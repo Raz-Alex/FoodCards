@@ -19,7 +19,16 @@
 
 /*Positioning*/
 
+header{
+    height: 4rem
+}
+
 /*Color*/
+
+header {
+    background-image:linear-gradient(to right, hsl(77 50% 50%), hsl(77 40% 50%))
+}
+
 button {
     cursor: pointer;
 }
