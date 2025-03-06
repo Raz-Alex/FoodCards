@@ -1,6 +1,85 @@
-h1:focus {
-    outline: none;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
+
+    *:focus {
+        outline: none;
+    }
+
+/* Dispplay Types
+{
+    display: inline;
+}
+
+{
+	display: block;
+}*/
+
+/*Positioning*/
+
+/*Color*/
+button {
+    cursor: pointer;
+}
+
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    button:focus {
+        outline: none;
+        border: 1px solid black;
+        padding: 1px;
+    }
+
+/*Font*/
+
+* {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+h1 {
+    font-size: 2.441rem;
+    font-style: italic;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+h2 {
+    font-size: 1.953rem;
+}
+
+h3 {
+    font-size: 1.563rem;
+}
+
+h4, p, li, a {
+    font-size: 1.25rem;
+}
+
+h5 {
+    font-size: 1rem;
+}
+
+h6 {
+    font-size: 0.8rem;
+}
+
+p {
+    line-height: 1.5;
+    max-width: 65ch;
+}
+
+q {
+    font-family: cursive;
+}
+
+/*Style*/
+ul {
+    list-style-type: none;
+}
+
+/*Blazor*/
 
 #blazor-error-ui {
     background: lightyellow;
