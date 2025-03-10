@@ -1,0 +1,98 @@
+﻿@using FoodCards.Client.Script
+
+<div class="pie-chart" style=@PieChartStyle()>
+    <div class="pie-chart-overlay" style=@OverlayStyle>
+        <div class="pie-chart-fade-overlay"/>
+        <div class="pie-chart-hole" style="align-content: center;">
+            @if (Compact && PiePieces.Count > 1)
+            {
+                <em>@($"{PiePieces[1].Items} St.")</em>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int Size { get; set; }
+
+    [Parameter]
+    public int Width { get; set; }
+
+    [Parameter]
+    public int Height { get; set; }
+
+    [Parameter]
+    public bool Compact { get; set; }
+
+    [Parameter]
+    public List<PiePiece> PiePieces { get; set; } = new();
+
+    [Parameter]
+    public string OverlayStyle { get; set; }
+
+    [Parameter]
+    public string HoleStyle { get; set; }
+
+    string PieChartStyle()
+    {
+        var css = string.Empty;
+        if(Size > 0)
+            css += $"width:{Size}rem;height:{Size}rem;";
+        else
+            css += $"width:{Width}rem;height:{Height}rem;";
+
+        if (PiePieces.Count == 0)
+            return css;
+
+        css += "background-image:conic-gradient(";
+        var lastDeg = 0m;
+        for (var i = 1; i < PiePieces.Count; i++)
+        {
+            css += $"{PiePieces[i].Color} {lastDeg}deg ";
+
+            lastDeg += PiePieces[i].Degrece;
+            css += $"{lastDeg}deg,";
+        }
+
+        css += $"{PiePieces[0].Color} {lastDeg}deg ";
+        
+        css += ")";
+        return css;
+    }
+}
+
+<style>
+    .pie-chart{
+        position:relative;
+        border-radius: 50%;
+        box-shadow: 8px 4px 8px hsl(0,0%,70%);
+    }
+
+    .pie-chart-overlay {
+        position: relative;
+        top:0;
+        width:100%;
+        height:100%;
+        border-radius: 50%;
+        align-content: center;
+    }
+
+    .pie-chart-fade-overlay{
+        position:absolute;
+        width:100%;
+        height:100%;
+        border-radius:50%;
+        top: 0;
+        background-image: radial-gradient(transparent, transparent, hsl(0, 0%, 30%, 0.1), transparent);
+    }
+
+    .pie-chart-hole {
+        margin: auto;
+        width: 50%;
+        height: 50%;
+        border-radius: 50%;
+        box-shadow: inset 8px 4px 8px hsl(0,0%,70%);
+        background-color: hsl(210, 75%, 98%);
+    }
+</style>

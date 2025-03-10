@@ -4,7 +4,7 @@ namespace FoodCards.Client.Script
 {
     public class FoodTable
     {
-        public List<Food> Get()
+        public static List<Food> Get()
         {
             var ingredients = new IngredientTable().Ingredients;
             return new List<Food>()

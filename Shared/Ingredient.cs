@@ -13,6 +13,7 @@
         public decimal Carbohydrate { get; set; }
         public decimal Sugar { get; set; }
         public decimal Salt { get; set; }
+        public decimal Fiber { get; set; }
         public int DefaultGramms { get; set; } = 100;
 
         public static List<string> Properties => new()
@@ -22,7 +23,10 @@
             "Protein",
             "Fat",
             "SaturatedFat",
-            "Carbohydrate"
+            "Carbohydrate",
+            "Sugar",
+            "Salt",
+            "Fiber"
         };
 
         /*

@@ -13,6 +13,7 @@
         decimal Carbohydrate { get;}
         decimal Sugar { get;}
         decimal Salt { get; }
+        decimal Fiber { get; }
         int DefaultGramms { get; set; }
     }
 }

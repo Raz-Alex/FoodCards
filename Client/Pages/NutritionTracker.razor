@@ -1,0 +1,152 @@
+﻿@page "/Tracker"
+@using FoodCards.Client.Layouts
+@using FoodCards.Client.Script
+@using FoodCards.Shared
+
+<div class="card">
+    <PieChart Width="15" Height="15" PiePieces=@nutrients></PieChart>
+</div>
+<div class="card">
+    <ul>
+        <li class="li-btn" @onclick=@AddBreakfast>Breakfast</li>
+        <li class="li-btn" @onclick=@AddLunch>Lunch</li>
+        <li class="li-btn" @onclick=@AddDinner>Dinner</li>
+        <li class="li-btn" @onclick=@AddSnacks>Snacks</li>
+    </ul>
+</div>
+<div class="card">
+    <table style="border:none; width:15rem; margin-top:0">
+        <caption style="margin-bottom:0.3rem"><h2>@($"Kal:{kalories}")</h2></caption>
+        <tbody>
+            @foreach (var nut in nutrients)
+            {
+                <tr>
+                    <td style="width:1rem">
+                        <div style=@($"width:1rem;height: 1rem;margin-right:1rem;background-color:{nut.Color}")></div>
+                    </td>
+                    <td style="text-align:left">@nut.Text</td>
+                    <td style="text-align:right;margin-inline:0.5rem">@($"{nut.Items}g")</td>
+                    <td style="text-align:right">@($"{(int)(nut.Percentage * 100)}%")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="card">
+    <ul>
+        @foreach(var vit in vitamins)
+        {
+            <li class=@(vit.Value ? "vit-on" : "vit-miss")>@vit.Key</li>
+        }
+    </ul>
+</div>
+<div class="card">
+    Source chart
+</div>
+<div class="card">
+    Minerals
+</div>
+<div class="card">
+    Proteins
+</div>
+<div class="card">
+    Fats
+</div>
+<div class="card">
+    Water check by meals
+</div>
+
+@code {
+    Dictionary<string, bool> vitamins = new()
+    {
+        {"Vitamin A", false},
+        {"Vitamin B", false},
+        {"Vitamin C", true},
+        {"Vitamin D", false},
+        {"Vitamin E", false},
+        {"Vitamin K", false},
+    };
+
+    decimal kalories;
+
+    List<PiePiece> nutrients = new();
+
+    List<INutrition> nutritions = new();
+
+    IngredientTable ingredients = new();
+
+    async Task AddBreakfast()
+    {
+        await InvokeAsync(() => nutritions.Add(ingredients.Ingredients[1]));
+        await Recalculate();
+    }
+
+    async Task AddLunch()
+    {
+        await InvokeAsync(() => nutritions.Add(ingredients.Ingredients[0]));
+        await Recalculate();
+    }
+
+    async Task AddDinner()
+    {
+        await InvokeAsync(() => nutritions.Add(ingredients.Ingredients[5]));
+        await Recalculate();
+    }
+
+    async Task AddSnacks()
+    {
+        await InvokeAsync(() => nutritions.Add(ingredients.Ingredients[4]));
+        await Recalculate();
+    }
+
+    async Task Recalculate()
+    {
+        kalories = nutritions.Sum(x => x.Kalories);
+        var proteins = nutritions.Sum(x => x.Protein);
+        var fat = nutritions.Sum(x => x.Fat - x.SaturatedFat);
+        var sFat = nutritions.Sum(x => x.SaturatedFat);
+        var carbs = nutritions.Sum(x => x.Carbohydrate - x.Sugar);
+        var sugar = nutritions.Sum(x => x.Sugar);
+        var salt = nutritions.Sum(x => x.Salt);
+        var fiber = nutritions.Sum(x => x.Fiber);
+        var total = proteins + fat + sFat + carbs + sugar + salt + fiber;
+
+        nutrients = new()
+        {
+            new("Protein",proteins, proteins/total, "hsl(0, 75%, 50%)"),
+            new("Fat",fat, fat/total, "hsl(51, 75%, 50%)"),
+            new("Sat. Fat", sFat, sFat / total, "hsl(102, 75%, 50%)"),
+            new("Carbs",carbs, carbs/total, "hsl(153, 75%, 50%)"),
+            new("Sugar",sugar, sugar/total, "hsl(204, 75%, 50%)"),
+            new("Salt",salt, salt/total, "hsl(255, 75%, 50%)"),
+            new("Fiber",fiber, fiber/total, "hsl(306, 75%, 50%)")
+        };
+
+        await InvokeAsync(() => StateHasChanged());
+    }
+}
+
+<style>
+    .card {
+        width: fit-content;
+        height: fit-content;
+    } 
+
+    .li-btn {
+        padding:0.5rem;
+        border: 1px solid hsl(210, 75%, 87%);
+        border-radius: 5px;
+    }
+
+    li {
+        margin: 0.5rem;
+    }
+
+    .vit-miss {
+        color: hsl(0 0 10% / 50%)
+    }
+
+    .vit-on {
+        color: hsl(120, 30%, 50%)
+    }
+</style>
