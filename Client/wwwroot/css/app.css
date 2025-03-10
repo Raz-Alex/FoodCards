@@ -8,19 +8,39 @@
         outline: none;
     }
 
-/* Dispplay Types
-{
-    display: inline;
-}
+/* Dispplay Types*/
 
-{
-	display: block;
-}*/
+.card {
+    display: inline-block;
+}
 
 /*Positioning*/
 
 header{
     height: 4rem
+}
+
+table {
+    margin: auto;
+    margin-top: 2rem;
+}
+
+th{
+    width: 10rem
+}
+
+tr{
+    text-align: center;
+    height: 2rem
+}
+
+.card {
+    margin: 2rem 0 0 2rem;
+    padding: 1rem;
+    width: 20rem;
+    height: 30rem;
+    position: relative;
+    vertical-align: top;
 }
 
 /*Color*/
@@ -41,8 +61,30 @@ button {
         padding: 1px;
     }
 
-/*Font*/
+table, thead {
+    border: 1px solid hsl(77 50% 80%)
+}
 
+thead {
+    background-color: hsl(77 60% 80%)
+}
+
+tr:nth-child(2n) {
+    background-color: hsl(77 70% 96%)
+}
+
+.card {
+    background-image: radial-gradient(25rem 150% at top left, hsl(210, 75%, 99%), hsl(210, 75%, 97%));
+    border: 1px solid hsl(210, 75%, 87%);
+    border-radius: 5px;
+    box-shadow: 2px 2px 8px hsl(210, 98%, 95%);
+}
+
+    .card:hover {
+        box-shadow: 4px 4px 12px hsl(210, 93%, 93%);
+    }
+
+/*Font*/
 * {
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
@@ -86,6 +128,10 @@ q {
 /*Style*/
 ul {
     list-style-type: none;
+}
+
+table {
+    border-collapse: collapse
 }
 
 /*Blazor*/

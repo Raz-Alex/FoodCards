@@ -8,7 +8,10 @@ namespace FoodCards.Client.Script
         {
             new()
             {
+                Id = 0,
                 Name = "Chicken Brest",
+                Photo = "chickenBreast.jpg",
+                Type = IngredientType.Protein,
                 Kalories = 102,
                 Protein = 24,
                 Carbohydrate = 0,
@@ -17,7 +20,10 @@ namespace FoodCards.Client.Script
             },
             new()
             {
+                Id = 1,
                 Name = "Egg",
+                Photo = "eggs.png",
+                Type = IngredientType.Fat,
                 Kalories = 92,
                 Protein = 8,
                 Carbohydrate = 0,
@@ -26,7 +32,10 @@ namespace FoodCards.Client.Script
             },
             new()
             {
+                Id = 2,
                 Name = "Milk",
+                Photo = "milk.jpg",
+                Type = IngredientType.Protein,
                 Kalories = 64,
                 Protein = 3,
                 Carbohydrate = 5,
@@ -35,7 +44,10 @@ namespace FoodCards.Client.Script
             },
             new()
             {
+                Id = 3,
                 Name = "Paprika",
+                Photo = "paprika.jpg",
+                Type = IngredientType.Vegie,
                 Kalories = 20,
                 Protein = 1,
                 Carbohydrate = 3,
@@ -44,7 +56,10 @@ namespace FoodCards.Client.Script
             },
             new()
             {
+                Id = 4,
                 Name = "Apple",
+                Photo = "apple.jpg",
+                Type = IngredientType.Fruit,
                 Kalories = 52,
                 Protein = 0,
                 Carbohydrate = 11,
@@ -53,7 +68,10 @@ namespace FoodCards.Client.Script
             },
             new()
             {
+                Id = 5,
                 Name = "Bread",
+                Photo = "bread.jpg",
+                Type = IngredientType.Carbs,
                 Kalories = 259,
                 Protein = 8,
                 Carbohydrate = 48,
@@ -62,7 +80,10 @@ namespace FoodCards.Client.Script
             },
             new()
             {
+                Id = 6,
                 Name = "Mandeln",
+                Photo = "mandeln.jpg",
+                Type = IngredientType.Fat,
                 Kalories = 569,
                 Protein = 19,
                 Carbohydrate = 4,

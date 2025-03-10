@@ -1,18 +1,53 @@
 ﻿@page "/Tables"
+@using FoodCards.Client.Script
+@using FoodCards.Shared
 
-<table>
-	<thead>
-		<tr>
-			<th />
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td />
-		</tr>
-	</tbody>
-</table>
+@if(ingredients != null)
+{
+	<table>
+		<thead>
+			<tr>
+				@foreach(var property in Ingredient.Properties)
+				{
+					<th>
+						@property
+					</th>
+				}
+			</tr>
+		</thead>
+		<tbody>
+			@foreach(var ingredient in ingredients)
+			{
+				<tr>
+					<td>
+						@ingredient.Name
+					</td>
+					<td>
+						@ingredient.Kalories
+					</td>
+					<td>
+						@ingredient.Protein
+					</td>
+					<td>
+						@ingredient.Carbohydrate
+					</td>
+					<td>
+						@ingredient.Fat
+					</td>
+					<td>
+						@ingredient.SaturatedFat
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
 
 @code {
+	List<Ingredient> ingredients;
 
+	protected override void OnInitialized()
+	{
+		ingredients = new IngredientTable().Ingredients;
+	}
 }

@@ -1,0 +1,113 @@
+﻿@using FoodCards.Shared
+
+@if(FoodItem != null)
+{
+	<div class="card" style=@Style>
+		<h2>@FoodItem.Name</h2>
+		<div class="img-holder">
+			<img src=@($"images/{FoodItem.Photo}") />
+		</div>
+		<table>
+			<tbody>
+				<tr>
+					<th>
+						Kalories
+					</th>
+					<td>
+						@FoodItem.Kalories
+					</td>
+				</tr>
+				<tr>
+					<th>
+						Protein
+					</th>
+					<td>
+						@FoodItem.Protein
+					</td>
+				</tr>
+				<tr>
+					<th>
+						Carbohydrate
+					</th>
+					<td>
+						@FoodItem.Carbohydrate
+					</td>
+				</tr>
+				<tr>
+					<th>
+						Fat
+					</th>
+					<td>
+						@FoodItem.Fat
+					</td>
+				</tr>
+				<tr>
+					<th>
+						SaturatedFat
+					</th>
+					<td>
+						@FoodItem.SaturatedFat
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+}
+
+@code {
+	[Parameter]
+	public INutrition FoodItem { get; set; }
+
+	string Style => FoodItem.Type switch
+	{
+		IngredientType.Mixed => "",
+		IngredientType.Protein => @"
+    background-image: radial-gradient(25rem 150% at top left, hsl(330, 75%, 99%), hsl(330, 75%, 97%));
+    border: 1px solid hsl(330, 75%, 87%);",
+		IngredientType.Carbs => @"
+    background-image: radial-gradient(25rem 150% at top left, hsl(30, 75%, 99%), hsl(30, 75%, 97%));
+    border: 1px solid hsl(30, 75%, 87%);",
+		IngredientType.Fat => @"
+    background-image: radial-gradient(25rem 150% at top left, hsl(270, 75%, 99%), hsl(270, 75%, 97%));
+    border: 1px solid hsl(270, 75%, 87%);",
+		IngredientType.Vegie => @"
+    background-image: radial-gradient(25rem 150% at top left, hsl(150, 75%, 99%), hsl(150, 75%, 97%));
+    border: 1px solid hsl(150, 75%, 87%);",
+		IngredientType.Fruit => @"
+    background-image: radial-gradient(25rem 150% at top left, hsl(90, 75%, 99%), hsl(90, 75%, 97%));
+    border: 1px solid hsl(90, 75%, 87%);",
+		_ => ""
+	};
+}
+
+<style>
+	table{
+		position: absolute;
+		bottom: 1rem;
+		width: calc(100% - 2rem);
+	}
+
+	th{
+		text-align:left
+	}
+
+	td {
+		text-align: right
+	}
+
+	th, td{
+		padding-inline: 0.5rem;
+	}
+
+	.img-holder {
+		width: 15rem;
+		height: 15rem ;
+		margin: auto;
+		align-content: center;
+	}
+
+	img {
+		max-width: 100%;
+		max-height: 100%;
+	}
+</style>
