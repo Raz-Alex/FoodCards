@@ -4,7 +4,7 @@
 @using FoodCards.Shared.Dish
 
 <div style="display:flex">
-    <div class="card" style="text-align: -webkit-center;">
+    <div class="card">
         <PieChart Width="15" Height="15" PiePieces=@nutrients CenterText=@($"{kalories} kcal")></PieChart>
         <table style="border:none;">
             <tbody>
@@ -37,7 +37,7 @@
     </div>
 </div>
 <div class="card">
-    Dish
+    <h3 style="margin:auto;margin-bottom:0.5rem">Goals</h3>
     <BarChartVerticalView ChartBars=@chartBars></BarChartVerticalView>
     <!--p>Kalories bar</p>
     <p>Goal Reached!</p>
@@ -105,10 +105,25 @@
             new(TextDictionary.Get(IngredientType.Processed), processed, (decimal)processed/kalories, "hsl(0, 0%, 10%)"),
         };
 
-        chartBars = new()
-        {
-            new("Kalories",kalories/dishData.DailyKalories,$"{kalories}kcal")
-        };
+        chartBars = new();
+        if (dishData.DailyKalories > 0)
+            chartBars.Add(new("Kalories", kalories / dishData.DailyKalories, $"{kalories}kcal"));
+        if (dishData.EggsAndDairy > 0)
+            chartBars.Add(new(TextDictionary.Get(IngredientType.EggsAndDairy), dairy / kalories / dishData.EggsAndDairy, $"{dairy}kcal"));
+        if (dishData.MeatAndFish > 0)
+            chartBars.Add(new(TextDictionary.Get(IngredientType.MeatAndFish), meats / kalories / dishData.MeatAndFish, $"{meats}kcal"));
+        if (dishData.GrainsAndPotatoes > 0)
+            chartBars.Add(new(TextDictionary.Get(IngredientType.GrainsAndPotatoes), carbs / kalories / dishData.GrainsAndPotatoes, $"{carbs}kcal"));
+        if (dishData.Vegetables > 0)
+            chartBars.Add(new(TextDictionary.Get(IngredientType.Vegetables), vegies / kalories / dishData.Vegetables, $"{vegies}kcal"));
+        if (dishData.Fruits > 0)
+            chartBars.Add(new(TextDictionary.Get(IngredientType.Fruits), fruits / kalories / dishData.Fruits, $"{fruits}kcal"));
+        if (dishData.Fats > 0)
+            chartBars.Add(new(TextDictionary.Get(IngredientType.Fats), fats / kalories / dishData.Fats, $"{fats}kcal"));
+        if (dishData.SweetsAndAlcohol > 0)
+            chartBars.Add(new(TextDictionary.Get(IngredientType.SweetsAndAlcohol), sweets / kalories / dishData.SweetsAndAlcohol, $"{sweets}kcal"));
+        if (dishData.Processed > 0)
+            chartBars.Add(new(TextDictionary.Get(IngredientType.Processed), sweets / kalories / dishData.Processed, $"{sweets}kcal"));
 
         await InvokeAsync(() => StateHasChanged());
     }

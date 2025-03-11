@@ -12,6 +12,7 @@ namespace FoodCards.Client.Script
             IngredientType.Vegetables => "Vegetables",
             IngredientType.Fruits => "Fruits",
             IngredientType.Fats => "Fats",
+            IngredientType.SweetsAndAlcohol => "Sweets & Alcohol",
             IngredientType.Processed => "Processed",
             IngredientType.HomeMadeMeal => "Meal",
             _ => "",
