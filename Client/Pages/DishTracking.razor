@@ -36,6 +36,13 @@
         </div>
     </div>
 </div>
+<div class="card">
+    Dish
+    <BarChartVerticalView ChartBars=@chartBars></BarChartVerticalView>
+    <p>Kalories bar</p>
+    <p>Goal Reached!</p>
+    <p>Warning! match</p>
+</div>
 
 @code {
     decimal kalories;
@@ -45,6 +52,10 @@
     List<IDish> nutritions = new();
 
     DishTable ingredients = new();
+
+    List<ChartBar> chartBars = new();
+
+    DishSetUpData dishData = new();
 
     async Task AddBreakfast()
     {
@@ -92,6 +103,11 @@
             new(TextDictionary.Get(IngredientType.Fats), fats, (decimal)fats/kalories, "hsl(240, 75%, 50%)"),
             new(TextDictionary.Get(IngredientType.SweetsAndAlcohol), sweets, (decimal)sweets/kalories, "hsl(300, 75%, 50%)"),
             new(TextDictionary.Get(IngredientType.Processed), processed, (decimal)processed/kalories, "hsl(0, 0%, 10%)"),
+        };
+
+        chartBars = new()
+        {
+            new("Kalories",kalories/dishData.DailyKalories,$"{kalories}kcal")
         };
 
         await InvokeAsync(() => StateHasChanged());
