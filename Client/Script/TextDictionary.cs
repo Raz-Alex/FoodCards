@@ -6,14 +6,14 @@ namespace FoodCards.Client.Script
     {
         public static string Get(IngredientType type) => type switch
         {
-            IngredientType.EggsAndDairy => "",
-            IngredientType.MeatAndFish => "",
-            IngredientType.GrainsAndPotatoes => "",
-            IngredientType.Vegetables => "",
-            IngredientType.Fruits => "",
-            IngredientType.Fats => "",
-            IngredientType.Processed => "",
-            IngredientType.HomeMadeMeal => "",
+            IngredientType.EggsAndDairy => "Eggs & Dairy",
+            IngredientType.MeatAndFish => "Meat & Fish",
+            IngredientType.GrainsAndPotatoes => "Grains & Potatoes",
+            IngredientType.Vegetables => "Vegetables",
+            IngredientType.Fruits => "Fruits",
+            IngredientType.Fats => "Fats",
+            IngredientType.Processed => "Processed",
+            IngredientType.HomeMadeMeal => "Meal",
             _ => "",
         };
     }

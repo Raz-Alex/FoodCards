@@ -4,7 +4,7 @@
 @using FoodCards.Shared.Dish
 
 <div style="display:flex">
-    <div class="card">
+    <div class="card" style="text-align: -webkit-center;">
         <PieChart Width="15" Height="15" PiePieces=@nutrients CenterText=@($"{kalories} kcal")></PieChart>
         <table style="border:none;">
             <tbody>
@@ -15,7 +15,7 @@
                             <div style=@($"width:1rem;height: 1rem;margin-right:1rem;background-color:{nut.Color}")></div>
                         </td>
                         <td style="text-align:left">@nut.Text</td>
-                        <td style="text-align:right;padding-inline:0.5rem">@($"{nut.Items}g")</td>
+                        <td style="text-align:right;padding-inline:0.5rem">@($"{nut.Items}kcal")</td>
                         <td style="text-align:right">@($"{(int)(nut.Percentage * 100)}%")</td>
                     </tr>
                 }
@@ -79,14 +79,14 @@
     async Task Recalculate()
     {
         kalories = nutritions.Sum(x => x.Kalories);
-        var dairy = nutritions.Where(x => x.Type == IngredientType.EggsAndDairy).Sum(x => x.Quantity.Quantity);
-        var meats = nutritions.Where(x => x.Type == IngredientType.MeatAndFish).Sum(x => x.Quantity.Quantity);
-        var carbs = nutritions.Where(x => x.Type == IngredientType.GrainsAndPotatoes).Sum(x => x.Quantity.Quantity);
-        var vegies = nutritions.Where(x => x.Type == IngredientType.Vegetables).Sum(x => x.Quantity.Quantity);
-        var fruits = nutritions.Where(x => x.Type == IngredientType.Fruits).Sum(x => x.Quantity.Quantity);
-        var fats = nutritions.Where(x => x.Type == IngredientType.Fats).Sum(x => x.Quantity.Quantity);
-        var sweets = nutritions.Where(x => x.Type == IngredientType.SweetsAndAlcohol).Sum(x => x.Quantity.Quantity);
-        var processed = nutritions.Where(x => x.Type == IngredientType.Processed).Sum(x => x.Quantity.Quantity);
+        var dairy = nutritions.Where(x => x.Type == IngredientType.EggsAndDairy).Sum(x => x.Kalories);
+        var meats = nutritions.Where(x => x.Type == IngredientType.MeatAndFish).Sum(x => x.Kalories);
+        var carbs = nutritions.Where(x => x.Type == IngredientType.GrainsAndPotatoes).Sum(x => x.Kalories);
+        var vegies = nutritions.Where(x => x.Type == IngredientType.Vegetables).Sum(x => x.Kalories);
+        var fruits = nutritions.Where(x => x.Type == IngredientType.Fruits).Sum(x => x.Kalories);
+        var fats = nutritions.Where(x => x.Type == IngredientType.Fats).Sum(x => x.Kalories);
+        var sweets = nutritions.Where(x => x.Type == IngredientType.SweetsAndAlcohol).Sum(x => x.Kalories);
+        var processed = nutritions.Where(x => x.Type == IngredientType.Processed).Sum(x => x.Kalories);
 
         nutrients = new()
         {
