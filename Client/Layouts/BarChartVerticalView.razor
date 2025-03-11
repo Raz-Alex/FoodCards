@@ -1,14 +1,16 @@
-﻿<table style="height:fit-content;z-index:10;margin-bottom: 0.4rem;border:none;">
+﻿<table style="height:fit-content;z-index:10;border:none;margin-top: auto;">
     <tbody>
         @foreach (var chartBar in ChartBars)
         {
             <tr>
-                <td>
-                    <h6 style="float:right">@chartBar.Name</h6>
+                <td style="float:right;padding-right:0.5rem">
+                    @chartBar.Name
                 </td>
-                <td class="v_bar_diagram">
-                    <div class="v_bar" style=@($"--bar-value:{chartBar.Percent*100}%;--bar-color-value:{chartBar.Percent*100}")>
-                        @chartBar.Text
+                <td style="vertical-align:top">
+                    <div style="width:10rem;height:1rem">
+                        <div class="v_bar" style=@($"--bar-value:{chartBar.CalculatePer}%;--bar-color-value:{chartBar.CalculatePer}")>
+                            @chartBar.Text
+                        </div>
                     </div>
                 </td>
             </tr>
@@ -19,18 +21,12 @@
 @code {
     [Parameter]
     public List<ChartBar> ChartBars { get; set; } = new();
-
-    [Parameter]
-    public int Height { get; set; }
-
-    [Parameter]
-    public string ViewDetailsId { get; set; }
 }
 
 <style>
     .v_bar {
         width: var(--bar-value);
-        height: 1.5rem;
+        height: 100%;
         background-image: linear-gradient(to right, hsl(var(--bar-color-value),50%,57%),hsl(var(--bar-color-value),50%,50%),hsl(var(--bar-color-value),50%,57%) );
         border-radius: 2px;
         box-shadow: 8px 4px 8px hsl(0,0%,70%);
