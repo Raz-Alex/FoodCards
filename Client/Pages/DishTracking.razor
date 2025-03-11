@@ -6,7 +6,7 @@
 <div style="display:flex">
     <div class="card">
         <PieChart Width="15" Height="15" PiePieces=@nutrients CenterText=@($"{kalories} kcal")></PieChart>
-        <table style="border:none; width:15rem">
+        <table style="border:none;">
             <tbody>
                 @foreach (var nut in nutrients)
                 {
@@ -15,7 +15,7 @@
                             <div style=@($"width:1rem;height: 1rem;margin-right:1rem;background-color:{nut.Color}")></div>
                         </td>
                         <td style="text-align:left">@nut.Text</td>
-                        <td style="text-align:right;margin-inline:0.5rem">@($"{nut.Items}g")</td>
+                        <td style="text-align:right;padding-inline:0.5rem">@($"{nut.Items}g")</td>
                         <td style="text-align:right">@($"{(int)(nut.Percentage * 100)}%")</td>
                     </tr>
                 }
@@ -79,22 +79,25 @@
     async Task Recalculate()
     {
         kalories = nutritions.Sum(x => x.Kalories);
-        var protein = nutritions.Where(x => x.Type == IngredientType.Protein).Sum(x => x.Quantity.Quantity);
-        var fatProtein = nutritions.Where(x => x.Type == IngredientType.FatProtein).Sum(x => x.Quantity.Quantity);
-        var fat = nutritions.Where(x => x.Type == IngredientType.Fats).Sum(x => x.Quantity.Quantity);
-        var carbs = nutritions.Where(x => x.Type == IngredientType.Carbs).Sum(x => x.Quantity.Quantity);
-        var fruits = nutritions.Where(x => x.Type == IngredientType.Fruit).Sum(x => x.Quantity.Quantity);
-        var vegies = nutritions.Where(x => x.Type == IngredientType.Vegie).Sum(x => x.Quantity.Quantity);
-        var total = protein + fatProtein + fat + carbs + fruits + vegies;
+        var dairy = nutritions.Where(x => x.Type == IngredientType.EggsAndDairy).Sum(x => x.Quantity.Quantity);
+        var meats = nutritions.Where(x => x.Type == IngredientType.MeatAndFish).Sum(x => x.Quantity.Quantity);
+        var carbs = nutritions.Where(x => x.Type == IngredientType.GrainsAndPotatoes).Sum(x => x.Quantity.Quantity);
+        var vegies = nutritions.Where(x => x.Type == IngredientType.Vegetables).Sum(x => x.Quantity.Quantity);
+        var fruits = nutritions.Where(x => x.Type == IngredientType.Fruits).Sum(x => x.Quantity.Quantity);
+        var fats = nutritions.Where(x => x.Type == IngredientType.Fats).Sum(x => x.Quantity.Quantity);
+        var sweets = nutritions.Where(x => x.Type == IngredientType.SweetsAndAlcohol).Sum(x => x.Quantity.Quantity);
+        var processed = nutritions.Where(x => x.Type == IngredientType.Processed).Sum(x => x.Quantity.Quantity);
 
         nutrients = new()
         {
-            new("Lean Protein", protein, (decimal)protein/total, "hsl(0, 75%, 50%)"),
-            new("Fat Protein", fatProtein, (decimal)fatProtein/total, "hsl(60, 75%, 50%)"),
-            new("Fat", fat, (decimal)fat/total, "hsl(120, 75%, 50%)"),
-            new("Carbs", carbs, (decimal)carbs / total, "hsl(180, 75%, 50%)"),
-            new("Fruits", fruits, (decimal)fruits/total, "hsl(240, 75%, 50%)"),
-            new("Vegies", vegies, (decimal)vegies/total, "hsl(300, 75%, 50%)"),
+            new(TextDictionary.Get(IngredientType.EggsAndDairy), dairy, (decimal)dairy/kalories, "hsl(0, 0%, 90%)"),
+            new(TextDictionary.Get(IngredientType.MeatAndFish), meats, (decimal)meats/kalories, "hsl(0, 75%, 50%)"),
+            new(TextDictionary.Get(IngredientType.GrainsAndPotatoes), carbs, (decimal)carbs/kalories, "hsl(60, 75%, 50%)"),
+            new(TextDictionary.Get(IngredientType.Vegetables), vegies, (decimal)vegies / kalories, "hsl(120, 75%, 50%)"),
+            new(TextDictionary.Get(IngredientType.Fruits), fruits, (decimal)fruits/kalories, "hsl(180, 75%, 50%)"),
+            new(TextDictionary.Get(IngredientType.Fats), fats, (decimal)fats/kalories, "hsl(240, 75%, 50%)"),
+            new(TextDictionary.Get(IngredientType.SweetsAndAlcohol), sweets, (decimal)sweets/kalories, "hsl(300, 75%, 50%)"),
+            new(TextDictionary.Get(IngredientType.Processed), processed, (decimal)processed/kalories, "hsl(0, 0%, 10%)"),
         };
 
         await InvokeAsync(() => StateHasChanged());

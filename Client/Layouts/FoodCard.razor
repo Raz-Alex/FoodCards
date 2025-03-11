@@ -60,20 +60,20 @@
 
 	string Style => FoodItem.Type switch
 	{
-		IngredientType.Complex => "",
-		IngredientType.Protein => @"
+		IngredientType.HomeMadeMeal => "",
+		IngredientType.MeatAndFish => @"
     background-image: radial-gradient(25rem 150% at top left, hsl(330, 75%, 99%), hsl(330, 75%, 97%));
     border: 1px solid hsl(330, 75%, 87%);",
-		IngredientType.Carbs => @"
+		IngredientType.GrainsAndPotatoes => @"
     background-image: radial-gradient(25rem 150% at top left, hsl(30, 75%, 99%), hsl(30, 75%, 97%));
     border: 1px solid hsl(30, 75%, 87%);",
 		IngredientType.Fats => @"
     background-image: radial-gradient(25rem 150% at top left, hsl(270, 75%, 99%), hsl(270, 75%, 97%));
     border: 1px solid hsl(270, 75%, 87%);",
-		IngredientType.Vegie => @"
+		IngredientType.Vegetables => @"
     background-image: radial-gradient(25rem 150% at top left, hsl(150, 75%, 99%), hsl(150, 75%, 97%));
     border: 1px solid hsl(150, 75%, 87%);",
-		IngredientType.Fruit => @"
+		IngredientType.Fruits => @"
     background-imasge: radial-gradient(25rem 150% at top left, hsl(90, 75%, 99%), hsl(90, 75%, 97%));
     border: 1px solid hsl(90, 75%, 87%);",
 		_ => ""
