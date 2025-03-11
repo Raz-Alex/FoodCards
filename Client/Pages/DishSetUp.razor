@@ -1,11 +1,56 @@
-﻿
-<div class="card">
-    Dish
-    <p>Kalories bar</p>
-    <p>Goal Reached!</p>
-    <p>Warning! match</p>
+﻿@using FoodCards.Client.Layouts
+@using FoodCards.Client.Script
+@inject DishSetUpDataService data
+
+<div class="card" style="width:fit-content;height:fit-content">
+    <form>
+        <fieldset style="margin-bottom:0.5rem">
+            <label>
+                Daily Kalorie target
+                <input style="float:right" @bind=@data.DailyKalories/>
+            </label>
+        </fieldset>
+        <fieldset>
+            <Slider Title="Daily Eggs & Dairy consumption" Value="@data.EggsAndDairy" 
+            Action="((x) => {data.EggsAndDairy = x; StateHasChanged();})"></Slider>
+            <hr />
+            <Slider Title="Daily Meat & Fish consumption" Value="@data.MeatAndFish"
+            Action="((x) => {data.MeatAndFish = x; StateHasChanged();})"></Slider>
+            <hr />
+            <Slider Title="Daily Grains & Potatoes consumption" Value="@data.GrainsAndPotatoes"
+            Action="((x) => {data.GrainsAndPotatoes = x; StateHasChanged();})"></Slider>
+            <hr />
+            <Slider Title="Daily Vegetables consumption" Value="@data.Vegetables"
+            Action="((x) => {data.Vegetables = x; StateHasChanged();})"></Slider>
+            <hr />
+            <Slider Title="Daily Fruits consumption" Value="@data.Fruits"
+            Action="((x) => {data.Fruits = x; StateHasChanged();})"></Slider>
+            <hr />
+            <Slider Title="Daily Fats consumption" Value="@data.Fats"
+            Action="((x) => {data.Fats = x; StateHasChanged();})"></Slider>
+            <hr />
+            <Slider Title="Daily Sweets & Alcohol consumption" Value="@data.SweetsAndAlcohol"
+            Action="((x) => {data.SweetsAndAlcohol = x; StateHasChanged();})"></Slider>
+            <hr />
+            <Slider Title="Daily Processed Products consumption" Value="@data.Processed"
+            Action="((x) => {data.Processed = x; StateHasChanged();})"></Slider>
+        </fieldset>
+    </form>
 </div>
 
 @code {
+    [Parameter]
+    public Action Refresh { get; set; }
 
+    void Update()
+    {
+        if (Refresh != null)
+            Refresh();
+    }
 }
+
+<style>
+    hr{
+        margin:0.5rem
+    }
+</style>

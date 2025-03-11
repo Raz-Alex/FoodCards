@@ -2,6 +2,7 @@
 @using FoodCards.Client.Script
 @using FoodCards.Shared
 @using FoodCards.Shared.Dish
+@inject DishSetUpDataService dishData
 
 <div style="display:flex">
     <div class="card">
@@ -37,12 +38,15 @@
     </div>
 </div>
 <div class="card">
-    <h3 style="margin:auto;margin-bottom:0.5rem">Goals</h3>
+    <h3 class="li-btn" style="margin:auto;margin-bottom:0.5rem" onclick="@OpenDishSetUpMenu">Goals</h3>
     <BarChartVerticalView ChartBars=@chartBars></BarChartVerticalView>
-    <!--p>Kalories bar</p>
-    <p>Goal Reached!</p>
-    <p>Warning! match</p-->
 </div>
+@if (displayDishSetUp)
+{
+    <segment>
+        <DishSetUp></DishSetUp>
+    </segment>
+}
 
 @code {
     decimal kalories;
@@ -55,7 +59,7 @@
 
     List<ChartBar> chartBars = new();
 
-    DishSetUpData dishData = new();
+    bool displayDishSetUp;
 
     async Task AddBreakfast()
     {
@@ -108,6 +112,8 @@
         chartBars = new();
         if (dishData.DailyKalories > 0)
             chartBars.Add(new("Kalories", kalories / dishData.DailyKalories, $"{kalories}kcal"));
+
+        kalories /= 100;
         if (dishData.EggsAndDairy > 0)
             chartBars.Add(new(TextDictionary.Get(IngredientType.EggsAndDairy), dairy / kalories / dishData.EggsAndDairy, $"{dairy}kcal"));
         if (dishData.MeatAndFish > 0)
@@ -123,9 +129,14 @@
         if (dishData.SweetsAndAlcohol > 0)
             chartBars.Add(new(TextDictionary.Get(IngredientType.SweetsAndAlcohol), sweets / kalories / dishData.SweetsAndAlcohol, $"{sweets}kcal"));
         if (dishData.Processed > 0)
-            chartBars.Add(new(TextDictionary.Get(IngredientType.Processed), sweets / kalories / dishData.Processed, $"{sweets}kcal"));
+            chartBars.Add(new(TextDictionary.Get(IngredientType.Processed), processed / kalories / dishData.Processed, $"{processed}kcal"));
 
         await InvokeAsync(() => StateHasChanged());
+    }
+
+    async Task OpenDishSetUpMenu()
+    {
+        await InvokeAsync(() => displayDishSetUp = !displayDishSetUp);
     }
 }
 

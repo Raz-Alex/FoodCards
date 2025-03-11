@@ -34,6 +34,10 @@ tr{
     height: 2rem
 }
 
+fieldset{
+    padding: 1rem;
+}
+
 .card {
     margin: 2rem 0 0 2rem;
     padding: 1rem;
@@ -43,10 +47,14 @@ tr{
     vertical-align: top;
 }
 
-/*Color*/
+.slider {
+    vertical-align:middle;
+    float:right
+}
 
+/*Color*/
 header {
-    background-image:linear-gradient(to right, hsl(77 50% 50%), hsl(77 40% 50%))
+    background-image: linear-gradient(to right, hsl(77 50% 50%), hsl(77 40% 50%))
 }
 
 button {
