@@ -3,11 +3,12 @@
 <div class="pie-chart" style=@PieChartStyle()>
     <div class="pie-chart-overlay" style=@OverlayStyle>
         <div class="pie-chart-fade-overlay"/>
-        <div class="pie-chart-hole" style="align-content: center;">
+        <div class="pie-chart-hole" style="align-content: center;text-align: center;">
             @if (Compact && PiePieces.Count > 1)
             {
                 <em>@($"{PiePieces[1].Items} St.")</em>
             }
+            <h2>@CenterText</h2>
         </div>
     </div>
 </div>
@@ -24,6 +25,9 @@
 
     [Parameter]
     public bool Compact { get; set; }
+
+    [Parameter]
+    public string CenterText { get; set; }
 
     [Parameter]
     public List<PiePiece> PiePieces { get; set; } = new();

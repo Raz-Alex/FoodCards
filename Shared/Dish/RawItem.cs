@@ -1,0 +1,14 @@
+﻿using FoodCards.Shared.Quantity;
+
+namespace FoodCards.Shared.Dish
+{
+    public class RawItem : IDish
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Photo { get; set; }
+        public int Kalories { get; set; }
+        public IngredientType Type { get; set; }
+        public IQuantity Quantity { get; set; }
+    }
+}

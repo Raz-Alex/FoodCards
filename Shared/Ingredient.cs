@@ -55,11 +55,33 @@
 
     public enum IngredientType
     {
-        Mixed,
-        Protein,
-        Carbs,
-        Fat,
-        Vegie,
-        Fruit
+        MeatAndFish,
+        EggsAndDairy,
+        GrainsAndPotatoes,
+        Vegetables,
+        Fruits,
+        Fats,
+        SweetsAndAlcohol,
+        Processed,
+        HomeMadeMeal
+    }
+
+    public enum IngredientType2
+    {
+        Meat,
+        Poultry,
+        Fish,
+        Seafood,
+        Eggs,
+        Dairy,
+        Grains,
+        Potatoes,
+        Vegies,
+        Fruits,
+        Nuts,
+        Herbs,
+        OilsAndFats,
+        Sweets,
+        Processed
     }
 }

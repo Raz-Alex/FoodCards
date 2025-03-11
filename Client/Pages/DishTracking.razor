@@ -1,0 +1,120 @@
+﻿@using FoodCards.Client.Layouts
+@using FoodCards.Client.Script
+@using FoodCards.Shared
+@using FoodCards.Shared.Dish
+
+<div style="display:flex">
+    <div class="card">
+        <PieChart Width="15" Height="15" PiePieces=@nutrients CenterText=@($"{kalories} kcal")></PieChart>
+        <table style="border:none; width:15rem">
+            <tbody>
+                @foreach (var nut in nutrients)
+                {
+                    <tr>
+                        <td style="width:1rem">
+                            <div style=@($"width:1rem;height: 1rem;margin-right:1rem;background-color:{nut.Color}")></div>
+                        </td>
+                        <td style="text-align:left">@nut.Text</td>
+                        <td style="text-align:right;margin-inline:0.5rem">@($"{nut.Items}g")</td>
+                        <td style="text-align:right">@($"{(int)(nut.Percentage * 100)}%")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <div class="card">
+            <ul>
+                <li class="li-btn" @onclick=@AddBreakfast>Breakfast</li>
+                <li class="li-btn" @onclick=@AddLunch>Lunch</li>
+                <li class="li-btn" @onclick=@AddDinner>Dinner</li>
+                <li class="li-btn" @onclick=@AddSnacks>Snacks</li>
+            </ul>
+        </div>
+        <div class="card">
+            Dish
+            <p>Kalories bar</p>
+            <p>Goal Reached!</p>
+            <p>Warning! match</p>
+        </div>
+        <div class="card">
+            Databank
+        </div>
+    </div>
+</div>
+
+@code {
+    decimal kalories;
+
+    List<PiePiece> nutrients = new();
+
+    List<IDish> nutritions = new();
+
+    DishTable ingredients = new();
+
+    async Task AddBreakfast()
+    {
+        await InvokeAsync(() => nutritions.Add(ingredients.Ingredients[1]));
+        await Recalculate();
+    }
+
+    async Task AddLunch()
+    {
+        await InvokeAsync(() => nutritions.Add(ingredients.Ingredients[0]));
+        await Recalculate();
+    }
+
+    async Task AddDinner()
+    {
+        await InvokeAsync(() => nutritions.Add(ingredients.Ingredients[5]));
+        await Recalculate();
+    }
+
+    async Task AddSnacks()
+    {
+        await InvokeAsync(() => nutritions.Add(ingredients.Ingredients[4]));
+        await Recalculate();
+    }
+
+    async Task Recalculate()
+    {
+        kalories = nutritions.Sum(x => x.Kalories);
+        var protein = nutritions.Where(x => x.Type == IngredientType.Protein).Sum(x => x.Quantity.Quantity);
+        var fatProtein = nutritions.Where(x => x.Type == IngredientType.FatProtein).Sum(x => x.Quantity.Quantity);
+        var fat = nutritions.Where(x => x.Type == IngredientType.Fats).Sum(x => x.Quantity.Quantity);
+        var carbs = nutritions.Where(x => x.Type == IngredientType.Carbs).Sum(x => x.Quantity.Quantity);
+        var fruits = nutritions.Where(x => x.Type == IngredientType.Fruit).Sum(x => x.Quantity.Quantity);
+        var vegies = nutritions.Where(x => x.Type == IngredientType.Vegie).Sum(x => x.Quantity.Quantity);
+        var total = protein + fatProtein + fat + carbs + fruits + vegies;
+
+        nutrients = new()
+        {
+            new("Lean Protein", protein, (decimal)protein/total, "hsl(0, 75%, 50%)"),
+            new("Fat Protein", fatProtein, (decimal)fatProtein/total, "hsl(60, 75%, 50%)"),
+            new("Fat", fat, (decimal)fat/total, "hsl(120, 75%, 50%)"),
+            new("Carbs", carbs, (decimal)carbs / total, "hsl(180, 75%, 50%)"),
+            new("Fruits", fruits, (decimal)fruits/total, "hsl(240, 75%, 50%)"),
+            new("Vegies", vegies, (decimal)vegies/total, "hsl(300, 75%, 50%)"),
+        };
+
+        await InvokeAsync(() => StateHasChanged());
+    }
+}
+
+<style>
+    .card {
+        width: fit-content;
+        height: fit-content;
+    }
+
+    .li-btn {
+        padding: 0.5rem;
+        border: 1px solid hsl(210, 75%, 87%);
+        border-radius: 5px;
+    }
+
+    li {
+        margin: 0.5rem;
+    }
+</style>
+
