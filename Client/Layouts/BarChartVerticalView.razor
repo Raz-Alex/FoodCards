@@ -1,0 +1,86 @@
+﻿@using Dashboard.Client.CSharp
+@using Dashboard.Shared
+@using Dashboard.Shared.ViewDetails
+@inject AuthorizeHttpClient http
+
+<div class="card">
+    <table style="height:10rem;z-index:10;margin-bottom: 0.4rem;">
+        <caption>
+            <h2 style="float:left;margin-bottom: 0.5rem;">@Title</h2>
+        </caption>
+        <tbody>
+            @foreach (var chartBar in chartBars)
+            {
+                <tr>
+                    <td>
+                        <h6 style="float:right">@chartBar.Name</h6>
+                    </td>
+                    <td class="v_bar_diagram">
+                        <div class="v_bar" style=@($"--bar-value:{chartBar.Percent*20}rem;--bar-color-value:{chartBar.Percent*100}")>
+                            @chartBar.Items
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    List<ChartBar> chartBars = new();
+
+    List<DataSet> dataSets = new();
+
+    [Parameter]
+    public int Height { get; set; }
+
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public string ViewDetailsId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        dataSets.Clear();
+
+        var httpViewResponse = await http.PostAsync<BarChartViewDetails, object>($"api/views/bar-chart-view-by-id", ViewDetailsId);
+        if (httpViewResponse == null || httpViewResponse is not BarChartViewDetails chartView)
+            return;
+
+        var ids = httpViewResponse.GetAllDataSetIds();
+
+        foreach (var id in ids)
+        {
+            var httpResponse = await http.PostAsync<DataSet, string>($"api/views/data-set-by-id", id);
+
+            if (httpResponse != null)
+                await InvokeAsync(() => dataSets.Add(httpResponse));
+        }
+
+        await InvokeAsync(() => StateHasChanged());
+
+        if (dataSets.Count == 0)
+            return;
+
+        var highestItemCount = dataSets.Max(x => x.ItemsReal());
+
+        foreach (var item in dataSets)
+        {
+            _ = decimal.TryParse(item.Items, out decimal itemCount);
+            chartBars.Add(new(item.Name, itemCount / highestItemCount, (int)itemCount));
+        }
+    }
+}
+
+<style>
+    .v_bar {
+        width: var(--bar-value);
+        height: 1.5rem;
+        background-image: linear-gradient(to right, hsl(var(--bar-color-value),50%,57%),hsl(var(--bar-color-value),50%,50%),hsl(var(--bar-color-value),50%,57%) );
+        border-radius: 2px;
+        box-shadow: 8px 4px 8px hsl(0,0%,70%);
+        position: relative;
+        z-index: 100;
+    }
+</style>
