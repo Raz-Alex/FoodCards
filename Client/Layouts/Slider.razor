@@ -1,8 +1,8 @@
 ﻿<div class="slidecontainer">
     <label>
         @Title
-        <input type="range" min="1" max="100" @bind="@Value" class="slider" 
-        @oninput="(EventArgs) => SetValue()" />
+        <input type="range" min="1" max="100" value="@Value" class="slider"
+        @oninput="(EventArgs) => SetValue(EventArgs.Value.ToString())" />
     </label>
 </div>
 
@@ -16,11 +16,12 @@
     [Parameter]
     public Action<int> Action { get; set; }
 
-    void SetValue()
+    void SetValue(string value)
     {
         if (Action == null)
             return;
 
-        Action(Value);
+        _ = int.TryParse(value, out int intValue);
+        Action(intValue);
     }
 }

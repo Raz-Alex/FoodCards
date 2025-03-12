@@ -7,21 +7,17 @@
 {
 	<div style="text-align: center;">
 		@foreach (var ingredient in ingredients)
-		@*foreach (var food in foods)*@
 		{
 			<FoodCard FoodItem=@ingredient />
-			<!--FoodCard FoodItem=@food /-->
 		}
 	</div>
 }
 
 @code {
 	List<Ingredient> ingredients;
-	List<Food> foods;
 
 	protected override void OnInitialized()
 	{
 		ingredients = new IngredientTable().Ingredients;
-		foods = FoodTable.Get();
 	}
 }

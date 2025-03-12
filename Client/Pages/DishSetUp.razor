@@ -7,33 +7,34 @@
         <fieldset style="margin-bottom:0.5rem">
             <label>
                 Daily Kalorie target
-                <input style="float:right" @bind=@data.DailyKalories/>
+                <input style="float:right" @bind=@data.DailyKalories
+                       @oninput="(EventArgs) => SetKalories(EventArgs.Value.ToString())" />
             </label>
         </fieldset>
         <fieldset>
-            <Slider Title="Daily Eggs & Dairy consumption" Value="@data.EggsAndDairy" 
-            Action="((x) => {data.EggsAndDairy = x; StateHasChanged();})"></Slider>
+            <Slider Title="Daily Eggs & Dairy consumption" Value="@data.EggsAndDairy"
+                    Action="((x) => {data.EggsAndDairy = x; Update();})"></Slider>
             <hr />
             <Slider Title="Daily Meat & Fish consumption" Value="@data.MeatAndFish"
-            Action="((x) => {data.MeatAndFish = x; StateHasChanged();})"></Slider>
+                    Action="((x) => {data.MeatAndFish = x; Update();})"></Slider>
             <hr />
             <Slider Title="Daily Grains & Potatoes consumption" Value="@data.GrainsAndPotatoes"
-            Action="((x) => {data.GrainsAndPotatoes = x; StateHasChanged();})"></Slider>
+                    Action="((x) => {data.GrainsAndPotatoes = x; Update();})"></Slider>
             <hr />
             <Slider Title="Daily Vegetables consumption" Value="@data.Vegetables"
-            Action="((x) => {data.Vegetables = x; StateHasChanged();})"></Slider>
+                    Action="((x) => {data.Vegetables = x; Update();})"></Slider>
             <hr />
             <Slider Title="Daily Fruits consumption" Value="@data.Fruits"
-            Action="((x) => {data.Fruits = x; StateHasChanged();})"></Slider>
+                    Action="((x) => {data.Fruits = x; Update();})"></Slider>
             <hr />
             <Slider Title="Daily Fats consumption" Value="@data.Fats"
-            Action="((x) => {data.Fats = x; StateHasChanged();})"></Slider>
+                    Action="((x) => {data.Fats = x; Update();})"></Slider>
             <hr />
             <Slider Title="Daily Sweets & Alcohol consumption" Value="@data.SweetsAndAlcohol"
-            Action="((x) => {data.SweetsAndAlcohol = x; StateHasChanged();})"></Slider>
+                    Action="((x) => {data.SweetsAndAlcohol = x; Update();})"></Slider>
             <hr />
             <Slider Title="Daily Processed Products consumption" Value="@data.Processed"
-            Action="((x) => {data.Processed = x; StateHasChanged();})"></Slider>
+                    Action="((x) => {data.Processed = x; Update();})"></Slider>
         </fieldset>
     </form>
 </div>
@@ -46,11 +47,22 @@
     {
         if (Refresh != null)
             Refresh();
+
+        StateHasChanged();
+    }
+
+    void SetKalories(string value)
+    {
+        _ = int.TryParse(value, out int intValue);
+        data.DailyKalories = intValue; 
+        Update();
     }
 }
 
 <style>
     hr{
-        margin:0.5rem
+        margin:0.5rem;
+        border: 0;
+        border-top: 1px solid hsl(0, 0%, 90%);
     }
 </style>

@@ -3,6 +3,7 @@
 @using FoodCards.Shared
 @using FoodCards.Shared.Dish
 @inject DishSetUpDataService dishData
+@inject NavigationManager nav
 
 <div style="display:flex">
     <div class="card">
@@ -33,7 +34,9 @@
             </ul>
         </div>
         <div class="card">
-            Databank
+            <ul>
+                <li class="li-btn" @onclick=@GotToDatabank>Databank</li>
+            </ul>
         </div>
     </div>
 </div>
@@ -44,7 +47,7 @@
 @if (displayDishSetUp)
 {
     <segment>
-        <DishSetUp></DishSetUp>
+        <DishSetUp Refresh=@(async() => await Recalculate())></DishSetUp>
     </segment>
 }
 
@@ -60,6 +63,11 @@
     List<ChartBar> chartBars = new();
 
     bool displayDishSetUp;
+
+    async Task GotToDatabank()
+    {
+        await InvokeAsync(() =>nav.NavigateTo("/Cards"));
+    }
 
     async Task AddBreakfast()
     {
@@ -97,39 +105,48 @@
         var sweets = nutritions.Where(x => x.Type == IngredientType.SweetsAndAlcohol).Sum(x => x.Kalories);
         var processed = nutritions.Where(x => x.Type == IngredientType.Processed).Sum(x => x.Kalories);
 
+        var dairyData = Const.Get(IngredientType.EggsAndDairy);
+        var meatsData = Const.Get(IngredientType.MeatAndFish);
+        var carbsData = Const.Get(IngredientType.GrainsAndPotatoes);
+        var vegiesData = Const.Get(IngredientType.Vegetables);
+        var fruitsData = Const.Get(IngredientType.Fruits);
+        var fatsData = Const.Get(IngredientType.Fats);
+        var sweetsData = Const.Get(IngredientType.SweetsAndAlcohol);
+        var processedData = Const.Get(IngredientType.Processed);
+
         nutrients = new()
         {
-            new(TextDictionary.Get(IngredientType.EggsAndDairy), dairy, (decimal)dairy/kalories, "hsl(0, 0%, 90%)"),
-            new(TextDictionary.Get(IngredientType.MeatAndFish), meats, (decimal)meats/kalories, "hsl(0, 75%, 50%)"),
-            new(TextDictionary.Get(IngredientType.GrainsAndPotatoes), carbs, (decimal)carbs/kalories, "hsl(60, 75%, 50%)"),
-            new(TextDictionary.Get(IngredientType.Vegetables), vegies, (decimal)vegies / kalories, "hsl(120, 75%, 50%)"),
-            new(TextDictionary.Get(IngredientType.Fruits), fruits, (decimal)fruits/kalories, "hsl(180, 75%, 50%)"),
-            new(TextDictionary.Get(IngredientType.Fats), fats, (decimal)fats/kalories, "hsl(240, 75%, 50%)"),
-            new(TextDictionary.Get(IngredientType.SweetsAndAlcohol), sweets, (decimal)sweets/kalories, "hsl(300, 75%, 50%)"),
-            new(TextDictionary.Get(IngredientType.Processed), processed, (decimal)processed/kalories, "hsl(0, 0%, 10%)"),
+            new(dairyData, dairy, (decimal)dairy/kalories),
+            new(meatsData, meats, (decimal)meats/kalories),
+            new(carbsData, carbs, (decimal)carbs/kalories),
+            new(vegiesData, vegies, (decimal)vegies / kalories),
+            new(fruitsData, fruits, (decimal)fruits/kalories),
+            new(fatsData, fats, (decimal)fats/kalories),
+            new(sweetsData, sweets, (decimal)sweets/kalories),
+            new(processedData, processed, (decimal)processed/kalories),
         };
 
         chartBars = new();
         if (dishData.DailyKalories > 0)
             chartBars.Add(new("Kalories", kalories / dishData.DailyKalories, $"{kalories}kcal"));
 
-        kalories /= 100;
+        var kal = kalories * 0.01m;
         if (dishData.EggsAndDairy > 0)
-            chartBars.Add(new(TextDictionary.Get(IngredientType.EggsAndDairy), dairy / kalories / dishData.EggsAndDairy, $"{dairy}kcal"));
+            chartBars.Add(new(dairyData.Name, dairy / kal / dishData.EggsAndDairy, $"{dairy}kcal"));
         if (dishData.MeatAndFish > 0)
-            chartBars.Add(new(TextDictionary.Get(IngredientType.MeatAndFish), meats / kalories / dishData.MeatAndFish, $"{meats}kcal"));
+            chartBars.Add(new(meatsData.Name, meats / kal / dishData.MeatAndFish, $"{meats}kcal"));
         if (dishData.GrainsAndPotatoes > 0)
-            chartBars.Add(new(TextDictionary.Get(IngredientType.GrainsAndPotatoes), carbs / kalories / dishData.GrainsAndPotatoes, $"{carbs}kcal"));
+            chartBars.Add(new(carbsData.Name, carbs / kal / dishData.GrainsAndPotatoes, $"{carbs}kcal"));
         if (dishData.Vegetables > 0)
-            chartBars.Add(new(TextDictionary.Get(IngredientType.Vegetables), vegies / kalories / dishData.Vegetables, $"{vegies}kcal"));
+            chartBars.Add(new(vegiesData.Name, vegies / kal / dishData.Vegetables, $"{vegies}kcal"));
         if (dishData.Fruits > 0)
-            chartBars.Add(new(TextDictionary.Get(IngredientType.Fruits), fruits / kalories / dishData.Fruits, $"{fruits}kcal"));
+            chartBars.Add(new(fruitsData.Name, fruits / kal / dishData.Fruits, $"{fruits}kcal"));
         if (dishData.Fats > 0)
-            chartBars.Add(new(TextDictionary.Get(IngredientType.Fats), fats / kalories / dishData.Fats, $"{fats}kcal"));
+            chartBars.Add(new(fatsData.Name, fats / kal / dishData.Fats, $"{fats}kcal"));
         if (dishData.SweetsAndAlcohol > 0)
-            chartBars.Add(new(TextDictionary.Get(IngredientType.SweetsAndAlcohol), sweets / kalories / dishData.SweetsAndAlcohol, $"{sweets}kcal"));
+            chartBars.Add(new(sweetsData.Name, sweets / kal / dishData.SweetsAndAlcohol, $"{sweets}kcal"));
         if (dishData.Processed > 0)
-            chartBars.Add(new(TextDictionary.Get(IngredientType.Processed), processed / kalories / dishData.Processed, $"{processed}kcal"));
+            chartBars.Add(new(processedData.Name, processed / kal / dishData.Processed, $"{processed}kcal"));
 
         await InvokeAsync(() => StateHasChanged());
     }
