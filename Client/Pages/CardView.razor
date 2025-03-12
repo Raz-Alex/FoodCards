@@ -2,7 +2,27 @@
 @using FoodCards.Client.Layouts
 @using FoodCards.Client.Script
 @using FoodCards.Shared
+@inject NavigationManager nav
 
+<div class="card" style="width: fit-content; height: fit-content;">
+	<div class="button" @onclick=@Home>
+		Home
+	</div>
+	<div class="button" @onclick=@Home>
+		Add food item
+	</div>
+	<div class="button" @onclick=@Home>
+		Create Meal
+	</div>
+	<div class="button" @onclick=@Home>
+		Import food item
+	</div>
+	@*
+		alter,
+		remove - remove fast
+		Import - import fast
+	*@
+</div>
 
 @if (ingredients != null)
 {
@@ -20,7 +40,7 @@
 				</div>
 			}
 		}
-	</div>
+	</div>	
 	<div>
 		<!--div style="text-align: center;"-->
 		@foreach (var ingredient in ingredients)
@@ -55,6 +75,11 @@
 
 		await InvokeAsync(() => StateHasChanged());
 	}
+
+	async Task Home()
+	{
+		await InvokeAsync(() => nav.NavigateTo("/"));
+	}
 }
 
 <style>
@@ -63,9 +88,5 @@
 		border-radius: 5px;
 		display:inline-flex;
 		margin-left:0.5rem
-	}
-
-	.filter-item:first-child {
-		margin-left:0
 	}
 </style>
