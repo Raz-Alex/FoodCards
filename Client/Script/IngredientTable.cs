@@ -16,7 +16,7 @@ namespace FoodCards.Client.Script
                 Protein = 24,
                 Carbohydrate = 0,
                 Fat = 1,
-                SaturatedFat = 0.32m
+                SaturatedFat = 0
             },
             new()
             {
@@ -28,7 +28,7 @@ namespace FoodCards.Client.Script
                 Protein = 8,
                 Carbohydrate = 0,
                 Fat = 7,
-                SaturatedFat = 2.52m
+                SaturatedFat = 3
             },
             new()
             {
@@ -40,7 +40,7 @@ namespace FoodCards.Client.Script
                 Protein = 3,
                 Carbohydrate = 5,
                 Fat = 4,
-                SaturatedFat = 3.84m
+                SaturatedFat = 4
             },
             new()
             {
@@ -76,7 +76,7 @@ namespace FoodCards.Client.Script
                 Protein = 8,
                 Carbohydrate = 48,
                 Fat = 3,
-                SaturatedFat = 1.11m
+                SaturatedFat = 1
             },
             new()
             {
@@ -88,7 +88,7 @@ namespace FoodCards.Client.Script
                 Protein = 19,
                 Carbohydrate = 4,
                 Fat = 54,
-                SaturatedFat = 4.86m
+                SaturatedFat = 5
             }
         };
     }

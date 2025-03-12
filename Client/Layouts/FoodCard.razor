@@ -1,56 +1,54 @@
-﻿@using FoodCards.Shared
+﻿@using FoodCards.Client.Script
+@using FoodCards.Shared
 
+@*
+	quant for nutrients
+*@
 @if(FoodItem != null)
 {
-	<div class="card" style=@Style>
-		<h2>@FoodItem.Name</h2>
+	<div class="card" style=@Style()>
+		<h3>@FoodItem.Name</h3>
 		<div class="img-holder">
 			<img src=@($"images/{FoodItem.Photo}") />
+			<div class="img-caption"><h4>@caption</h4></div>
 		</div>
-		<table>
-			<tbody>
-				<tr>
-					<th>
-						Kalories
-					</th>
-					<td>
-						@FoodItem.Kalories
-					</td>
-				</tr>
-				<tr>
-					<th>
-						Protein
-					</th>
-					<td>
-						@FoodItem.Protein
-					</td>
-				</tr>
-				<tr>
-					<th>
-						Carbohydrate
-					</th>
-					<td>
-						@FoodItem.Carbohydrate
-					</td>
-				</tr>
-				<tr>
-					<th>
-						Fat
-					</th>
-					<td>
-						@FoodItem.Fat
-					</td>
-				</tr>
-				<tr>
-					<th>
-						SaturatedFat
-					</th>
-					<td>
-						@FoodItem.SaturatedFat
-					</td>
-				</tr>
-			</tbody>
-		</table>
+		@if (nutrients != null)
+		{
+			<table>
+				<tbody>
+					<tr>
+						<th>
+							Calculated for
+						</th>
+						<td>
+							100g
+						</td>
+					</tr>
+					<tr>
+						<th>
+							Kalories
+						</th>
+						<td>
+							@($"{FoodItem.Kalories}kcal")
+						</td>
+					</tr>
+					@foreach(var item in nutrients)
+					{
+						@if(item.Value > 0)
+						{
+							<tr>
+								<th>
+									@item.Key
+								</th>
+								<td>
+									@($"{item.Value}g")
+								</td>
+							</tr>
+						}
+					}
+				</tbody>
+			</table>
+		}
 	</div>
 }
 
@@ -58,33 +56,45 @@
 	[Parameter]
 	public INutrition FoodItem { get; set; }
 
-	string Style => FoodItem.Type switch
+	Dictionary<string, decimal> nutrients;
+
+	string caption;
+
+	protected override void OnInitialized()
 	{
-		IngredientType.HomeMadeMeal => "",
-		IngredientType.MeatAndFish => @"
-    background-image: radial-gradient(25rem 150% at top left, hsl(330, 75%, 99%), hsl(330, 75%, 97%));
-    border: 1px solid hsl(330, 75%, 87%);",
-		IngredientType.GrainsAndPotatoes => @"
-    background-image: radial-gradient(25rem 150% at top left, hsl(30, 75%, 99%), hsl(30, 75%, 97%));
-    border: 1px solid hsl(30, 75%, 87%);",
-		IngredientType.Fats => @"
-    background-image: radial-gradient(25rem 150% at top left, hsl(270, 75%, 99%), hsl(270, 75%, 97%));
-    border: 1px solid hsl(270, 75%, 87%);",
-		IngredientType.Vegetables => @"
-    background-image: radial-gradient(25rem 150% at top left, hsl(150, 75%, 99%), hsl(150, 75%, 97%));
-    border: 1px solid hsl(150, 75%, 87%);",
-		IngredientType.Fruits => @"
-    background-imasge: radial-gradient(25rem 150% at top left, hsl(90, 75%, 99%), hsl(90, 75%, 97%));
-    border: 1px solid hsl(90, 75%, 87%);",
-		_ => ""
-	};
+		if (FoodItem == null)
+			return;
+
+		nutrients = new()
+		{
+			{"Protein",FoodItem.Protein},
+			{"Fat",FoodItem.Fat},
+			{"Sat. Fat",FoodItem.SaturatedFat},
+			{"Carbs",FoodItem.Carbohydrate},
+			{"Sugar",FoodItem.Sugar},
+			{"Salt",FoodItem.Salt},
+			{"Fiber",FoodItem.Fiber}
+		};
+
+		caption = Const.GetShortcut(FoodItem.Type);
+	}
+
+	string Style()
+	{
+		var data = Const.Get(FoodItem.Type);
+		var css = $"background-image:{data.Gradient};border:{data.Border};";
+		return css;
+	}
 }
 
 <style>
 	table{
-		position: absolute;
-		bottom: 1rem;
-		width: calc(100% - 2rem);
+		margin-top:0;
+		width: 100%;
+	}
+
+	tr{
+		height: 1.2rem
 	}
 
 	th{
@@ -97,13 +107,23 @@
 
 	th, td{
 		padding-inline: 0.5rem;
+		font-size: 0.8rem;
 	}
 
 	.img-holder {
-		width: 15rem;
-		height: 15rem ;
+		width: 10rem;
+		height: 10rem ;
 		margin: auto;
+		margin-top: 1rem;
+		margin-bottom: 1rem;
 		align-content: center;
+		position: relative;
+	}
+
+	.img-caption {
+		position: absolute;
+		bottom: 0.1rem;
+		right: 0.1rem;
 	}
 
 	img {

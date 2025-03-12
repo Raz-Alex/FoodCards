@@ -8,7 +8,7 @@ namespace FoodCards.Client.Script
     {
         public List<IDish> Ingredients { get; } = new()
         {
-            new RawItem()
+            new FoodItem()
             {
                 Id = 0,
                 Name = "Chicken Brest",
@@ -17,7 +17,7 @@ namespace FoodCards.Client.Script
                 Kalories = 102,
                 Quantity = new Grams()
             },
-            new RawItem()
+            new FoodItem()
             {
                 Id = 1,
                 Name = "Egg",
@@ -26,7 +26,7 @@ namespace FoodCards.Client.Script
                 Kalories = 92,
                 Quantity = new Grams()
             },
-            new RawItem()
+            new FoodItem()
             {
                 Id = 2,
                 Name = "Milk",
@@ -35,7 +35,7 @@ namespace FoodCards.Client.Script
                 Kalories = 64,
                 Quantity = new Grams()
             },
-            new RawItem()
+            new FoodItem()
             {
                 Id = 3,
                 Name = "Paprika",
@@ -44,7 +44,7 @@ namespace FoodCards.Client.Script
                 Kalories = 20,
                 Quantity = new Grams()
             },
-            new RawItem()
+            new FoodItem()
             {
                 Id = 4,
                 Name = "Apple",
@@ -53,7 +53,7 @@ namespace FoodCards.Client.Script
                 Kalories = 52,
                 Quantity = new Grams()
             },
-            new RawItem()
+            new FoodItem()
             {
                 Id = 5,
                 Name = "Bread",
@@ -62,7 +62,7 @@ namespace FoodCards.Client.Script
                 Kalories = 259,
                 Quantity = new Grams()
             },
-            new RawItem()
+            new FoodItem()
             {
                 Id = 6,
                 Name = "Mandeln",

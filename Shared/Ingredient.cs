@@ -14,20 +14,7 @@
         public decimal Sugar { get; set; }
         public decimal Salt { get; set; }
         public decimal Fiber { get; set; }
-        public int DefaultGramms { get; set; } = 100;
 
-        public static List<string> Properties => new()
-        {
-            "Name",
-            "Kalories",
-            "Protein",
-            "Fat",
-            "SaturatedFat",
-            "Carbohydrate",
-            "Sugar",
-            "Salt",
-            "Fiber"
-        };
 
         /*
          * Name

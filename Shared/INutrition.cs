@@ -14,6 +14,5 @@
         decimal Sugar { get;}
         decimal Salt { get; }
         decimal Fiber { get; }
-        int DefaultGramms { get; set; }
     }
 }
