@@ -6,22 +6,7 @@
 @inject NavigationManager nav
 
 <div class="card">
-    <PieChart Width="15" Height="15" PiePieces=@nutrients CenterText=@($"{kalories} kcal")></PieChart>
-    <table style="border:none;">
-        <tbody>
-            @foreach (var nut in nutrients)
-            {
-                <tr>
-                    <td style="width:1rem">
-                        <div style=@($"width:1rem;height: 1rem;margin-right:1rem;background-color:{nut.Color}")></div>
-                    </td>
-                    <td style="text-align:left">@nut.Text</td>
-                    <td style="text-align:right;padding-inline:0.5rem">@($"{nut.Items}kcal")</td>
-                    <td style="text-align:right">@($"{(int)(nut.Percentage * 100)}%")</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <FoodTypePie @ref=@foodTypePie />
 </div>
 <div class="card">
     <ul>
@@ -55,11 +40,10 @@
 </div>
 
 @code {
-    decimal kalories;
 
-    List<PiePiece> nutrients = new();
+    FoodTypePie foodTypePie;
 
-    List<IDish> nutritions = new();
+    List<Ingredient> nutritions = new();
 
     DishTable ingredients = new();
 
@@ -98,7 +82,7 @@
 
     async Task Recalculate()
     {
-        kalories = nutritions.Sum(x => x.Kalories);
+        var kalories = nutritions.Sum(x => x.Kalories);
         var dairy = nutritions.Where(x => x.Type == IngredientType.EggsAndDairy).Sum(x => x.Kalories);
         var meats = nutritions.Where(x => x.Type == IngredientType.MeatAndFish).Sum(x => x.Kalories);
         var carbs = nutritions.Where(x => x.Type == IngredientType.GrainsAndPotatoes).Sum(x => x.Kalories);
@@ -117,17 +101,7 @@
         var sweetsData = Const.Get(IngredientType.SweetsAndAlcohol);
         var processedData = Const.Get(IngredientType.Processed);
 
-        nutrients = new()
-        {
-            new(dairyData, dairy, (decimal)dairy/kalories),
-            new(meatsData, meats, (decimal)meats/kalories),
-            new(carbsData, carbs, (decimal)carbs/kalories),
-            new(vegiesData, vegies, (decimal)vegies / kalories),
-            new(fruitsData, fruits, (decimal)fruits/kalories),
-            new(fatsData, fats, (decimal)fats/kalories),
-            new(sweetsData, sweets, (decimal)sweets/kalories),
-            new(processedData, processed, (decimal)processed/kalories),
-        };
+        await foodTypePie.Recalculate(nutritions);
 
         chartBars = new();
         if (dishData.DailyKalories > 0)

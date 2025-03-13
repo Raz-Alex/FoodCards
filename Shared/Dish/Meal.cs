@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FoodCards.Shared.Dish
+﻿namespace FoodCards.Shared.Dish
 {
-    class Meal
+    public class Meal
     {
     }
 }

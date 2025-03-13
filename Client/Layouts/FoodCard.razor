@@ -8,7 +8,7 @@
 {
 	@if (Editable)
 	{
-		<div class="card" style="height:fit-content;width: min-content;">
+		<div class="card free" style="height:fit-content;width: min-content;">
 			<form>
 				<fieldset>
 					<label>
@@ -70,7 +70,7 @@
 	}
 	else
 	{
-		<div class="card" style=@Style()>
+		<div class="card" style=@Style() @onclick=@(() => {if(Click != null)Click();})>
 			<h3>@FoodItem.Name</h3>
 			<div class="img-holder">
 				@if (!string.IsNullOrEmpty(FoodItem.Photo))
@@ -129,6 +129,9 @@
 
 	[Parameter]
 	public INutrition FoodItem { get; set; }
+
+	[Parameter]
+	public Action Click { get; set; }
 
 	[Parameter]
 	public Action AcceptAction { get; set; }

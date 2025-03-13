@@ -1,0 +1,77 @@
+﻿@using FoodCards.Client.Script
+@using FoodCards.Shared
+
+<div>
+    <PieChart Width="15" Height="15" PiePieces=@nutrients CenterText=@($"{kalories} kcal")></PieChart>
+    <table style="border:none; margin-top:0.5rem">
+        <tbody>
+            @foreach (var nut in nutrients)
+            {
+                <tr>
+                    <td style="width:1rem">
+                        <div style=@($"width:1rem;height: 1rem;margin-right:1rem;background-color:{nut.Color}")></div>
+                    </td>
+                    <td style="text-align:left">@nut.Text</td>
+                    <td style="text-align:right;padding-inline:0.5rem">@($"{nut.Items}kcal")</td>
+                    <td style="text-align:right">@($"{(int)(nut.Percentage * 100)}%")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    decimal kalories;
+
+    List<PiePiece> nutrients = new();
+
+    public async Task Recalculate(List<Ingredient> ingredients)
+    {
+        await InvokeAsync(() => kalories = ingredients.Sum(x => x.Kalories));
+
+        if (kalories == 0)
+        {
+            await InvokeAsync(() =>
+            {
+                nutrients = new();
+                StateHasChanged();
+            });
+            return;
+        }
+
+        var dairy = ingredients.Where(x => x.Type == IngredientType.EggsAndDairy).Sum(x => x.Kalories);
+        var meats = ingredients.Where(x => x.Type == IngredientType.MeatAndFish).Sum(x => x.Kalories);
+        var carbs = ingredients.Where(x => x.Type == IngredientType.GrainsAndPotatoes).Sum(x => x.Kalories);
+        var vegies = ingredients.Where(x => x.Type == IngredientType.Vegetables).Sum(x => x.Kalories);
+        var fruits = ingredients.Where(x => x.Type == IngredientType.Fruits).Sum(x => x.Kalories);
+        var fats = ingredients.Where(x => x.Type == IngredientType.Fats).Sum(x => x.Kalories);
+        var sweets = ingredients.Where(x => x.Type == IngredientType.SweetsAndAlcohol).Sum(x => x.Kalories);
+        var processed = ingredients.Where(x => x.Type == IngredientType.Processed).Sum(x => x.Kalories);
+
+        var dairyData = Const.Get(IngredientType.EggsAndDairy);
+        var meatsData = Const.Get(IngredientType.MeatAndFish);
+        var carbsData = Const.Get(IngredientType.GrainsAndPotatoes);
+        var vegiesData = Const.Get(IngredientType.Vegetables);
+        var fruitsData = Const.Get(IngredientType.Fruits);
+        var fatsData = Const.Get(IngredientType.Fats);
+        var sweetsData = Const.Get(IngredientType.SweetsAndAlcohol);
+        var processedData = Const.Get(IngredientType.Processed);
+
+        await InvokeAsync(() =>
+        {
+            nutrients = new()
+                {
+                new(dairyData, dairy, (decimal)dairy/kalories),
+                new(meatsData, meats, (decimal)meats/kalories),
+                new(carbsData, carbs, (decimal)carbs/kalories),
+                new(vegiesData, vegies, (decimal)vegies / kalories),
+                new(fruitsData, fruits, (decimal)fruits/kalories),
+                new(fatsData, fats, (decimal)fats/kalories),
+                new(sweetsData, sweets, (decimal)sweets/kalories),
+                new(processedData, processed, (decimal)processed/kalories),
+                };
+
+            StateHasChanged(); 
+        });
+    }
+}

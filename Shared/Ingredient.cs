@@ -1,4 +1,6 @@
-﻿namespace FoodCards.Shared
+﻿using FoodCards.Shared.Quantity;
+
+namespace FoodCards.Shared
 {
     public class Ingredient: INutrition
     {
@@ -14,6 +16,7 @@
         public decimal Sugar { get; set; }
         public decimal Salt { get; set; }
         public decimal Fiber { get; set; }
+        public IQuantity Quantity { get; set; }
 
 
         /*

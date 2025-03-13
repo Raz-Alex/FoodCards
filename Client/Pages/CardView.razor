@@ -2,9 +2,10 @@
 @using FoodCards.Client.Layouts
 @using FoodCards.Client.Script
 @using FoodCards.Shared
+@using FoodCards.Shared.Dish
 @inject NavigationManager nav
 
-@if (newIngredient == null)
+@if (newIngredient == null && newMeal == null)
 {
 	<div class="card" style="width: fit-content; height: fit-content;">
 
@@ -14,13 +15,15 @@
 		<div class="button" @onclick=@AddFoodItem>
 			Add food item
 		</div>
-		<div class="button" @onclick=@Home>
+		<div class="button" @onclick=@CreateMeal>
 			Create Meal
 		</div>
+		@*
+			PostPone for now
 		<div class="button" @onclick=@Home>
 			Import food item
 		</div>
-		@*
+
 		alter,
 		remove - remove fast
 		Import - import fast
@@ -31,8 +34,14 @@
 @if (newIngredient != null)
 {
 	<FoodCard FoodItem=@newIngredient Editable=true 
-		AcceptAction=@(async () => await Accept()) 
-		CancelAction=@(async() => await Cancel())></FoodCard>
+	AcceptAction=@(async () => await Accept()) 
+	CancelAction=@(async() => await Cancel())></FoodCard>
+}
+
+@if (newMeal != null)
+{
+	<MealCard @ref=@mealCard AcceptAction=@(async () => await Accept())
+	CancelAction=@(async() => await Cancel())></MealCard>
 }
 
 @if (ingredients != null)
@@ -47,9 +56,9 @@
 					_ = Enum.TryParse(type, out IngredientType iType);
 					var iData = Const.Get(iType);
 					<div class="filter-item"
-						 style=@($"background-image:{iData.Gradient};border:{iData.Border};{(displayType == iType ? "border:2px double" : "")}")
-						 @onclick=@(() => Filter(iType))>
-						 @Const.GetShortcut(iType)
+					style=@($"background-image:{iData.Gradient};border:{iData.Border};{(displayType == iType ? "border:2px double" : "")}")
+					@onclick=@(() => Filter(iType))>
+						@Const.GetShortcut(iType)
 					</div>
 				}
 			}
@@ -59,7 +68,8 @@
 		<!--div style="text-align: center;"-->
 		@foreach (var ingredient in ingredients)
 		{
-			<FoodCard FoodItem=@ingredient Hide=@(displayType != IngredientType.None && displayType != ingredient.Type) />
+			<FoodCard FoodItem=@ingredient Click=@(async() =>await FoodCardClick(ingredient))
+			Hide=@(displayType != IngredientType.None && displayType != ingredient.Type) />
 		}
 		<!--/div-->
 	</div>
@@ -73,6 +83,10 @@
 	IngredientType displayType = IngredientType.None;
 
 	Ingredient newIngredient;
+
+	Meal newMeal;
+
+	MealCard mealCard;
 
 	protected override void OnInitialized()
 	{
@@ -103,9 +117,32 @@
 		});
 	}
 
+	async Task CreateMeal()
+	{
+		await InvokeAsync(() =>
+		{
+			newMeal = new();
+			StateHasChanged();
+		});
+	}
+
+	async Task FoodCardClick(Ingredient ingredient)
+	{
+		if (mealCard == null)
+			return;
+
+		await mealCard.AddIngredient(ingredient);
+		await InvokeAsync(() => StateHasChanged());
+	}
+
 	async Task Accept()
 	{
+		if (newIngredient != null)
 		await InvokeAsync(() => ingredients.Add(newIngredient));
+		
+		//if(newMeal != null)
+		//await InvokeAsync(() => ingredients.Add(newMeal));
+
 		await Cancel();
 	}
 
@@ -114,6 +151,7 @@
 		await InvokeAsync(() =>
 		{
 			newIngredient = null;
+			newMeal = null;
 			StateHasChanged();
 		});
 	}

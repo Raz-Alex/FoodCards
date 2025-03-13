@@ -51,6 +51,11 @@ fieldset{
     vertical-align: top;
 }
 
+.free {
+    height: fit-content;
+    width: min-content;
+}
+
 .slider {
     vertical-align:middle;
     float:right

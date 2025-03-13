@@ -1,0 +1,75 @@
+﻿@using FoodCards.Client.Script
+@using FoodCards.Shared
+
+<div class="card free container" style=@(ingredients.Count>0 ?"column-gap: 2rem;":"")>
+    <div>
+        <table>
+            <tbody>
+                @foreach (var ingredient in ingredients)
+                {
+                    <tr>
+                        <td>
+                            <div class="img-holder" style="width:3rem;height:3rem;margin:0">
+                                @if (!string.IsNullOrEmpty(ingredient.Photo))
+                                {
+                                    <img src=@($"images/{ingredient.Photo}") />
+                                }
+                            </div>
+                        </td>
+                        <td>@ingredient.Name</td>
+                        <td>
+                            <input style="height: 1.2rem; width: 4rem;" />
+                        </td>
+                        <td>
+                            <button type="button" @onclick=@(async() => await RemoveIngredient(ingredient))
+                            style="padding-inline: 0.5rem; background-color: hsl(0, 60%, 60%); border-radius: 3px;">
+                                -
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <FoodTypePie @ref=foodTypePie/>
+</div>
+
+@code {
+
+    [Parameter]
+    public Action AcceptAction { get; set; }
+
+    [Parameter]
+    public Action CancelAction { get; set; }
+
+    List<Ingredient> ingredients = new();
+
+    FoodTypePie foodTypePie;
+
+    public async Task AddIngredient(Ingredient ingredient)
+    {
+        if (ingredients.Contains(ingredient))
+            return;
+
+        await InvokeAsync(() => ingredients.Add(ingredient));
+        await Recalculate();
+    }
+
+    async Task RemoveIngredient(Ingredient ingredient)
+    {
+        await InvokeAsync(() =>  ingredients.Remove(ingredient));
+        await Recalculate();
+    }
+
+    async Task Recalculate()
+    {
+        await foodTypePie.Recalculate(ingredients);
+    }
+}
+
+<style>
+    .container{
+        display: grid;
+        grid-template-columns: auto auto;
+    }
+</style>
