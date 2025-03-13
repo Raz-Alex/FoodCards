@@ -79,43 +79,7 @@
 				}
 				<div class="img-caption"><h4>@caption</h4></div>
 			</div>
-			@if (nutrients != null)
-			{
-				<table>
-					<tbody>
-						<tr>
-							<th>
-								Calculated for
-							</th>
-							<td>
-								100g
-							</td>
-						</tr>
-						<tr>
-							<th>
-								Kalories
-							</th>
-							<td>
-								@($"{FoodItem.Kalories}kcal")
-							</td>
-						</tr>
-						@foreach (var item in nutrients)
-						{
-							@if (item.Value > 0)
-							{
-								<tr>
-									<th>
-										@item.Key
-									</th>
-									<td>
-										@($"{item.Value}g")
-									</td>
-								</tr>
-							}
-						}
-					</tbody>
-				</table>
-			}
+			<NutritionTable Kalories=@FoodItem.Kalories Nutrients=@nutrients></NutritionTable>
 		</div>
 	}
 }
@@ -244,11 +208,6 @@
 
 	td {
 		text-align: right
-	}
-
-	th, td{
-		padding-inline: 0.5rem;
-		font-size: 0.8rem;
 	}
 
 	.img-holder {

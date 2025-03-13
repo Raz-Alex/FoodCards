@@ -30,6 +30,9 @@
                 }
             </tbody>
         </table>
+        <div style="margin-top:0.5rem">
+            <NutritionTable Kalories=@kalories Nutrients=@nutrients></NutritionTable>
+        </div>
     </div>
     <FoodTypePie @ref=foodTypePie/>
 </div>
@@ -46,6 +49,10 @@
 
     FoodTypePie foodTypePie;
 
+    decimal kalories;
+
+    Dictionary<string, decimal> nutrients;
+
     public async Task AddIngredient(Ingredient ingredient)
     {
         if (ingredients.Contains(ingredient))
@@ -57,13 +64,28 @@
 
     async Task RemoveIngredient(Ingredient ingredient)
     {
-        await InvokeAsync(() =>  ingredients.Remove(ingredient));
+        await InvokeAsync(() => ingredients.Remove(ingredient));
         await Recalculate();
     }
 
     async Task Recalculate()
     {
         await foodTypePie.Recalculate(ingredients);
+        await InvokeAsync(() =>
+        {
+            kalories = foodTypePie.Kalories;
+            nutrients = new()
+            {
+                {"Protein", ingredients.Sum(x => x.Protein)},
+                {"Fat",ingredients.Sum(x => x.Fat)},
+                {"Sat. Fat",ingredients.Sum(x => x.SaturatedFat)},
+                {"Carbs",ingredients.Sum(x => x.Carbohydrate)},
+                {"Sugar",ingredients.Sum(x => x.Sugar)},
+                {"Salt",ingredients.Sum(x => x.Salt)},
+                {"Fiber",ingredients.Sum(x => x.Fiber)}
+            };
+            StateHasChanged();
+        });
     }
 }
 

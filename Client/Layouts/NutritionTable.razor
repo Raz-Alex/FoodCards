@@ -1,0 +1,45 @@
+﻿@if (Nutrients != null)
+{
+	<table>
+		<tbody>
+			<tr>
+				<th>
+					Calculated for
+				</th>
+				<td>
+					100g
+				</td>
+			</tr>
+			<tr>
+				<th>
+					Kalories
+				</th>
+				<td>
+					@($"{Kalories}kcal")
+				</td>
+			</tr>
+			@foreach (var item in Nutrients)
+			{
+				@if (item.Value > 0)
+				{
+					<tr>
+						<th>
+							@item.Key
+						</th>
+						<td>
+							@($"{item.Value}g")
+						</td>
+					</tr>
+				}
+			}
+		</tbody>
+	</table>
+}
+
+@code {
+	[Parameter]
+	public decimal Kalories{ get; set; }
+
+	[Parameter]
+	public Dictionary<string, decimal> Nutrients { get; set; }
+}

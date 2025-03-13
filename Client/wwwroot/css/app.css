@@ -27,10 +27,17 @@ header{
 table {
     margin: auto;
     margin-top: 2rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
 }
 
 th{
     width: 10rem
+}
+
+th, td {
+    padding-inline: 0.5rem;
+    font-size: 0.8rem;
 }
 
 tr{

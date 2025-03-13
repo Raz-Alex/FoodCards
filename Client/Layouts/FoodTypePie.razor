@@ -2,8 +2,8 @@
 @using FoodCards.Shared
 
 <div>
-    <PieChart Width="15" Height="15" PiePieces=@nutrients CenterText=@($"{kalories} kcal")></PieChart>
-    <table style="border:none; margin-top:0.5rem">
+    <PieChart Width="15" Height="15" PiePieces=@nutrients CenterText=@($"{Kalories} kcal")></PieChart>
+    <table style="margin-top:0.5rem">
         <tbody>
             @foreach (var nut in nutrients)
             {
@@ -21,15 +21,16 @@
 </div>
 
 @code {
-    decimal kalories;
+    [Parameter]
+    public decimal Kalories{ get; set; }
 
     List<PiePiece> nutrients = new();
 
     public async Task Recalculate(List<Ingredient> ingredients)
     {
-        await InvokeAsync(() => kalories = ingredients.Sum(x => x.Kalories));
+        await InvokeAsync(() => Kalories = ingredients.Sum(x => x.Kalories));
 
-        if (kalories == 0)
+        if (Kalories == 0)
         {
             await InvokeAsync(() =>
             {
@@ -61,14 +62,14 @@
         {
             nutrients = new()
                 {
-                new(dairyData, dairy, (decimal)dairy/kalories),
-                new(meatsData, meats, (decimal)meats/kalories),
-                new(carbsData, carbs, (decimal)carbs/kalories),
-                new(vegiesData, vegies, (decimal)vegies / kalories),
-                new(fruitsData, fruits, (decimal)fruits/kalories),
-                new(fatsData, fats, (decimal)fats/kalories),
-                new(sweetsData, sweets, (decimal)sweets/kalories),
-                new(processedData, processed, (decimal)processed/kalories),
+                new(dairyData, dairy, (decimal)dairy/Kalories),
+                new(meatsData, meats, (decimal)meats/Kalories),
+                new(carbsData, carbs, (decimal)carbs/Kalories),
+                new(vegiesData, vegies, (decimal)vegies / Kalories),
+                new(fruitsData, fruits, (decimal)fruits/Kalories),
+                new(fatsData, fats, (decimal)fats/Kalories),
+                new(sweetsData, sweets, (decimal)sweets/Kalories),
+                new(processedData, processed, (decimal)processed/Kalories),
                 };
 
             StateHasChanged(); 
