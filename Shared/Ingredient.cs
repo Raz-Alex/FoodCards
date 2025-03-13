@@ -50,7 +50,8 @@
         Fats,
         SweetsAndAlcohol,
         Processed,
-        HomeMadeMeal
+        HomeMadeMeal,
+        None
     }
 
     public enum IngredientType2

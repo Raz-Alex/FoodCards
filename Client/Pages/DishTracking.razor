@@ -35,9 +35,12 @@
     <ul>
         <li class="li-btn" @onclick="@OpenDishSetUpMenu">Goals</li>
     </ul>
-    <div style="margin-top: 2rem;">
-        <BarChartVerticalView ChartBars=@chartBars></BarChartVerticalView>
-    </div>
+    @if (chartBars.Count > 0)
+    {
+        <div style="margin-top: 2rem;">
+            <BarChartVerticalView ChartBars=@chartBars></BarChartVerticalView>
+        </div>
+    }
 </div>
 @if (displayDishSetUp)
 {

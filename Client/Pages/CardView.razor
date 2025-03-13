@@ -4,25 +4,35 @@
 @using FoodCards.Shared
 @inject NavigationManager nav
 
-<div class="card" style="width: fit-content; height: fit-content;">
-	<div class="button" @onclick=@Home>
-		Home
-	</div>
-	<div class="button" @onclick=@Home>
-		Add food item
-	</div>
-	<div class="button" @onclick=@Home>
-		Create Meal
-	</div>
-	<div class="button" @onclick=@Home>
-		Import food item
-	</div>
-	@*
+@if (newIngredient == null)
+{
+	<div class="card" style="width: fit-content; height: fit-content;">
+
+		<div class="button" @onclick=@Home>
+			Home
+		</div>
+		<div class="button" @onclick=@AddFoodItem>
+			Add food item
+		</div>
+		<div class="button" @onclick=@Home>
+			Create Meal
+		</div>
+		<div class="button" @onclick=@Home>
+			Import food item
+		</div>
+		@*
 		alter,
 		remove - remove fast
 		Import - import fast
 	*@
-</div>
+	</div>
+}
+
+@if (newIngredient != null)
+{
+	<FoodCard FoodItem=@newIngredient Editable=true 
+	AcceptAction=@(async () => await Accept()) CancelAction=@(async() => await Cancel())></FoodCard>
+}
 
 @if (ingredients != null)
 {
@@ -31,13 +41,16 @@
 		{
 			@foreach(var type in ingredientTypes)
 			{
-				_ = Enum.TryParse(type, out IngredientType iType);
-				var iData = Const.Get(iType);
-				<div class="filter-item"
-				style=@($"background-image:{iData.Gradient};border:{iData.Border};{(filter.Contains(iType)? "border:2px double" : "")}")
-				@onclick=@(() => Filter(iType))>
-					@Const.GetShortcut(iType)
-				</div>
+				@if(type != "None")
+				{
+					_ = Enum.TryParse(type, out IngredientType iType);
+					var iData = Const.Get(iType);
+					<div class="filter-item"
+						 style=@($"background-image:{iData.Gradient};border:{iData.Border};{(displayType == iType ? "border:2px double" : "")}")
+						 @onclick=@(() => Filter(iType))>
+						 @Const.GetShortcut(iType)
+					</div>
+				}
 			}
 		}
 	</div>	
@@ -45,10 +58,7 @@
 		<!--div style="text-align: center;"-->
 		@foreach (var ingredient in ingredients)
 		{
-			@if(filter.Count == 0 || filter.Contains(ingredient.Type))
-			{
-				<FoodCard FoodItem=@ingredient />
-			}
+			<FoodCard FoodItem=@ingredient Hide=@(displayType != IngredientType.None && displayType != ingredient.Type) />
 		}
 		<!--/div-->
 	</div>
@@ -59,7 +69,9 @@
 
 	List<string> ingredientTypes = Enum.GetNames(typeof(IngredientType)).ToList();
 
-	List<IngredientType> filter = new();
+	IngredientType displayType = IngredientType.None;
+
+	Ingredient newIngredient;
 
 	protected override void OnInitialized()
 	{
@@ -68,10 +80,10 @@
 
 	async Task Filter(IngredientType type)
 	{
-		if (filter.Contains(type))
-			await InvokeAsync(() => filter.Remove(type));
+		if (displayType == type)
+			await InvokeAsync(() => displayType = IngredientType.None);
 		else
-			await InvokeAsync(() => filter.Add(type));
+			await InvokeAsync(() => displayType = type);
 
 		await InvokeAsync(() => StateHasChanged());
 	}
@@ -79,6 +91,30 @@
 	async Task Home()
 	{
 		await InvokeAsync(() => nav.NavigateTo("/"));
+	}
+
+	async Task AddFoodItem()
+	{
+		await InvokeAsync(() =>
+		{
+			newIngredient = new();
+			StateHasChanged();
+		});
+	}
+
+	async Task Accept()
+	{
+		await InvokeAsync(() => ingredients.Add(newIngredient));
+		await Cancel();
+	}
+
+	async Task Cancel()
+	{
+		await InvokeAsync(() =>
+		{
+			newIngredient = null;
+			StateHasChanged();
+		});
 	}
 }
 

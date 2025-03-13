@@ -5,14 +5,14 @@
         int Id { get; set; }
         string Name { get; set; }
         string Photo { get; set; }
-        IngredientType Type { get;}
-        int Kalories { get;}
-        decimal Protein { get;}
-        decimal Fat { get;}
-        decimal SaturatedFat { get;}
-        decimal Carbohydrate { get;}
-        decimal Sugar { get;}
-        decimal Salt { get; }
-        decimal Fiber { get; }
+        IngredientType Type { get; set; }
+        int Kalories { get; set; }
+        decimal Protein { get; set; }
+        decimal Fat { get; set; }
+        decimal SaturatedFat { get; set; }
+        decimal Carbohydrate { get; set; }
+        decimal Sugar { get; set; }
+        decimal Salt { get; set; }
+        decimal Fiber { get; set; }
     }
 }

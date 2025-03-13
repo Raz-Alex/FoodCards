@@ -1,6 +1,6 @@
 ﻿namespace FoodCards.Shared
 {
-    public class Food : INutrition
+    public class Food 
     {
         public int Id { get; set; }
         public string Name { get; set; }

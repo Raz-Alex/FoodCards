@@ -42,6 +42,7 @@ namespace FoodCards.Client.Script
                 new("Meal", "hsl(210, 0%, 75%, 50%)",
                     "radial-gradient(25rem 150% at top left, hsl(210, 75%, 99%), hsl(210, 75%, 97%))",
                     "1px solid hsl(210, 75%, 87%)"),
+            IngredientType.None => new("","","",""),
             _ => throw new NotImplementedException(),
         };
 

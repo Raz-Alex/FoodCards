@@ -4,79 +4,160 @@
 @*
 	quant for nutrients
 *@
-@if(FoodItem != null)
+@if(FoodItem != null && !Hide)
 {
-	<div class="card" style=@Style()>
-		<h3>@FoodItem.Name</h3>
-		<div class="img-holder">
-			<img src=@($"images/{FoodItem.Photo}") />
-			<div class="img-caption"><h4>@caption</h4></div>
-		</div>
-		@if (nutrients != null)
-		{
-			<table>
-				<tbody>
-					<tr>
-						<th>
-							Calculated for
-						</th>
-						<td>
-							100g
-						</td>
-					</tr>
-					<tr>
-						<th>
-							Kalories
-						</th>
-						<td>
-							@($"{FoodItem.Kalories}kcal")
-						</td>
-					</tr>
-					@foreach(var item in nutrients)
+	@if (Editable)
+	{
+		<div class="card" style="height:fit-content;width: min-content;">
+			<form>
+				<fieldset>
+					<label>
+						Food item name:
+						<input @bind=@FoodItem.Name />
+					</label>
+					<label>
+						Upload image:
+						<input @bind=@FoodItem.Photo />
+					</label>
+					<label>
+						Select food type:
+						<select name="" size="1">
+							@foreach (var type in ingredientTypes)
+							{
+								@if (type == FoodItem.Type.ToString())
+								{
+									<option value=@type selected />
+								}
+								else
+								{
+									<option value=@type/>
+								}
+							}
+						</select>
+						<!--input style="float:right" @bind=@FoodItem.Type /-->
+					</label>
+				</fieldset>
+			</form>
+			<form>
+				<fieldset>
+					<label>
+						Kalories
+						<!--input @bind=@FoodItem.Kalories /-->
+					</label>
+					@foreach (var item in nutrients)
 					{
-						@if(item.Value > 0)
-						{
-							<tr>
-								<th>
-									@item.Key
-								</th>
-								<td>
-									@($"{item.Value}g")
-								</td>
-							</tr>
-						}
+						<label>
+							@item.Key
+							<input @bind=@nutrients[item.Key]
+							@oninput="async(EventArgs) => await SetValue(item.Key,EventArgs.Value.ToString())" />
+						</label>
 					}
-				</tbody>
-			</table>
-		}
-	</div>
+				</fieldset>
+			</form>
+			<div style="width: fit-content; height: fit-content;margin: auto; margin-top: 10px;">
+				<div class="button" @onclick=@(() => {if(AcceptAction != null)AcceptAction();})>
+					Accept
+				</div>
+				<div class="button" @onclick=@(() => {if(CancelAction != null)CancelAction();})>
+					Cancel
+				</div>
+			</div>
+		</div>
+	}
+	else
+	{
+		<div class="card" style=@Style()>
+			<h3>@FoodItem.Name</h3>
+			<div class="img-holder">
+				@if (!string.IsNullOrEmpty(FoodItem.Photo))
+				{
+					<img src=@($"images/{FoodItem.Photo}") />
+				}
+				<div class="img-caption"><h4>@caption</h4></div>
+			</div>
+			@if (nutrients != null)
+			{
+				<table>
+					<tbody>
+						<tr>
+							<th>
+								Calculated for
+							</th>
+							<td>
+								100g
+							</td>
+						</tr>
+						<tr>
+							<th>
+								Kalories
+							</th>
+							<td>
+								@($"{FoodItem.Kalories}kcal")
+							</td>
+						</tr>
+						@foreach (var item in nutrients)
+						{
+							@if (item.Value > 0)
+							{
+								<tr>
+									<th>
+										@item.Key
+									</th>
+									<td>
+										@($"{item.Value}g")
+									</td>
+								</tr>
+							}
+						}
+					</tbody>
+				</table>
+			}
+		</div>
+	}
 }
 
 @code {
 	[Parameter]
+	public bool Hide { get; set; }
+
+	[Parameter]
+	public bool Editable { get; set; }
+
+	[Parameter]
 	public INutrition FoodItem { get; set; }
+
+	[Parameter]
+	public Action AcceptAction { get; set; }
+
+	[Parameter]
+	public Action CancelAction { get; set; }
 
 	Dictionary<string, decimal> nutrients;
 
 	string caption;
 
-	protected override void OnInitialized()
+	List<string> ingredientTypes = Enum.GetNames(typeof(IngredientType)).ToList();
+
+	protected override async Task OnInitializedAsync()
 	{
 		if (FoodItem == null)
 			return;
 
-		nutrients = new()
+		await InvokeAsync(() =>
 		{
-			{"Protein",FoodItem.Protein},
-			{"Fat",FoodItem.Fat},
-			{"Sat. Fat",FoodItem.SaturatedFat},
-			{"Carbs",FoodItem.Carbohydrate},
-			{"Sugar",FoodItem.Sugar},
-			{"Salt",FoodItem.Salt},
-			{"Fiber",FoodItem.Fiber}
-		};
+			nutrients = new()
+			{
+				{"Protein",FoodItem.Protein},
+				{"Fat",FoodItem.Fat},
+				{"Sat. Fat",FoodItem.SaturatedFat},
+				{"Carbs",FoodItem.Carbohydrate},
+				{"Sugar",FoodItem.Sugar},
+				{"Salt",FoodItem.Salt},
+				{"Fiber",FoodItem.Fiber}
+			};
 
-		caption = Const.GetShortcut(FoodItem.Type);
+			caption = Const.GetShortcut(FoodItem.Type);
+		});
 	}
 
 	string Style()
@@ -84,6 +165,46 @@
 		var data = Const.Get(FoodItem.Type);
 		var css = $"background-image:{data.Gradient};border:{data.Border};";
 		return css;
+	}
+
+	async Task SetValue(string key,string value)
+	{
+		_ = decimal.TryParse(value, out decimal decimalValue);
+		await InvokeAsync(() =>
+		{
+			switch(key)
+			{
+				case "Protein": 
+					FoodItem.Protein = decimalValue;
+					break;
+
+				case "Fat":
+					FoodItem.Fat = decimalValue;
+					break;
+
+				case "Sat. Fat":
+					FoodItem.SaturatedFat = decimalValue;
+					break;
+
+				case "Carbs":
+					FoodItem.Carbohydrate = decimalValue;
+					break;
+
+				case "Sugar":
+					FoodItem.Sugar = decimalValue;
+					break;
+
+				case "Salt":
+					FoodItem.Salt = decimalValue;
+					break;
+
+				case "Fiber":
+					FoodItem.Fiber = decimalValue;
+					break;
+			}
+
+			StateHasChanged();
+		});
 	}
 }
 
@@ -114,8 +235,8 @@
 		width: 10rem;
 		height: 10rem ;
 		margin: auto;
-		margin-top: 1rem;
-		margin-bottom: 1rem;
+		margin-top: 0.5rem;
+		margin-bottom: 0.5rem;
 		align-content: center;
 		position: relative;
 	}
@@ -129,5 +250,13 @@
 	img {
 		max-width: 100%;
 		max-height: 100%;
+	}
+
+	label{
+		display:block
+	}
+
+	input{
+		text-align:right
 	}
 </style>
