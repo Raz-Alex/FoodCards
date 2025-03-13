@@ -31,7 +31,8 @@
 @if (newIngredient != null)
 {
 	<FoodCard FoodItem=@newIngredient Editable=true 
-	AcceptAction=@(async () => await Accept()) CancelAction=@(async() => await Cancel())></FoodCard>
+		AcceptAction=@(async () => await Accept()) 
+		CancelAction=@(async() => await Cancel())></FoodCard>
 }
 
 @if (ingredients != null)

@@ -5,7 +5,7 @@
         public int Id { get; set; }
         public string Name { get; set; }
         public string Photo { get; set; }
-        public int Kalories => Ingredients.Sum(x => x.Kalories) * (int)QuantityCoeficient ;
+        public decimal Kalories => Ingredients.Sum(x => x.Kalories) * QuantityCoeficient ;
         public decimal Protein => Ingredients.Sum(x => x.Protein) * QuantityCoeficient;
         public decimal Fat => Ingredients.Sum(x => x.Fat) * QuantityCoeficient;
         public decimal SaturatedFat => Ingredients.Sum(x => x.SaturatedFat) * QuantityCoeficient;

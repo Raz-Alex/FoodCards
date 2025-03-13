@@ -21,16 +21,19 @@
 					</label>
 					<label>
 						Select food type:
-						<select name="" size="1">
+						<select name="" size="1" @onchange=@((e) => ChangeType(e))>
 							@foreach (var type in ingredientTypes)
 							{
-								@if (type == FoodItem.Type.ToString())
+								@if(type != "None")
 								{
-									<option value=@type selected />
-								}
-								else
-								{
-									<option value=@type/>
+									@if (type == FoodItem.Type.ToString())
+									{
+										<option value=@type selected>@type</option>
+									}
+									else
+									{
+										<option value=@type>@type</option>
+									}
 								}
 							}
 						</select>
@@ -42,14 +45,15 @@
 				<fieldset>
 					<label>
 						Kalories
-						<!--input @bind=@FoodItem.Kalories /-->
+						<input @bind=@FoodItem.Kalories
+						@oninput=@(async(EventArgs) => await SetValue("Kalories",EventArgs.Value.ToString())) />
 					</label>
 					@foreach (var item in nutrients)
 					{
 						<label>
 							@item.Key
 							<input @bind=@nutrients[item.Key]
-							@oninput="async(EventArgs) => await SetValue(item.Key,EventArgs.Value.ToString())" />
+							@oninput=@(async(EventArgs) => await SetValue(item.Key,EventArgs.Value.ToString())) />
 						</label>
 					}
 				</fieldset>
@@ -167,6 +171,15 @@
 		return css;
 	}
 
+	async Task ChangeType(ChangeEventArgs e)
+	{
+		if (e.Value == null)
+			return;
+
+		_ = Enum.TryParse((string)e.Value, out IngredientType iType);
+		await InvokeAsync(() => FoodItem.Type = iType);
+	}
+
 	async Task SetValue(string key,string value)
 	{
 		_ = decimal.TryParse(value, out decimal decimalValue);
@@ -174,6 +187,10 @@
 		{
 			switch(key)
 			{
+				case "Kalories":
+					FoodItem.Kalories = decimalValue;
+					break;
+					
 				case "Protein": 
 					FoodItem.Protein = decimalValue;
 					break;
@@ -232,8 +249,8 @@
 	}
 
 	.img-holder {
-		width: 10rem;
-		height: 10rem ;
+		width: 9rem;
+		height: 9rem ;
 		margin: auto;
 		margin-top: 0.5rem;
 		margin-bottom: 0.5rem;

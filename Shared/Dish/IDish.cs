@@ -7,7 +7,7 @@ namespace FoodCards.Shared.Dish
         int Id { get; set; }
         string Name { get; set; }
         string Photo { get; set; }
-        int Kalories { get; }
+        decimal Kalories { get; }
         IngredientType Type { get; }
         IQuantity Quantity { get; }
     }

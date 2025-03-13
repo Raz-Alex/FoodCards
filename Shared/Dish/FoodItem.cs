@@ -10,7 +10,7 @@ namespace FoodCards.Shared.Dish
 
         public string Photo { get; set; }
 
-        public int Kalories { get; set; }
+        public decimal Kalories { get; set; }
 
         public IngredientType Type { get; set; }
 

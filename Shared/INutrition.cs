@@ -6,7 +6,7 @@
         string Name { get; set; }
         string Photo { get; set; }
         IngredientType Type { get; set; }
-        int Kalories { get; set; }
+        decimal Kalories { get; set; }
         decimal Protein { get; set; }
         decimal Fat { get; set; }
         decimal SaturatedFat { get; set; }
