@@ -1,12 +1,12 @@
 ﻿namespace FoodCards.Shared.Quantity
 {
-    public class Grams : IQuantity
+    public class MilliLiters : IQuantity
     {
-        public string MesurmentUnit => "g";
+        public string MesurmentUnit => "ml";
         public int BaseQuantity { get;}
         public int Quantity { get; set; }
 
-        public Grams(int baseQuantity = 100, int quantity = 100)
+        public MilliLiters(int baseQuantity = 100, int quantity = 100)
         {
             Quantity = quantity;
             BaseQuantity = baseQuantity;

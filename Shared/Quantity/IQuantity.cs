@@ -2,7 +2,8 @@
 {
     public interface IQuantity
     {
-        int BaseQuantity { get; }
-        int Quantity { get; }
+        string MesurmentUnit { get; }
+        int BaseQuantity { get;}
+        int Quantity { get; set; }
     }
 }

@@ -40,7 +40,7 @@
 
 @if (newMeal != null)
 {
-	<MealCard @ref=@mealCard AcceptAction=@(async () => await Accept())
+	<MealCard @ref=@mealCard Meal=@newMeal AcceptAction=@(async () => await Accept())
 	CancelAction=@(async() => await Cancel())></MealCard>
 }
 
@@ -66,17 +66,25 @@
 	</div>	
 	<div>
 		<!--div style="text-align: center;"-->
-		@foreach (var ingredient in ingredients)
+		@foreach (var nutrition in ingredients)
 		{
-			<FoodCard FoodItem=@ingredient Click=@(async() =>await FoodCardClick(ingredient))
-			Hide=@(displayType != IngredientType.None && displayType != ingredient.Type) />
+			@if (nutrition is Ingredient ingredient)
+			{
+				<FoodCard FoodItem=@ingredient Click=@(async() =>await FoodCardClick(ingredient))
+				Hide=@(displayType != IngredientType.None && displayType != ingredient.Type) />
+			}
+			else if (nutrition is Meal meal)
+			{
+				<MealCard Meal=@meal Compact=true 
+						  Hide=@(displayType != IngredientType.None && displayType != meal.Type) />
+			}
 		}
 		<!--/div-->
 	</div>
 }
 
 @code {
-	List<Ingredient> ingredients;
+	List<INutrition> ingredients;
 
 	List<string> ingredientTypes = Enum.GetNames(typeof(IngredientType)).ToList();
 
@@ -126,7 +134,7 @@
 		});
 	}
 
-	async Task FoodCardClick(Ingredient ingredient)
+	async Task FoodCardClick(INutrition ingredient)
 	{
 		if (mealCard == null)
 			return;
@@ -138,10 +146,10 @@
 	async Task Accept()
 	{
 		if (newIngredient != null)
-		await InvokeAsync(() => ingredients.Add(newIngredient));
+			await InvokeAsync(() => ingredients.Add(newIngredient));
 		
-		//if(newMeal != null)
-		//await InvokeAsync(() => ingredients.Add(newMeal));
+		if(newMeal != null)
+			await InvokeAsync(() => ingredients.Add(newMeal));
 
 		await Cancel();
 	}

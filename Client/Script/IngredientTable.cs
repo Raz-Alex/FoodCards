@@ -4,9 +4,9 @@ namespace FoodCards.Client.Script
 {
     public class IngredientTable
     {
-        public List<Ingredient> Ingredients { get; } = new()
+        public List<INutrition> Ingredients { get; } = new()
         {
-            new()
+            new Ingredient()
             {
                 Id = 0,
                 Name = "Chicken Brest",
@@ -18,7 +18,7 @@ namespace FoodCards.Client.Script
                 Fat = 1,
                 SaturatedFat = 0
             },
-            new()
+            new Ingredient()
             {
                 Id = 1,
                 Name = "Egg",
@@ -30,7 +30,7 @@ namespace FoodCards.Client.Script
                 Fat = 7,
                 SaturatedFat = 3
             },
-            new()
+            new Ingredient()
             {
                 Id = 2,
                 Name = "Milk",
@@ -42,7 +42,7 @@ namespace FoodCards.Client.Script
                 Fat = 4,
                 SaturatedFat = 4
             },
-            new()
+            new Ingredient()
             {
                 Id = 3,
                 Name = "Paprika",
@@ -54,7 +54,7 @@ namespace FoodCards.Client.Script
                 Fat = 0,
                 SaturatedFat = 0
             },
-            new()
+            new Ingredient()
             {
                 Id = 4,
                 Name = "Apple",
@@ -66,7 +66,7 @@ namespace FoodCards.Client.Script
                 Fat = 0,
                 SaturatedFat = 0
             },
-            new()
+            new Ingredient()
             {
                 Id = 5,
                 Name = "Bread",
@@ -78,7 +78,7 @@ namespace FoodCards.Client.Script
                 Fat = 3,
                 SaturatedFat = 1
             },
-            new()
+            new Ingredient()
             {
                 Id = 6,
                 Name = "Mandeln",

@@ -34,6 +34,11 @@
     </segment>
 }
 <div class="card">
+    <div style="width: 10rem;height: 10rem">
+        <img style ="width: 100%;height 100%" src=@($"images/glass_water.jpg") />
+    </div>
+</div>
+<div class="card">
     <ul>
         <li class="li-btn" @onclick=@GotToDatabank>Databank</li>
     </ul>
@@ -43,7 +48,7 @@
 
     FoodTypePie foodTypePie;
 
-    List<Ingredient> nutritions = new();
+    List<INutrition> nutritions = new();
 
     DishTable ingredients = new();
 
