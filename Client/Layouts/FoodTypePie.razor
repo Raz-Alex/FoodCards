@@ -39,7 +39,7 @@ else
 
     public async Task Recalculate(List<FoodItem> ingredients)
     {
-        await InvokeAsync(() => Kalories = ingredients.Sum(x => x.Kalories * x.Coeficient));
+        await InvokeAsync(() => Kalories = ingredients.Sum(x => x.FullKalories));
 
         if (Kalories == 0)
         {
@@ -51,14 +51,24 @@ else
             return;
         }
 
-        var dairy = ingredients.Where(x => x.Type == IngredientType.EggsAndDairy).Sum(x => x.Kalories * x.Coeficient);
-        var meats = ingredients.Where(x => x.Type == IngredientType.MeatAndFish).Sum(x => x.Kalories * x.Coeficient);
-        var carbs = ingredients.Where(x => x.Type == IngredientType.GrainsAndPotatoes).Sum(x => x.Kalories * x.Coeficient);
-        var vegies = ingredients.Where(x => x.Type == IngredientType.Vegetables).Sum(x => x.Kalories * x.Coeficient);
-        var fruits = ingredients.Where(x => x.Type == IngredientType.Fruits).Sum(x => x.Kalories * x.Coeficient);
-        var fats = ingredients.Where(x => x.Type == IngredientType.Fats).Sum(x => x.Kalories * x.Coeficient);
-        var sweets = ingredients.Where(x => x.Type == IngredientType.SweetsAndAlcohol).Sum(x => x.Kalories * x.Coeficient);
-        var processed = ingredients.Where(x => x.Type == IngredientType.Processed).Sum(x => x.Kalories * x.Coeficient);
+        var dairy = ingredients.Where(x => x.Type == IngredientType.EggsAndDairy).Sum(x => x.FullKalories);
+        var meats = ingredients.Where(x => x.Type == IngredientType.MeatAndFish).Sum(x => x.FullKalories);
+        var carbs = ingredients.Where(x => x.Type == IngredientType.GrainsAndPotatoes).Sum(x => x.FullKalories);
+        var vegies = ingredients.Where(x => x.Type == IngredientType.Vegetables).Sum(x => x.FullKalories);
+        var fruits = ingredients.Where(x => x.Type == IngredientType.Fruits).Sum(x => x.FullKalories);
+        var fats = ingredients.Where(x => x.Type == IngredientType.Fats).Sum(x => x.FullKalories);
+        var sweets = ingredients.Where(x => x.Type == IngredientType.SweetsAndAlcohol).Sum(x => x.FullKalories);
+        var processed = ingredients.Where(x => x.Type == IngredientType.Processed).Sum(x => x.FullKalories);
+
+        var meals = ingredients.Where(x => x.Type == IngredientType.HomeMadeMeal).Select((x) => x as Meal);
+        dairy += meals.Sum(x => x.Ingredients.Where(x => x.Type == IngredientType.EggsAndDairy).Sum(x => x.FullKalories));
+        meats += meals.Sum(x => x.Ingredients.Where(x => x.Type == IngredientType.MeatAndFish).Sum(x => x.FullKalories));
+        carbs += meals.Sum(x => x.Ingredients.Where(x => x.Type == IngredientType.GrainsAndPotatoes).Sum(x => x.FullKalories));
+        vegies += meals.Sum(x => x.Ingredients.Where(x => x.Type == IngredientType.Vegetables).Sum(x => x.FullKalories));
+        fruits += meals.Sum(x => x.Ingredients.Where(x => x.Type == IngredientType.Fruits).Sum(x => x.FullKalories));
+        fats += meals.Sum(x => x.Ingredients.Where(x => x.Type == IngredientType.Fats).Sum(x => x.FullKalories));
+        sweets += meals.Sum(x => x.Ingredients.Where(x => x.Type == IngredientType.SweetsAndAlcohol).Sum(x => x.FullKalories));
+        processed += meals.Sum(x => x.Ingredients.Where(x => x.Type == IngredientType.Processed).Sum(x => x.FullKalories));
 
         var dairyData = Const.Get(IngredientType.EggsAndDairy);
         var meatsData = Const.Get(IngredientType.MeatAndFish);

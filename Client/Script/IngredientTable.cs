@@ -24,7 +24,7 @@ namespace FoodCards.Client.Script
                 Id = 1,
                 Name = "Egg",
                 Photo = "eggs.png",
-                Type = IngredientType.Fats,
+                Type = IngredientType.EggsAndDairy,
                 Kalories = 92,
                 Protein = 8,
                 Carbohydrate = 0,

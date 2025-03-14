@@ -4,9 +4,16 @@
     {
         public List<FoodItem> Ingredients { get; set; } = new();
 
+        public override decimal FullKalories => Ingredients.Sum(x => x.FullKalories);
+
+        public Meal()
+        {
+            Type = IngredientType.HomeMadeMeal;
+        }
+
         public void Calculate()
         {
-            Kalories = Ingredients.Sum(x => x.Kalories * x.Coeficient);
+            Kalories = Ingredients.Sum(x => x.FullKalories);
             Protein = Ingredients.Sum(x => x.Protein * x.Coeficient);
             Fat = Ingredients.Sum(x => x.Fat * x.Coeficient);
             SaturatedFat = Ingredients.Sum(x => x.SaturatedFat * x.Coeficient);

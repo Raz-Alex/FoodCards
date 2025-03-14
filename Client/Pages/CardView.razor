@@ -5,10 +5,9 @@
 @using FoodCards.Shared.Dish
 @inject NavigationManager nav
 
-@if (newIngredient == null && newMeal == null)
+@if (newIngredient == null && newMeal == null && GetMeal == null)
 {
 	<div class="card" style="width: fit-content; height: fit-content;">
-
 		<div class="button" @onclick=@Home>
 			Home
 		</div>
@@ -29,6 +28,12 @@
 		Import - import fast
 	*@
 	</div>
+}
+
+@if (GetMeal != null)
+{
+	<MealCard @ref=@mealCard Meal=@buildMeal AcceptAction=@(async() => await Accept())
+	CancelAction=@(async() => await InvokeAsync(() =>GetMeal(null)))></MealCard>
 }
 
 @if (newIngredient != null)
@@ -71,7 +76,7 @@
 			@if (nutrition is Meal meal)
 			{
 				<MealCard Meal=@meal Compact=true
-						  Hide=@(displayType != IngredientType.None && displayType != meal.Type) />
+				Hide=@(displayType != IngredientType.None && displayType != meal.Type) />
 			}
 			else if (nutrition is FoodItem ingredient)
 			{
@@ -94,10 +99,18 @@
 
 	Meal newMeal;
 
+	Meal buildMeal;
+
 	MealCard mealCard;
+
+	[Parameter]
+	public Action<FoodItem> GetMeal { get; set; }
 
 	protected override void OnInitialized()
 	{
+		if (GetMeal != null)
+			buildMeal = new();
+
 		ingredients = new IngredientTable().Ingredients;
 	}
 
@@ -147,9 +160,12 @@
 	{
 		if (newIngredient != null)
 			await InvokeAsync(() => ingredients.Add(newIngredient));
-		
+
 		if(newMeal != null)
 			await InvokeAsync(() => ingredients.Add(newMeal));
+
+		if (buildMeal != null)
+			await InvokeAsync(() => GetMeal(buildMeal));
 
 		await Cancel();
 	}

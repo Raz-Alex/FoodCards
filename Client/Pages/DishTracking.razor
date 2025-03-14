@@ -5,44 +5,51 @@
 @inject DishSetUpDataService dishData
 @inject NavigationManager nav
 
-<div class="card">
+<div class="card free">
     <FoodTypePie @ref=@foodTypePie />
 </div>
-<div class="card">
-    <ul>
-        <li class="li-btn" @onclick=@AddBreakfast>Breakfast</li>
-        <li class="li-btn" @onclick=@AddLunch>Lunch</li>
-        <li class="li-btn" @onclick=@AddDinner>Dinner</li>
-        <li class="li-btn" @onclick=@AddSnacks>Snacks</li>
-    </ul>
-</div>
-<div class="card">
-    <ul>
-        <li class="li-btn" @onclick="@OpenDishSetUpMenu">Goals</li>
-    </ul>
-    @if (chartBars.Count > 0)
-    {
-        <div style="margin-top: 2rem;">
-            <BarChartVerticalView ChartBars=@chartBars></BarChartVerticalView>
-        </div>
-    }
-</div>
-@if (displayDishSetUp)
+@if(!displayCardView)
 {
-    <segment>
-        <DishSetUp Refresh=@(async() => await Recalculate())></DishSetUp>
-    </segment>
-}
-<div class="card">
-    <div style="width: 10rem;height: 10rem">
-        <img style ="width: 100%;height 100%" src=@($"images/glass_water.jpg") />
+    <div class="card free">
+        <ul>
+            <li class="li-btn" @onclick=@AddBreakfast>Breakfast</li>
+            <li class="li-btn" @onclick=@AddLunch>Lunch</li>
+            <li class="li-btn" @onclick=@AddDinner>Dinner</li>
+            <li class="li-btn" @onclick=@AddSnacks>Snacks</li>
+        </ul>
     </div>
-</div>
-<div class="card">
-    <ul>
-        <li class="li-btn" @onclick=@GotToDatabank>Databank</li>
-    </ul>
-</div>
+    <div class="card free">
+        <ul>
+            <li class="li-btn" @onclick="@OpenDishSetUpMenu">Goals</li>
+        </ul>
+        @if (chartBars.Count > 0)
+        {
+            <div style="margin-top: 2rem;">
+                <BarChartVerticalView ChartBars=@chartBars></BarChartVerticalView>
+            </div>
+        }
+    </div>
+    @if (displayDishSetUp)
+    {
+        <segment>
+            <DishSetUp Refresh=@(async() => await Recalculate())></DishSetUp>
+        </segment>
+    }
+    <div class="card free">
+        <div style="width: 10rem;height: 10rem">
+            <img style="width: 100%;height 100%" src=@($"images/glass_water.jpg") />
+        </div>
+    </div>
+    <div class="card free">
+        <ul>
+            <li class="li-btn" @onclick=@GotToDatabank>Databank</li>
+        </ul>
+    </div>
+}
+else
+{
+    <CardView GetMeal=@(async (x) => await GetMeal(x))></CardView>
+}
 
 @code {
 
@@ -56,6 +63,8 @@
 
     bool displayDishSetUp;
 
+    bool displayCardView;
+
     async Task GotToDatabank()
     {
         await InvokeAsync(() =>nav.NavigateTo("/Cards"));
@@ -63,39 +72,66 @@
 
     async Task AddBreakfast()
     {
-        await InvokeAsync(() => nutritions.Add(ingredients.Ingredients[1]));
-        await Recalculate();
+        await ShowCardView();
     }
 
     async Task AddLunch()
     {
-        await InvokeAsync(() => nutritions.Add(ingredients.Ingredients[0]));
-        await Recalculate();
+        await ShowCardView();
     }
 
     async Task AddDinner()
     {
-        await InvokeAsync(() => nutritions.Add(ingredients.Ingredients[5]));
-        await Recalculate();
+        await ShowCardView();
     }
 
     async Task AddSnacks()
     {
-        await InvokeAsync(() => nutritions.Add(ingredients.Ingredients[4]));
-        await Recalculate();
+        await ShowCardView();
+    }
+
+    async Task ShowCardView()
+    {
+        await InvokeAsync(() => displayCardView = true);
+    }
+
+    async Task GetMeal(FoodItem foodItem)
+    {
+        await InvokeAsync(() =>
+        {
+            if (foodItem != null)
+                nutritions.Add(foodItem);
+
+            displayCardView = false;
+        });
+
+        if (foodItem != null)
+            await Recalculate();
+        else
+            await InvokeAsync(() => StateHasChanged());
     }
 
     async Task Recalculate()
     {
-        var kalories = nutritions.Sum(x => x.Kalories);
-        var dairy = nutritions.Where(x => x.Type == IngredientType.EggsAndDairy).Sum(x => x.Kalories);
-        var meats = nutritions.Where(x => x.Type == IngredientType.MeatAndFish).Sum(x => x.Kalories);
-        var carbs = nutritions.Where(x => x.Type == IngredientType.GrainsAndPotatoes).Sum(x => x.Kalories);
-        var vegies = nutritions.Where(x => x.Type == IngredientType.Vegetables).Sum(x => x.Kalories);
-        var fruits = nutritions.Where(x => x.Type == IngredientType.Fruits).Sum(x => x.Kalories);
-        var fats = nutritions.Where(x => x.Type == IngredientType.Fats).Sum(x => x.Kalories);
-        var sweets = nutritions.Where(x => x.Type == IngredientType.SweetsAndAlcohol).Sum(x => x.Kalories);
-        var processed = nutritions.Where(x => x.Type == IngredientType.Processed).Sum(x => x.Kalories);
+        var kalories = nutritions.Sum(x => x.FullKalories);
+        var dairy = nutritions.Where(x => x.Type == IngredientType.EggsAndDairy).Sum(x => x.FullKalories);
+        var meats = nutritions.Where(x => x.Type == IngredientType.MeatAndFish).Sum(x => x.FullKalories);
+        var carbs = nutritions.Where(x => x.Type == IngredientType.GrainsAndPotatoes).Sum(x => x.FullKalories);
+        var vegies = nutritions.Where(x => x.Type == IngredientType.Vegetables).Sum(x => x.FullKalories);
+        var fruits = nutritions.Where(x => x.Type == IngredientType.Fruits).Sum(x => x.FullKalories);
+        var fats = nutritions.Where(x => x.Type == IngredientType.Fats).Sum(x => x.FullKalories);
+        var sweets = nutritions.Where(x => x.Type == IngredientType.SweetsAndAlcohol).Sum(x => x.FullKalories);
+        var processed = nutritions.Where(x => x.Type == IngredientType.Processed).Sum(x => x.FullKalories);
+
+        var meals = nutritions.Where(x => x.Type == IngredientType.HomeMadeMeal).Select((x) => x as Meal);
+        dairy += meals.Sum(x => x.Ingredients.Where(x => x.Type == IngredientType.EggsAndDairy).Sum(x => x.FullKalories));
+        meats += meals.Sum(x => x.Ingredients.Where(x => x.Type == IngredientType.MeatAndFish).Sum(x => x.FullKalories));
+        carbs += meals.Sum(x => x.Ingredients.Where(x => x.Type == IngredientType.GrainsAndPotatoes).Sum(x => x.FullKalories));
+        vegies += meals.Sum(x => x.Ingredients.Where(x => x.Type == IngredientType.Vegetables).Sum(x => x.FullKalories));
+        fruits += meals.Sum(x => x.Ingredients.Where(x => x.Type == IngredientType.Fruits).Sum(x => x.FullKalories));
+        fats += meals.Sum(x => x.Ingredients.Where(x => x.Type == IngredientType.Fats).Sum(x => x.FullKalories));
+        sweets += meals.Sum(x => x.Ingredients.Where(x => x.Type == IngredientType.SweetsAndAlcohol).Sum(x => x.FullKalories));
+        processed += meals.Sum(x => x.Ingredients.Where(x => x.Type == IngredientType.Processed).Sum(x => x.FullKalories));
 
         var dairyData = Const.Get(IngredientType.EggsAndDairy);
         var meatsData = Const.Get(IngredientType.MeatAndFish);
@@ -140,11 +176,6 @@
 }
 
 <style>
-    .card {
-        width: fit-content;
-        height: fit-content;
-    }
-
     .li-btn {
         padding: 0.5rem;
         border: 1px solid hsl(210, 75%, 87%);

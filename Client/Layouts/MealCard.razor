@@ -68,7 +68,7 @@
             </div>
             <div style="width: fit-content; height: fit-content;margin: auto; margin-top: 10px;">
                 <div class="button" 
-                    @onclick=@(() => {if(AcceptAction != null && !string.IsNullOrEmpty(Meal.Name))AcceptAction();})>
+                    @onclick=@(() => {if(AcceptAction != null)AcceptAction();})>
                     Accept
                 </div>
                 <div class="button" @onclick=@(() => {if(CancelAction != null)CancelAction();})>

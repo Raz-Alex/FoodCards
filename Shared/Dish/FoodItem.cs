@@ -12,6 +12,8 @@ namespace FoodCards.Shared.Dish
 
         public decimal Kalories { get; set; }
 
+        public virtual decimal FullKalories => Kalories * Coeficient;
+
         public IngredientType Type { get; set; }
 
         public IQuantity Quantity { get; set; } = new Grams();
