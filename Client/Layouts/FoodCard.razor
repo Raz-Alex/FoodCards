@@ -46,14 +46,14 @@
 				<fieldset>
 					<label>
 						Kalories
-						<input @bind=@FoodItem.Kalories
+						<input @bind=@FoodItem.Kalories type="number"
 						@oninput=@(async(EventArgs) => await SetValue("Kalories",EventArgs.Value.ToString())) />
 					</label>
 					@foreach (var item in nutrients)
 					{
 						<label>
 							@item.Key
-							<input @bind=@nutrients[item.Key]
+							<input type="number" @bind=@nutrients[item.Key]
 							@oninput=@(async(EventArgs) => await SetValue(item.Key,EventArgs.Value.ToString())) />
 						</label>
 					}

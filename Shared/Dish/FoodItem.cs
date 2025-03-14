@@ -14,7 +14,9 @@ namespace FoodCards.Shared.Dish
 
         public IngredientType Type { get; set; }
 
-        public IQuantity Quantity { get; set; }
+        public IQuantity Quantity { get; set; } = new Grams();
+
+        public decimal Coeficient => (decimal)Quantity.Quantity / Quantity.BaseQuantity;
 
         public decimal Protein { get; set; }
 

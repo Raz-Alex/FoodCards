@@ -28,7 +28,9 @@
                                     </td>
                                     <td>@ingredient.Name</td>
                                     <td>
-                                        <input style="height: 1.2rem; width: 4rem;" />
+                                        <input type="number" @bind=@ingredient.Quantity.Quantity style="height: 1.2rem; width: 4rem;"
+                                               @oninput=@(async() => await Recalculate()) />
+                                        @ingredient.Quantity.MesurmentUnit
                                     </td>
                                     <td>
                                         <button type="button" @onclick=@(async() => await RemoveIngredient(ingredient))
@@ -41,7 +43,7 @@
                         </tbody>
                     </table>
                     <div style="margin-top:0.5rem">
-                        <NutritionTable Kalories=@kalories Nutrients=@nutrients></NutritionTable>
+                        <NutritionTable Kalories=@Meal.Kalories Nutrients=@nutrients></NutritionTable>
                     </div>
                 </div>
                 <FoodTypePie @ref=foodTypePie />
@@ -92,8 +94,6 @@
 
     FoodTypePie foodTypePie;
 
-    decimal kalories;
-
     Dictionary<string, decimal> nutrients;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -122,19 +122,19 @@
         if (foodTypePie == null)
             return;
 
+        await InvokeAsync(() => Meal.Calculate());
         await foodTypePie.Recalculate(Meal.Ingredients);
         await InvokeAsync(() =>
-        {
-            kalories = foodTypePie.Kalories;
+        {   
             nutrients = new()
             {
-                {"Protein", Meal.Ingredients.Sum(x => x.Protein)},
-                {"Fat",Meal.Ingredients.Sum(x => x.Fat)},
-                {"Sat. Fat",Meal.Ingredients.Sum(x => x.SaturatedFat)},
-                {"Carbs",Meal.Ingredients.Sum(x => x.Carbohydrate)},
-                {"Sugar",Meal.Ingredients.Sum(x => x.Sugar)},
-                {"Salt",Meal.Ingredients.Sum(x => x.Salt)},
-                {"Fiber",Meal.Ingredients.Sum(x => x.Fiber)}
+                {"Protein", Meal.Protein},
+                {"Fat",Meal.Fat},
+                {"Sat. Fat",Meal.SaturatedFat},
+                {"Carbs",Meal.Carbohydrate},
+                {"Sugar",Meal.Sugar},
+                {"Salt",Meal.Salt},
+                {"Fiber",Meal.Fiber}
             };
             StateHasChanged();
         });
