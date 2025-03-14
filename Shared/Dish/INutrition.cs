@@ -1,11 +1,9 @@
-﻿namespace FoodCards.Shared
+﻿using FoodCards.Shared.Quantity;
+
+namespace FoodCards.Shared.Dish
 {
     public interface INutrition
     {
-        int Id { get; set; }
-        string Name { get; set; }
-        string Photo { get; set; }
-        IngredientType Type { get; set; }
         decimal Kalories { get; set; }
         decimal Protein { get; set; }
         decimal Fat { get; set; }
@@ -14,5 +12,6 @@
         decimal Sugar { get; set; }
         decimal Salt { get; set; }
         decimal Fiber { get; set; }
+        IQuantity Quantity { get; set; }
     }
 }

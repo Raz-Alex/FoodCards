@@ -68,15 +68,15 @@
 		<!--div style="text-align: center;"-->
 		@foreach (var nutrition in ingredients)
 		{
-			@if (nutrition is Ingredient ingredient)
+			@if (nutrition is Meal meal)
+			{
+				<MealCard Meal=@meal Compact=true
+						  Hide=@(displayType != IngredientType.None && displayType != meal.Type) />
+			}
+			else if (nutrition is FoodItem ingredient)
 			{
 				<FoodCard FoodItem=@ingredient Click=@(async() =>await FoodCardClick(ingredient))
 				Hide=@(displayType != IngredientType.None && displayType != ingredient.Type) />
-			}
-			else if (nutrition is Meal meal)
-			{
-				<MealCard Meal=@meal Compact=true 
-						  Hide=@(displayType != IngredientType.None && displayType != meal.Type) />
 			}
 		}
 		<!--/div-->
@@ -84,13 +84,13 @@
 }
 
 @code {
-	List<INutrition> ingredients;
+	List<FoodItem> ingredients;
 
 	List<string> ingredientTypes = Enum.GetNames(typeof(IngredientType)).ToList();
 
 	IngredientType displayType = IngredientType.None;
 
-	Ingredient newIngredient;
+	FoodItem newIngredient;
 
 	Meal newMeal;
 
@@ -134,7 +134,7 @@
 		});
 	}
 
-	async Task FoodCardClick(INutrition ingredient)
+	async Task FoodCardClick(FoodItem ingredient)
 	{
 		if (mealCard == null)
 			return;

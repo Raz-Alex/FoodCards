@@ -1,4 +1,4 @@
-﻿using FoodCards.Shared;
+﻿using FoodCards.Shared.Dish;
 
 namespace FoodCards.Client.Script
 {

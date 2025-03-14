@@ -1,6 +1,7 @@
 ﻿@page "/Tables"
 @using FoodCards.Client.Script
 @using FoodCards.Shared
+@using FoodCards.Shared.Dish
 
 @if(ingredients != null)
 {
@@ -44,7 +45,7 @@
 }
 
 @code {
-	List<INutrition> ingredients;
+	List<FoodItem> ingredients;
 
 	protected override void OnInitialized()
 	{

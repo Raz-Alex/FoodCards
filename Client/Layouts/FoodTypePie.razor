@@ -1,5 +1,6 @@
 ﻿@using FoodCards.Client.Script
 @using FoodCards.Shared
+@using FoodCards.Shared.Dish
 
 @if(Compact)
 {
@@ -36,7 +37,7 @@ else
 
     List<PiePiece> nutrients = new();
 
-    public async Task Recalculate(List<INutrition> ingredients)
+    public async Task Recalculate(List<FoodItem> ingredients)
     {
         await InvokeAsync(() => Kalories = ingredients.Sum(x => x.Kalories));
 

@@ -102,7 +102,7 @@
             await Recalculate();
     }
 
-    public async Task AddIngredient(INutrition ingredient)
+    public async Task AddIngredient(FoodItem ingredient)
     {
         if (Meal.Ingredients.Contains(ingredient))
             return;
@@ -111,7 +111,7 @@
         await Recalculate();
     }
 
-    async Task RemoveIngredient(INutrition ingredient)
+    async Task RemoveIngredient(FoodItem ingredient)
     {
         await InvokeAsync(() => Meal.Ingredients.Remove(ingredient));
         await Recalculate();

@@ -1,5 +1,6 @@
 ﻿@using FoodCards.Client.Script
 @using FoodCards.Shared
+@using FoodCards.Shared.Dish
 
 @*
 	quant for nutrients
@@ -92,7 +93,7 @@
 	public bool Editable { get; set; }
 
 	[Parameter]
-	public INutrition FoodItem { get; set; }
+	public FoodItem FoodItem { get; set; }
 
 	[Parameter]
 	public Action Click { get; set; }

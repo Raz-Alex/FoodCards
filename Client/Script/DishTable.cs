@@ -1,14 +1,13 @@
-﻿using FoodCards.Shared;
-using FoodCards.Shared.Dish;
+﻿using FoodCards.Shared.Dish;
 using FoodCards.Shared.Quantity;
 
 namespace FoodCards.Client.Script
 {
     public class DishTable
     {
-        public List<Ingredient> Ingredients { get; } = new()
+        public List<FoodItem> Ingredients { get; } = new()
         {
-            new Ingredient()
+            new ()
             {
                 Id = 0,
                 Name = "Chicken Brest",
@@ -17,7 +16,7 @@ namespace FoodCards.Client.Script
                 Kalories = 102,
                 Quantity = new Grams()
             },
-            new Ingredient()
+            new ()
             {
                 Id = 1,
                 Name = "Egg",
@@ -26,7 +25,7 @@ namespace FoodCards.Client.Script
                 Kalories = 92,
                 Quantity = new Grams()
             },
-            new Ingredient()
+            new ()
             {
                 Id = 2,
                 Name = "Milk",
@@ -35,7 +34,7 @@ namespace FoodCards.Client.Script
                 Kalories = 64,
                 Quantity = new Grams()
             },
-            new Ingredient()
+            new ()
             {
                 Id = 3,
                 Name = "Paprika",
@@ -44,7 +43,7 @@ namespace FoodCards.Client.Script
                 Kalories = 20,
                 Quantity = new Grams()
             },
-            new Ingredient()
+            new ()
             {
                 Id = 4,
                 Name = "Apple",
@@ -53,7 +52,7 @@ namespace FoodCards.Client.Script
                 Kalories = 52,
                 Quantity = new Grams()
             },
-            new Ingredient()
+            new ()
             {
                 Id = 5,
                 Name = "Bread",
@@ -62,7 +61,7 @@ namespace FoodCards.Client.Script
                 Kalories = 259,
                 Quantity = new Grams()
             },
-            new Ingredient()
+            new ()
             {
                 Id = 6,
                 Name = "Mandeln",

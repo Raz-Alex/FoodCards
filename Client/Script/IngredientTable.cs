@@ -1,12 +1,13 @@
-﻿using FoodCards.Shared;
+﻿using FoodCards.Shared.Dish;
+using FoodCards.Shared.Quantity;
 
 namespace FoodCards.Client.Script
 {
     public class IngredientTable
     {
-        public List<INutrition> Ingredients { get; } = new()
+        public List<FoodItem> Ingredients { get; } = new()
         {
-            new Ingredient()
+            new ()
             {
                 Id = 0,
                 Name = "Chicken Brest",
@@ -18,7 +19,7 @@ namespace FoodCards.Client.Script
                 Fat = 1,
                 SaturatedFat = 0
             },
-            new Ingredient()
+            new ()
             {
                 Id = 1,
                 Name = "Egg",
@@ -28,9 +29,10 @@ namespace FoodCards.Client.Script
                 Protein = 8,
                 Carbohydrate = 0,
                 Fat = 7,
-                SaturatedFat = 3
+                SaturatedFat = 3,
+                Quantity = new FixedQuantity()
             },
-            new Ingredient()
+            new ()
             {
                 Id = 2,
                 Name = "Milk",
@@ -40,9 +42,10 @@ namespace FoodCards.Client.Script
                 Protein = 3,
                 Carbohydrate = 5,
                 Fat = 4,
-                SaturatedFat = 4
+                SaturatedFat = 4,
+                Quantity = new MilliLiters()
             },
-            new Ingredient()
+            new ()
             {
                 Id = 3,
                 Name = "Paprika",
@@ -54,7 +57,7 @@ namespace FoodCards.Client.Script
                 Fat = 0,
                 SaturatedFat = 0
             },
-            new Ingredient()
+            new ()
             {
                 Id = 4,
                 Name = "Apple",
@@ -66,7 +69,7 @@ namespace FoodCards.Client.Script
                 Fat = 0,
                 SaturatedFat = 0
             },
-            new Ingredient()
+            new ()
             {
                 Id = 5,
                 Name = "Bread",
@@ -78,7 +81,7 @@ namespace FoodCards.Client.Script
                 Fat = 3,
                 SaturatedFat = 1
             },
-            new Ingredient()
+            new ()
             {
                 Id = 6,
                 Name = "Mandeln",
