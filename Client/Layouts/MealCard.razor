@@ -7,7 +7,7 @@
     @if (!Compact)
     {
         <div class="card free">
-            <div class="container" style=@(Meal.Ingredients.Count>0 ?"column-gap: 2rem;":"")>
+            <div class="container" style=@("column-gap: 2rem;")>
                 <div>
                     <label style="display: ruby-text;">
                         Name:
@@ -30,8 +30,8 @@
                                     <td>
                                         <input type="number" @bind=@ingredient.Quantity.Quantity style="height: 1.2rem; width: 4rem;"
                                                @oninput=@(async() => await Recalculate()) />
-                                        @ingredient.Quantity.MesurmentUnit
                                     </td>
+                                    <td>@ingredient.Quantity.MesurmentUnit</td>
                                     <td>
                                         <button type="button" @onclick=@(async() => await RemoveIngredient(ingredient))
                                         style="padding-inline: 0.5rem; background-color: hsl(0, 60%, 60%); border-radius: 3px;">
@@ -47,9 +47,28 @@
                     </div>
                 </div>
                 <FoodTypePie @ref=foodTypePie />
+                <div style="width: max-content;">
+                    <label>
+                        <input type="checkbox" />
+                        Breakfast
+                    </label>
+                    <label>
+                        <input type="checkbox" />
+                        Lunch
+                    </label>
+                    <label>
+                        <input type="checkbox" />
+                        Dinner
+                    </label>
+                    <label>
+                        <input type="checkbox" />
+                        Snack
+                    </label>
+                </div>
             </div>
             <div style="width: fit-content; height: fit-content;margin: auto; margin-top: 10px;">
-                <div class="button" @onclick=@(() => {if(AcceptAction != null)AcceptAction();})>
+                <div class="button" 
+                    @onclick=@(() => {if(AcceptAction != null && !string.IsNullOrEmpty(Meal.Name))AcceptAction();})>
                     Accept
                 </div>
                 <div class="button" @onclick=@(() => {if(CancelAction != null)CancelAction();})>
@@ -144,6 +163,6 @@
 <style>
     .container{
         display: grid;
-        grid-template-columns: auto auto;
+        grid-template-columns: auto auto auto;
     }
 </style>

@@ -1,62 +1,103 @@
 ﻿@using FoodCards.Client.Script
 @using FoodCards.Shared
 @using FoodCards.Shared.Dish
+@using FoodCards.Shared.Quantity
 
-@*
-	quant for nutrients
-*@
 @if(FoodItem != null && !Hide)
 {
 	@if (Editable)
 	{
 		<div class="card free" style="height:fit-content;width: min-content;">
 			<form>
-				<fieldset>
-					<label>
-						Name:
-						<input @bind=@FoodItem.Name />
-					</label>
-					<label>
-						Upload image:
-						<input @bind=@FoodItem.Photo />
-					</label>
-					<label>
-						Select food type:
-						<select name="" size="1" @onchange=@((e) => ChangeType(e))>
-							@foreach (var type in ingredientTypes)
-							{
-								@if(type != "None")
-								{
-									@if (type == FoodItem.Type.ToString())
-									{
-										<option value=@type selected>@type</option>
-									}
-									else
-									{
-										<option value=@type>@type</option>
-									}
-								}
-							}
-						</select>
-						<!--input style="float:right" @bind=@FoodItem.Type /-->
-					</label>
+				<fieldset style="width: max-content; margin-bottom: 1rem">
+					<table>
+						<tbody>
+							<tr>
+								<td>
+									Name
+								</td>
+								<td>
+									<input style="width:9rem" @bind=@FoodItem.Name />
+								</td>
+							</tr>
+							<tr>
+								<td>
+									Upload image
+								</td>
+								<td>
+									<input style="width:9rem" @bind=@FoodItem.Photo />
+								</td>
+							</tr>
+							<tr>
+								<td>
+									Food type
+								</td>
+								<td>
+									<select style="width:9rem" name="" size="1" @onchange=@((e) => ChangeType(e))>
+										@foreach (var type in ingredientTypes)
+										{
+											@if (type != "None")
+											{
+												@if (type == FoodItem.Type.ToString())
+												{
+													<option value=@type selected>@type</option>
+												}
+												else
+												{
+													<option value=@type>@type</option>
+												}
+											}
+										}
+									</select>
+								</td>
+							</tr>
+						</tbody>
+					</table>
 				</fieldset>
 			</form>
 			<form>
-				<fieldset>
-					<label>
-						Kalories
-						<input @bind=@FoodItem.Kalories type="number"
-						@oninput=@(async(EventArgs) => await SetValue("Kalories",EventArgs.Value.ToString())) />
-					</label>
-					@foreach (var item in nutrients)
-					{
-						<label>
-							@item.Key
-							<input type="number" @bind=@nutrients[item.Key]
-							@oninput=@(async(EventArgs) => await SetValue(item.Key,EventArgs.Value.ToString())) />
-						</label>
-					}
+				<fieldset style="width: max-content;">
+					<table>
+						<tbody>
+							<tr>
+								<td>
+									Calculate for
+								</td>
+								<td>
+									<input @bind=@FoodItem.Quantity.Quantity type="number"
+										   @oninput=@(async(EventArgs) => await SetValue("Quantity",EventArgs.Value.ToString())) />
+								</td>
+								<td>
+									<select name="" size="1" @onchange=@((e) => ChangeUnits(e))>
+										<option value="g" selected>Grams</option>
+										<option value="ml">Milliliters</option>
+										<option value="unit">Unit</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									Kalories
+								</td>
+								<td>
+									<input @bind=@FoodItem.Kalories type="number"
+										   @oninput=@(async(EventArgs) => await SetValue("Kalories",EventArgs.Value.ToString())) />
+								</td>
+							</tr>
+							@foreach (var item in nutrients)
+							{
+								<tr>
+									<td>
+										@item.Key
+									</td>
+									<td>
+										<input type="number" @bind=@nutrients[item.Key]
+											   @oninput=@(async(EventArgs) => await SetValue(item.Key,EventArgs.Value.ToString())) />
+									</td>
+								</tr>
+							}
+						</tbody>
+					</table>
 				</fieldset>
 			</form>
 			<div style="width: fit-content; height: fit-content;margin: auto; margin-top: 10px;">
@@ -148,6 +189,28 @@
 		await InvokeAsync(() => FoodItem.Type = iType);
 	}
 
+	async Task ChangeUnits(ChangeEventArgs e)
+	{
+		if (e.Value == null)
+			return;
+
+		switch((string)e.Value)
+		{
+			case "g":
+				await InvokeAsync(() => FoodItem.Quantity = new Grams());
+				break;
+
+			case "ml":
+				await InvokeAsync(() => FoodItem.Quantity = new MilliLiters());
+				break;
+
+			case "unit":
+				await InvokeAsync(() => FoodItem.Quantity = new FixedQuantity());
+				break;
+		}
+		//updateValue
+	}
+
 	async Task SetValue(string key,string value)
 	{
 		_ = decimal.TryParse(value, out decimal decimalValue);
@@ -155,6 +218,10 @@
 		{
 			switch(key)
 			{
+				case "Quantity":
+					FoodItem.Quantity.Quantity = (int)decimalValue;
+					break;
+
 				case "Kalories":
 					FoodItem.Kalories = decimalValue;
 					break;
@@ -237,6 +304,11 @@
 	}
 
 	input{
-		text-align:right
+		text-align:right;
+		width:5rem
+	}
+
+	select{
+		height: 1.2rem;
 	}
 </style>
