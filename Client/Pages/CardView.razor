@@ -1,6 +1,8 @@
 ﻿@page "/Cards"
+@using FoodCards.Client.Helper
 @using FoodCards.Client.Layouts
 @using FoodCards.Client.Script
+@using FoodCards.Client.Services
 @using FoodCards.Shared
 @using FoodCards.Shared.Dish
 @inject NavigationManager nav
@@ -9,13 +11,13 @@
 {
 	<div class="card" style="width: fit-content; height: fit-content;">
 		<div class="button" @onclick=@Home>
-			@DictionaryService.Home
+			@DictionaryHelper.Home
 		</div>
 		<div class="button" @onclick=@AddFoodItem>
-			@DictionaryService.AddFoodItem
+			@DictionaryHelper.AddFoodItem
 		</div>
 		<div class="button" @onclick=@CreateMeal>
-			@DictionaryService.CreateMeal
+			@DictionaryHelper.CreateMeal
 		</div>
 		@*
 			PostPone for now

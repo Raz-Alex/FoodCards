@@ -1,4 +1,6 @@
-﻿@using FoodCards.Client.Script
+﻿@using FoodCards.Client.Helper
+@using FoodCards.Client.Script
+@using FoodCards.Client.Services
 @using FoodCards.Shared
 @using FoodCards.Shared.Dish
 
@@ -50,19 +52,19 @@
                 <div style="width: max-content;">
                     <label>
                         <input type="checkbox" />
-                        @DictionaryService.Breakfast
+                        @DictionaryHelper.Breakfast
                     </label>
                     <label>
                         <input type="checkbox" />
-                        @DictionaryService.Lunch
+                        @DictionaryHelper.Lunch
                     </label>
                     <label>
                         <input type="checkbox" />
-                        @DictionaryService.Dinner
+                        @DictionaryHelper.Dinner
                     </label>
                     <label>
                         <input type="checkbox" />
-                        @DictionaryService.Snack
+                        @DictionaryHelper.Snack
                     </label>
                 </div>
             </div>

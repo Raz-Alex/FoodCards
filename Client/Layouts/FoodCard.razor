@@ -1,4 +1,6 @@
-﻿@using FoodCards.Client.Script
+﻿@using FoodCards.Client.Helper
+@using FoodCards.Client.Script
+@using FoodCards.Client.Services
 @using FoodCards.Shared
 @using FoodCards.Shared.Dish
 @using FoodCards.Shared.Quantity
@@ -14,7 +16,7 @@
 						<tbody>
 							<tr>
 								<td>
-									@DictionaryService.Name
+									@DictionaryHelper.Name
 								</td>
 								<td>
 									<input style="width:9rem" @bind=@FoodItem.Name />
@@ -22,7 +24,7 @@
 							</tr>
 							<tr>
 								<td>
-									@DictionaryService.UploadImage
+									@DictionaryHelper.UploadImage
 								</td>
 								<td>
 									<input style="width:9rem" @bind=@FoodItem.Photo />
@@ -30,7 +32,7 @@
 							</tr>
 							<tr>
 								<td>
-									@DictionaryService.FoodType
+									@DictionaryHelper.FoodType
 								</td>
 								<td>
 									<select style="width:9rem" name="" size="1" @onchange=@((e) => ChangeType(e))>
@@ -61,7 +63,7 @@
 						<tbody>
 							<tr>
 								<td>
-									@DictionaryService.CalculateFor
+									@DictionaryHelper.CalculateFor
 								</td>
 								<td>
 									<input @bind=@FoodItem.Quantity.Quantity type="number"
@@ -69,15 +71,15 @@
 								</td>
 								<td>
 									<select name="" size="1" @onchange=@((e) => ChangeUnits(e))>
-										<option value="g" selected>@DictionaryService.Grams</option>
-										<option value="ml">@DictionaryService.Milliliters</option>
-										<option value="unit">@DictionaryService.Unit</option>
+										<option value="g" selected>@DictionaryHelper.Grams</option>
+										<option value="ml">@DictionaryHelper.Milliliters</option>
+										<option value="unit">@DictionaryHelper.Unit</option>
 									</select>
 								</td>
 							</tr>
 							<tr>
 								<td>
-									@DictionaryService.Kalories
+									@DictionaryHelper.Kalories
 								</td>
 								<td>
 									<input @bind=@FoodItem.Kalories type="number"

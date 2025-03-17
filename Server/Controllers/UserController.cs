@@ -1,9 +1,9 @@
-﻿using Dashboard.Server.Services;
-using Dashboard.Shared;
+﻿using FoodCards.Server.Services;
+using FoodCards.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
-namespace Dashboard.Server.Controllers
+namespace FoodCards.Server.Controllers
 {
     [Route("api/users/")]
     [ApiController]

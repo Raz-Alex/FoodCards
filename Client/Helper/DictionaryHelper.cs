@@ -1,6 +1,6 @@
-﻿namespace FoodCards.Client.Script
+﻿namespace FoodCards.Client.Helper
 {
-    public class DictionaryService
+    public class DictionaryHelper
     {
         public const string Breakfast = "Frühstück";
         public const string Lunch = "Mittags";

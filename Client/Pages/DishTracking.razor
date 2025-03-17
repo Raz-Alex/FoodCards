@@ -1,5 +1,7 @@
-﻿@using FoodCards.Client.Layouts
+﻿@using FoodCards.Client.Helper
+@using FoodCards.Client.Layouts
 @using FoodCards.Client.Script
+@using FoodCards.Client.Services
 @using FoodCards.Shared
 @using FoodCards.Shared.Dish
 @inject DishSetUpDataService dishData
@@ -12,15 +14,15 @@
 {
     <div class="card free">
         <ul>
-            <li class="li-btn" @onclick=@AddBreakfast>@DictionaryService.Breakfast</li>
-            <li class="li-btn" @onclick=@AddLunch>@DictionaryService.Lunch</li>
-            <li class="li-btn" @onclick=@AddDinner>@DictionaryService.Dinner</li>
-            <li class="li-btn" @onclick=@AddSnacks>@DictionaryService.Snack</li>
+            <li class="li-btn" @onclick=@AddBreakfast>@DictionaryHelper.Breakfast</li>
+            <li class="li-btn" @onclick=@AddLunch>@DictionaryHelper.Lunch</li>
+            <li class="li-btn" @onclick=@AddDinner>@DictionaryHelper.Dinner</li>
+            <li class="li-btn" @onclick=@AddSnacks>@DictionaryHelper.Snack</li>
         </ul>
     </div>
     <div class="card free">
         <ul>
-            <li class="li-btn" @onclick="@OpenDishSetUpMenu">@DictionaryService.Goals</li>
+            <li class="li-btn" @onclick="@OpenDishSetUpMenu">@DictionaryHelper.Goals</li>
         </ul>
         @if (chartBars.Count > 0)
         {
@@ -42,7 +44,7 @@
     </div>
     <div class="card free">
         <ul>
-            <li class="li-btn" @onclick=@GotToDatabank>@DictionaryService.Databank</li>
+            <li class="li-btn" @onclick=@GotToDatabank>@DictionaryHelper.Databank</li>
         </ul>
     </div>
 }

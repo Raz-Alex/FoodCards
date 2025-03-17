@@ -1,0 +1,41 @@
+﻿@using System.Diagnostics.CodeAnalysis
+@using FoodCards.Client.Script
+@using FoodCards.Client.Services
+@using FoodCards.Shared
+@inject AuthorizeMonitorService monitor
+@inject LocalStorage storage
+
+@if (logedIn)
+{
+    @Authorized
+}
+else
+{
+    @UnAuthorized
+}
+
+@code {
+    [Parameter, NotNull]
+    public RenderFragment Authorized { get; set; }
+
+    [Parameter, NotNull]
+    public RenderFragment UnAuthorized { get; set; }
+
+    bool logedIn;
+
+    Action Refresh => async () =>
+    {
+        var user = await storage.GetAsync<string>(ConstValues.UserToken);
+        await InvokeAsync(() =>
+        {
+            logedIn = user != null;
+            StateHasChanged();
+        });
+    };
+
+    protected override void OnInitialized()
+    {
+        monitor.RecheckAuthorization = Refresh;
+        Refresh();
+    }
+}

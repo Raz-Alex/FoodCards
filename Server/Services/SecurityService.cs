@@ -1,6 +1,6 @@
-﻿using Dashboard.Shared;
+﻿using FoodCards.Shared;
 
-namespace Dashboard.Server.Services
+namespace FoodCards.Server.Services
 {
     public class SecurityService
     {

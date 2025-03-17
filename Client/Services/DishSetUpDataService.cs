@@ -1,4 +1,4 @@
-﻿namespace FoodCards.Client.Script
+﻿namespace FoodCards.Client.Services
 {
     public class DishSetUpDataService
     {

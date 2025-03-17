@@ -1,12 +1,14 @@
-﻿@using FoodCards.Client.Layouts
+﻿@using FoodCards.Client.Helper
+@using FoodCards.Client.Layouts
 @using FoodCards.Client.Script
+@using FoodCards.Client.Services
 @inject DishSetUpDataService data
 
 <div class="card" style="width:fit-content;height:fit-content">
     <form>
         <fieldset style="margin-bottom:0.5rem">
             <label>
-                @DictionaryService.DailyKalorieTarget
+                @DictionaryHelper.DailyKalorieTarget
                 <input style="float:right" @bind=@data.DailyKalories
                        @oninput="(EventArgs) => SetKalories(EventArgs.Value.ToString())" />
             </label>
