@@ -6,7 +6,7 @@
     <form>
         <fieldset style="margin-bottom:0.5rem">
             <label>
-                Daily Kalorie target
+                @DictionaryService.DailyKalorieTarget
                 <input style="float:right" @bind=@data.DailyKalories
                        @oninput="(EventArgs) => SetKalories(EventArgs.Value.ToString())" />
             </label>

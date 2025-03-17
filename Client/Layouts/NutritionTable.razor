@@ -1,10 +1,12 @@
-﻿@if (Nutrients != null)
+﻿@using FoodCards.Client.Script
+
+@if (Nutrients != null)
 {
 	<table>
 		<tbody>
 			<tr>
 				<th>
-					Calculated for
+					@DictionaryService.CalculateFor
 				</th>
 				<td>
 					100g
@@ -12,7 +14,7 @@
 			</tr>
 			<tr>
 				<th>
-					Kalories
+					@DictionaryService.Kalories
 				</th>
 				<td>
 					@($"{Kalories}kcal")

@@ -19,6 +19,17 @@ namespace FoodCards.Client.Script
                 Fat = 1,
                 SaturatedFat = 0
             },
+            new()
+            {
+                Id = 10,
+                Name = "Tomato",
+                Photo ="tomato.jpg",
+                Type = IngredientType.Vegetables,
+                Kalories = 17,
+                Protein = 1,
+                Carbohydrate = 3,
+                Fiber = 1
+            },
             new ()
             {
                 Id = 1,
@@ -49,7 +60,7 @@ namespace FoodCards.Client.Script
             {
                 Id = 3,
                 Name = "Paprika",
-                Photo = "paprika.jpg",
+                Photo = "paprika.png",
                 Type = IngredientType.Vegetables,
                 Kalories = 20,
                 Protein = 1,

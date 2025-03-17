@@ -14,7 +14,7 @@
 						<tbody>
 							<tr>
 								<td>
-									Name
+									@DictionaryService.Name
 								</td>
 								<td>
 									<input style="width:9rem" @bind=@FoodItem.Name />
@@ -22,7 +22,7 @@
 							</tr>
 							<tr>
 								<td>
-									Upload image
+									@DictionaryService.UploadImage
 								</td>
 								<td>
 									<input style="width:9rem" @bind=@FoodItem.Photo />
@@ -30,7 +30,7 @@
 							</tr>
 							<tr>
 								<td>
-									Food type
+									@DictionaryService.FoodType
 								</td>
 								<td>
 									<select style="width:9rem" name="" size="1" @onchange=@((e) => ChangeType(e))>
@@ -61,7 +61,7 @@
 						<tbody>
 							<tr>
 								<td>
-									Calculate for
+									@DictionaryService.CalculateFor
 								</td>
 								<td>
 									<input @bind=@FoodItem.Quantity.Quantity type="number"
@@ -69,15 +69,15 @@
 								</td>
 								<td>
 									<select name="" size="1" @onchange=@((e) => ChangeUnits(e))>
-										<option value="g" selected>Grams</option>
-										<option value="ml">Milliliters</option>
-										<option value="unit">Unit</option>
+										<option value="g" selected>@DictionaryService.Grams</option>
+										<option value="ml">@DictionaryService.Milliliters</option>
+										<option value="unit">@DictionaryService.Unit</option>
 									</select>
 								</td>
 							</tr>
 							<tr>
 								<td>
-									Kalories
+									@DictionaryService.Kalories
 								</td>
 								<td>
 									<input @bind=@FoodItem.Kalories type="number"
@@ -305,8 +305,11 @@
 
 	input{
 		text-align:right;
-		width:5rem
 	}
+
+		input[type="number"] {
+			width:5rem
+		}
 
 	select{
 		height: 1.2rem;

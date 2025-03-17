@@ -1,4 +1,4 @@
-﻿namespace FoodCards.Client.Layouts
+﻿namespace FoodCards.Client.Script
 {
     public class ChartBar
     {
