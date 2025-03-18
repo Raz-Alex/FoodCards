@@ -35,5 +35,24 @@
         public decimal Salt { get; set; }
 
         public decimal Fiber { get; set; }
+
+        public FoodItem Clone() => new()
+            {
+                Id = Id,
+                Name = Name,
+                Photo = Photo,
+                Kalories = Kalories,
+                Type = Type,
+                MesurmentUnit = MesurmentUnit,
+                Quantity = Quantity,
+                BaseQuantity = BaseQuantity,
+                Protein = Protein,
+                Fat = Fat,
+                SaturatedFat = SaturatedFat,
+                Carbohydrate = Carbohydrate,
+                Sugar = Sugar,
+                Salt = Salt,
+                Fiber = Fiber
+            };
     }
 }

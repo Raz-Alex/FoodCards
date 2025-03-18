@@ -117,6 +117,29 @@
 		var foodItems = await http.PostAsync<List<FoodItem>>("api/food-items/load");
 		if (foodItems != null)
 			await InvokeAsync(() => ingredients = foodItems);
+
+		var meals = await http.PostAsync<List<Meal>>("api/food-items/load-meals");
+		if (meals != null && ingredients != null)
+		{
+			foreach (var meal in meals)
+			{
+				var newIngredients = new List<FoodItem>();
+				foreach(var ingredient in meal.Ingredients)
+				{
+					var newIngredient = ingredients.Where(x => x.Id == ingredient.Id).FirstOrDefault();
+					if (newIngredient == null)
+						continue;
+
+					var ingClone = newIngredient.Clone();
+					ingClone.Quantity = ingredient.Quantity;
+					newIngredients.Add(ingClone);
+				}
+				meal.Ingredients = newIngredients;
+				meal.Calculate();
+			}
+
+			await InvokeAsync(() => ingredients.AddRange(meals));
+		}
 	}
 
 	async Task Filter(IngredientType type)
@@ -149,6 +172,7 @@
 		await InvokeAsync(() =>
 		{
 			newMeal = new();
+			newMeal.Id = Guid.NewGuid();
 			StateHasChanged();
 		});
 	}
@@ -170,8 +194,11 @@
 			await InvokeAsync(() => ingredients.Add(newIngredient)); 
 		}
 
-		if(newMeal != null)
+		if (newMeal != null)
+		{
+			await http.PostAsync<bool, Meal>("api/food-items/save-meal", newMeal);
 			await InvokeAsync(() => ingredients.Add(newMeal));
+		}
 
 		if (buildMeal != null)
 			await InvokeAsync(() => GetMeal(buildMeal));

@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System.Text.Json;
+﻿using System.Text.Json;
 
 namespace FoodCards.Server.Services
 {
@@ -104,9 +103,16 @@ namespace FoodCards.Server.Services
 
         public async Task InsertAsync<T>(T value, string table)
         {
-            var users = await LoadAsync<T>(table);
-            users.Add(value);
-            await SaveAsync(users, table);
+            var data = await LoadAsync<T>(table);
+            data.Add(value);
+            await SaveAsync(data, table);
+        }
+
+        public async Task InsertListAsync<T>(List<T> values, string table)
+        {
+            var data = await LoadAsync<T>(table);
+            data.AddRange(values);
+            await SaveAsync(data, table);
         }
 
         static string Path(string file) => $"{Directory.GetCurrentDirectory()}/{file}";

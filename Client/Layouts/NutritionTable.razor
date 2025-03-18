@@ -11,7 +11,7 @@
 					@DictionaryHelper.CalculateFor
 				</th>
 				<td>
-					100g
+					@($"{BaseQuantity}{MeasurmentUnit}")
 				</td>
 			</tr>
 			<tr>
@@ -46,4 +46,10 @@
 
 	[Parameter]
 	public Dictionary<string, decimal> Nutrients { get; set; }
+
+	[Parameter]
+	public int BaseQuantity { get; set; }
+
+	[Parameter]
+	public string MeasurmentUnit{ get; set; }
 }

@@ -4,6 +4,14 @@
     {
         public List<FoodItem> Ingredients { get; set; } = new();
 
+        public bool Breakfast { get; set; }
+        
+        public bool Lunch { get; set; }
+
+        public bool Dinner { get; set; }
+
+        public bool Snack { get; set; }
+
         public override decimal FullKalories => Ingredients.Sum(x => x.FullKalories);
 
         public Meal()

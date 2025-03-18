@@ -1,0 +1,37 @@
+[
+  {
+    "MealId": "0ce6797d-1842-4373-a2f7-553312eaf158",
+    "IngredientId": "f7578cb7-07cb-4d02-9736-859eb358c03c",
+    "Quantity": 10
+  },
+  {
+    "MealId": "0ce6797d-1842-4373-a2f7-553312eaf158",
+    "IngredientId": "dc516ec5-27f3-4131-954c-18e394f8376b",
+    "Quantity": 200
+  },
+  {
+    "MealId": "0ce6797d-1842-4373-a2f7-553312eaf158",
+    "IngredientId": "ad7a382c-f1a4-4791-b88d-058bda041b6c",
+    "Quantity": 120
+  },
+  {
+    "MealId": "978e8e82-faf0-4bf7-b647-9f55953a166d",
+    "IngredientId": "ee55e31d-f02d-41e0-b546-30d7bf11dc1b",
+    "Quantity": 3
+  },
+  {
+    "MealId": "978e8e82-faf0-4bf7-b647-9f55953a166d",
+    "IngredientId": "5888f258-76ec-4cce-b0db-9344b8902003",
+    "Quantity": 120
+  },
+  {
+    "MealId": "978e8e82-faf0-4bf7-b647-9f55953a166d",
+    "IngredientId": "20fbc770-4911-4da6-8d69-f178895eaebe",
+    "Quantity": 120
+  },
+  {
+    "MealId": "978e8e82-faf0-4bf7-b647-9f55953a166d",
+    "IngredientId": "f7578cb7-07cb-4d02-9736-859eb358c03c",
+    "Quantity": 20
+  }
+]

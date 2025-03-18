@@ -122,7 +122,8 @@
 				}
 				<div class="img-caption"><h4>@caption</h4></div>
 			</div>
-			<NutritionTable Kalories=@FoodItem.Kalories Nutrients=@nutrients></NutritionTable>
+			<NutritionTable Kalories=@FoodItem.Kalories Nutrients=@nutrients
+				BaseQuantity=@FoodItem.BaseQuantity MeasurmentUnit=@FoodItem.MesurmentUnit></NutritionTable>
 		</div>
 	}
 }

@@ -45,25 +45,26 @@
                         </tbody>
                     </table>
                     <div style="margin-top:0.5rem">
-                        <NutritionTable Kalories=@Meal.Kalories Nutrients=@nutrients></NutritionTable>
+                        <NutritionTable Kalories=@Meal.Kalories Nutrients=@nutrients
+                            BaseQuantity=@Meal.BaseQuantity MeasurmentUnit=@Meal.MesurmentUnit></NutritionTable>
                     </div>
                 </div>
                 <FoodTypePie @ref=foodTypePie />
                 <div style="width: max-content;">
                     <label>
-                        <input type="checkbox" />
+                        <input type="checkbox" @bind=@Meal.Breakfast/>
                         @DictionaryHelper.Breakfast
                     </label>
                     <label>
-                        <input type="checkbox" />
+                        <input type="checkbox" @bind=@Meal.Lunch />
                         @DictionaryHelper.Lunch
                     </label>
                     <label>
-                        <input type="checkbox" />
+                        <input type="checkbox" @bind=@Meal.Dinner />
                         @DictionaryHelper.Dinner
                     </label>
                     <label>
-                        <input type="checkbox" />
+                        <input type="checkbox" @bind=@Meal.Snack />
                         @DictionaryHelper.Snack
                     </label>
                 </div>
@@ -127,7 +128,7 @@
         if (Meal.Ingredients.Contains(ingredient))
             return;
 
-        await InvokeAsync(() => Meal.Ingredients.Add(ingredient));
+        await InvokeAsync(() => Meal.Ingredients.Add(ingredient.Clone()));
         await Recalculate();
     }
 
