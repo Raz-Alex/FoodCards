@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using Newtonsoft.Json.Linq;
+using System.Text.Json;
 
 namespace FoodCards.Server.Services
 {
@@ -7,14 +8,24 @@ namespace FoodCards.Server.Services
     {
         public async Task<List<T>> LoadAsync<T>(string table)
         {
-            var path = $"{Path(table)}.x";
+            var path = $"{Path(table)}.json";
             if (!File.Exists(path))
                 return new List<T>();
 
             using var reader = new StreamReader(path);
             var json = await reader.ReadToEndAsync();
-            var obj = JsonSerializer.Deserialize(json, typeof(List<T>));
-            return obj == null ? new List<T>() : (List<T>)obj;
+            if (string.IsNullOrEmpty(json))
+                return new List<T>();
+
+            try
+            {
+                var obj = JsonSerializer.Deserialize(json, typeof(List<T>));
+                return obj == null ? new List<T>() : (List<T>)obj;
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
         }
 
       //  public async Task<DataSet> LoadSingleByIdAsync(string table, string id)
@@ -68,10 +79,24 @@ namespace FoodCards.Server.Services
       //      return result;
       //  }
 
+        public async Task SaveJsonDirect(string jsonString, string table)
+        {
+            var path = $"{Path(table)}.json";
+
+            if (!File.Exists(path))
+                File.Create(path);
+
+            using var writer = new StreamWriter(path);
+            await writer.WriteAsync(jsonString);
+        }
+
         public async Task SaveAsync<T>(List<T> values, string table)
         {
             var jsonString = JsonSerializer.Serialize<object>(values);
-            var path = $"{Path(table)}.x";
+            var path = $"{Path(table)}.json";
+
+            if (!File.Exists(path))
+                File.Create(path);
 
             using var writer = new StreamWriter(path);
             await writer.WriteAsync(jsonString);

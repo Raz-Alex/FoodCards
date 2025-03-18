@@ -1,6 +1,4 @@
-﻿using FoodCards.Shared.Quantity;
-
-namespace FoodCards.Shared.Dish
+﻿namespace FoodCards.Shared.Dish
 {
     public interface INutrition
     {
@@ -12,6 +10,6 @@ namespace FoodCards.Shared.Dish
         decimal Sugar { get; set; }
         decimal Salt { get; set; }
         decimal Fiber { get; set; }
-        IQuantity Quantity { get; set; }
+        public int BaseQuantity { get; set; }
     }
 }

@@ -30,10 +30,10 @@
                                     </td>
                                     <td>@ingredient.Name</td>
                                     <td>
-                                        <input type="number" @bind=@ingredient.Quantity.Quantity style="height: 1.2rem; width: 4rem;"
+                                        <input type="number" @bind=@ingredient.Quantity style="height: 1.2rem; width: 4rem;"
                                                @oninput=@(async() => await Recalculate()) />
                                     </td>
-                                    <td>@ingredient.Quantity.MesurmentUnit</td>
+                                    <td>@ingredient.MesurmentUnit</td>
                                     <td>
                                         <button type="button" @onclick=@(async() => await RemoveIngredient(ingredient))
                                         style="padding-inline: 0.5rem; background-color: hsl(0, 60%, 60%); border-radius: 3px;">
@@ -69,13 +69,12 @@
                 </div>
             </div>
             <div style="width: fit-content; height: fit-content;margin: auto; margin-top: 10px;">
-                <div class="button" 
-                    @onclick=@(() => {if(AcceptAction != null)AcceptAction();})>
+                <button @onclick=@(() => {if(AcceptAction != null)AcceptAction();})>
                     Accept
-                </div>
-                <div class="button" @onclick=@(() => {if(CancelAction != null)CancelAction();})>
+                </button>
+                <button @onclick=@(() => {if(CancelAction != null)CancelAction();})>
                     Cancel
-                </div>
+                </button>
             </div>
         </div>
     }

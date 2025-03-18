@@ -1,10 +1,8 @@
-﻿using FoodCards.Shared.Quantity;
-
-namespace FoodCards.Shared.Dish
+﻿namespace FoodCards.Shared.Dish
 {
     public class FoodItem : IDish, INutrition
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public string Name { get; set; }
 
@@ -16,9 +14,13 @@ namespace FoodCards.Shared.Dish
 
         public IngredientType Type { get; set; }
 
-        public IQuantity Quantity { get; set; } = new Grams();
+        public string MesurmentUnit { get; set; } = "g";
 
-        public decimal Coeficient => (decimal)Quantity.Quantity / Quantity.BaseQuantity;
+        public int Quantity { get; set; } = 100;
+
+        public int BaseQuantity { get; set; } = 100;
+
+        public decimal Coeficient => (decimal)Quantity / BaseQuantity;
 
         public decimal Protein { get; set; }
 

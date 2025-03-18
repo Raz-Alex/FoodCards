@@ -1,9 +1,11 @@
-using Microsoft.AspNetCore.ResponseCompression;
+using FoodCards.Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddSingleton<DataService>();
+builder.Services.AddSingleton<SecurityService>();
 
 var app = builder.Build();
 

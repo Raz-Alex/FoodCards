@@ -6,19 +6,20 @@
 @using FoodCards.Shared
 @using FoodCards.Shared.Dish
 @inject NavigationManager nav
+@inject AuthorizeHttpClient http
 
 @if (newIngredient == null && newMeal == null && GetMeal == null)
 {
 	<div class="card" style="width: fit-content; height: fit-content;">
-		<div class="button" @onclick=@Home>
+		<button type="button" @onclick=@Home>
 			@DictionaryHelper.Home
-		</div>
-		<div class="button" @onclick=@AddFoodItem>
+		</button>
+		<button type="button" @onclick=@AddFoodItem>
 			@DictionaryHelper.AddFoodItem
-		</div>
-		<div class="button" @onclick=@CreateMeal>
+		</button>
+		<button type="button" @onclick=@CreateMeal>
 			@DictionaryHelper.CreateMeal
-		</div>
+		</button>
 		@*
 			PostPone for now
 		<div class="button" @onclick=@Home>
@@ -108,12 +109,14 @@
 	[Parameter]
 	public Action<FoodItem> GetMeal { get; set; }
 
-	protected override void OnInitialized()
+	protected override async Task OnInitializedAsync()
 	{
 		if (GetMeal != null)
-			buildMeal = new();
+			await InvokeAsync(() => buildMeal = new());
 
-		ingredients = new IngredientTable().Ingredients;
+		var foodItems = await http.PostAsync<List<FoodItem>>("api/food-items/load");
+		if (foodItems != null)
+			await InvokeAsync(() => ingredients = foodItems);
 	}
 
 	async Task Filter(IngredientType type)
@@ -136,6 +139,7 @@
 		await InvokeAsync(() =>
 		{
 			newIngredient = new();
+			newIngredient.Id = Guid.NewGuid();
 			StateHasChanged();
 		});
 	}
@@ -161,7 +165,10 @@
 	async Task Accept()
 	{
 		if (newIngredient != null)
-			await InvokeAsync(() => ingredients.Add(newIngredient));
+		{
+			await http.PostAsync<bool, FoodItem>("api/food-items/save", newIngredient);
+			await InvokeAsync(() => ingredients.Add(newIngredient)); 
+		}
 
 		if(newMeal != null)
 			await InvokeAsync(() => ingredients.Add(newMeal));

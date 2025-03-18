@@ -1,14 +1,13 @@
-﻿using FoodCards.Shared.Quantity;
-
-namespace FoodCards.Shared.Dish
+﻿namespace FoodCards.Shared.Dish
 {
     public interface IDish
     {
-        int Id { get; set; }
+        Guid Id { get; set; }
         string Name { get; set; }
         string Photo { get; set; }
         IngredientType Type { get; }
-        IQuantity Quantity { get; }
+        public string MesurmentUnit { get; set; }
+        public int Quantity { get; set; }
     }
 
     public enum IngredientType

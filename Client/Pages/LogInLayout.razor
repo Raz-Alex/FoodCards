@@ -7,29 +7,34 @@
 @inject AuthorizeHttpClient http
 @inject IJSRuntime js
 
-<div class="card" style="display:inline-flex">
-    <table style="margin-bottom:0.2rem;">
-        <tbody>
-            <tr>
-                <th>
-                    <label for="username-text-id">Username</label>
-                </th>
-                <td>
-                    <input id="username-text-id" type="text" @bind-value=@username />
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    <label for="password-text-id">Password</label>
-                </th>
-                <td>
-                    <input id="password-text-id" type="password" @bind-value=@password />
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <button class="log-in-button" type="button" @onclick=LogIn>
-        <i class="material-icons button-icon">login</i>
+<div class="card free" style="text-align: center;">
+    <form>
+        <table style="margin-bottom:1rem;margin-top:0;border:none">
+            <tbody>
+                <tr>
+                    <th>
+                        <label for="username-text-id">Username</label>
+                    </th>
+                    <td>
+                        <input id="username-text-id" type="text" @bind-value=@username />
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="password-text-id">Password</label>
+                    </th>
+                    <td>
+                        <input id="password-text-id" type="password" @bind-value=@password />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+    <button class="log-in-button" type="button" @onclick=LogIn style="margin-bottom:1rem">
+        Login
+    </button>
+    <button class="log-in-button" type="button" @onclick=Register>
+        Register
     </button>
 </div>
 
@@ -67,3 +72,9 @@
             await js.InvokeVoidAsync("alert", "User already exists");
     }
 }
+
+<style>
+    tr:nth-child(2n) {
+        background-color: transparent;
+    }
+</style>

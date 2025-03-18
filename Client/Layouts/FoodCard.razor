@@ -3,7 +3,6 @@
 @using FoodCards.Client.Services
 @using FoodCards.Shared
 @using FoodCards.Shared.Dish
-@using FoodCards.Shared.Quantity
 
 @if(FoodItem != null && !Hide)
 {
@@ -66,11 +65,11 @@
 									@DictionaryHelper.CalculateFor
 								</td>
 								<td>
-									<input @bind=@FoodItem.Quantity.Quantity type="number"
+									<input @bind=@FoodItem.Quantity type="number"
 										   @oninput=@(async(EventArgs) => await SetValue("Quantity",EventArgs.Value.ToString())) />
 								</td>
 								<td>
-									<select name="" size="1" @onchange=@((e) => ChangeUnits(e))>
+									<select name="" size="1" @onchange=@(async (e) =>await SetValue("MesurmentUnit",(string)e.Value))>
 										<option value="g" selected>@DictionaryHelper.Grams</option>
 										<option value="ml">@DictionaryHelper.Milliliters</option>
 										<option value="unit">@DictionaryHelper.Unit</option>
@@ -103,12 +102,12 @@
 				</fieldset>
 			</form>
 			<div style="width: fit-content; height: fit-content;margin: auto; margin-top: 10px;">
-				<div class="button" @onclick=@(() => {if(AcceptAction != null)AcceptAction();})>
+				<button @onclick=@(() => {if(AcceptAction != null)AcceptAction();})>
 					Accept
-				</div>
-				<div class="button" @onclick=@(() => {if(CancelAction != null)CancelAction();})>
+				</button>
+				<button @onclick=@(() => {if(CancelAction != null)CancelAction();})>
 					Cancel
-				</div>
+				</button>
 			</div>
 		</div>
 	}
@@ -191,28 +190,6 @@
 		await InvokeAsync(() => FoodItem.Type = iType);
 	}
 
-	async Task ChangeUnits(ChangeEventArgs e)
-	{
-		if (e.Value == null)
-			return;
-
-		switch((string)e.Value)
-		{
-			case "g":
-				await InvokeAsync(() => FoodItem.Quantity = new Grams());
-				break;
-
-			case "ml":
-				await InvokeAsync(() => FoodItem.Quantity = new MilliLiters());
-				break;
-
-			case "unit":
-				await InvokeAsync(() => FoodItem.Quantity = new FixedQuantity());
-				break;
-		}
-		//updateValue
-	}
-
 	async Task SetValue(string key,string value)
 	{
 		_ = decimal.TryParse(value, out decimal decimalValue);
@@ -220,8 +197,14 @@
 		{
 			switch(key)
 			{
+				case "MesurmentUnit":
+					FoodItem.MesurmentUnit = (string)value;
+					FoodItem.Quantity = 1;
+					FoodItem.BaseQuantity = 1;
+					break;
+
 				case "Quantity":
-					FoodItem.Quantity.Quantity = (int)decimalValue;
+					FoodItem.Quantity = (int)decimalValue;
 					break;
 
 				case "Kalories":
