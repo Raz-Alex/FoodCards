@@ -6,24 +6,35 @@
 @using FoodCards.Shared.Dish
 @inject DishSetUpDataService dishData
 @inject NavigationManager nav
+@inject LocalStorage storage
+@inject AuthorizeMonitorService authorizationService
 
-<div class="card free">
-    <FoodTypePie @ref=@foodTypePie />
-</div>
+@if (foodItems.Count > 0)
+{
+    <div class="card free">
+        <FoodTypePie @ref=@foodTypePie />
+    </div>
+}
 @if(!displayCardView)
 {
     <div class="card free">
-        <ul>
-            <li class="li-btn" @onclick=@AddBreakfast>@DictionaryHelper.Breakfast</li>
-            <li class="li-btn" @onclick=@AddLunch>@DictionaryHelper.Lunch</li>
-            <li class="li-btn" @onclick=@AddDinner>@DictionaryHelper.Dinner</li>
-            <li class="li-btn" @onclick=@AddSnacks>@DictionaryHelper.Snack</li>
-        </ul>
+        <button type="button" @onclick=AddBreakfast>
+            @DictionaryHelper.Breakfast
+        </button>
+        <button type="button" @onclick=AddLunch>
+            @DictionaryHelper.Lunch
+        </button>
+        <button type="button" @onclick=AddDinner>
+            @DictionaryHelper.Dinner
+        </button>
+        <button type="button" @onclick=AddSnacks>
+            @DictionaryHelper.Snack
+        </button>
     </div>
     <div class="card free">
-        <ul>
-            <li class="li-btn" @onclick="@OpenDishSetUpMenu">@DictionaryHelper.Goals</li>
-        </ul>
+        <button type="button" @onclick=OpenDishSetUpMenu>
+            @DictionaryHelper.Goals
+        </button>
         @if (chartBars.Count > 0)
         {
             <div style="margin-top: 2rem;">
@@ -43,9 +54,14 @@
         </div>
     </div>
     <div class="card free">
-        <ul>
-            <li class="li-btn" @onclick=@GotToDatabank>@DictionaryHelper.Databank</li>
-        </ul>
+        <button type="button" @onclick=GotToDatabank>
+            @DictionaryHelper.Databank
+        </button>
+    </div>
+    <div class="card free">
+        <button type="button" @onclick=LogOut>
+            Logout
+        </button>
     </div>
 }
 else
@@ -57,7 +73,7 @@ else
 
     FoodTypePie foodTypePie;
 
-    List<FoodItem> nutritions = new();
+    List<FoodItem> foodItems = new();
 
     List<ChartBar> chartBars = new();
 
@@ -100,7 +116,7 @@ else
         await InvokeAsync(() =>
         {
             if (foodItem != null)
-                nutritions.Add(foodItem);
+                foodItems.Add(foodItem);
 
             displayCardView = false;
         });
@@ -113,17 +129,17 @@ else
 
     async Task Recalculate()
     {
-        var kalories = nutritions.Sum(x => x.FullKalories);
-        var dairy = nutritions.Where(x => x.Type == IngredientType.EggsAndDairy).Sum(x => x.FullKalories);
-        var meats = nutritions.Where(x => x.Type == IngredientType.MeatAndFish).Sum(x => x.FullKalories);
-        var carbs = nutritions.Where(x => x.Type == IngredientType.GrainsAndPotatoes).Sum(x => x.FullKalories);
-        var vegies = nutritions.Where(x => x.Type == IngredientType.Vegetables).Sum(x => x.FullKalories);
-        var fruits = nutritions.Where(x => x.Type == IngredientType.Fruits).Sum(x => x.FullKalories);
-        var fats = nutritions.Where(x => x.Type == IngredientType.Fats).Sum(x => x.FullKalories);
-        var sweets = nutritions.Where(x => x.Type == IngredientType.SweetsAndAlcohol).Sum(x => x.FullKalories);
-        var processed = nutritions.Where(x => x.Type == IngredientType.Processed).Sum(x => x.FullKalories);
+        var kalories = foodItems.Sum(x => x.FullKalories);
+        var dairy = foodItems.Where(x => x.Type == IngredientType.EggsAndDairy).Sum(x => x.FullKalories);
+        var meats = foodItems.Where(x => x.Type == IngredientType.MeatAndFish).Sum(x => x.FullKalories);
+        var carbs = foodItems.Where(x => x.Type == IngredientType.GrainsAndPotatoes).Sum(x => x.FullKalories);
+        var vegies = foodItems.Where(x => x.Type == IngredientType.Vegetables).Sum(x => x.FullKalories);
+        var fruits = foodItems.Where(x => x.Type == IngredientType.Fruits).Sum(x => x.FullKalories);
+        var fats = foodItems.Where(x => x.Type == IngredientType.Fats).Sum(x => x.FullKalories);
+        var sweets = foodItems.Where(x => x.Type == IngredientType.SweetsAndAlcohol).Sum(x => x.FullKalories);
+        var processed = foodItems.Where(x => x.Type == IngredientType.Processed).Sum(x => x.FullKalories);
 
-        var meals = nutritions.Where(x => x.Type == IngredientType.HomeMadeMeal).Select((x) => x as Meal);
+        var meals = foodItems.Where(x => x.Type == IngredientType.HomeMadeMeal).Select((x) => x as Meal);
         dairy += meals.Sum(x => x.Ingredients.Where(x => x.Type == IngredientType.EggsAndDairy).Sum(x => x.FullKalories));
         meats += meals.Sum(x => x.Ingredients.Where(x => x.Type == IngredientType.MeatAndFish).Sum(x => x.FullKalories));
         carbs += meals.Sum(x => x.Ingredients.Where(x => x.Type == IngredientType.GrainsAndPotatoes).Sum(x => x.FullKalories));
@@ -142,7 +158,7 @@ else
         var sweetsData = Const.Get(IngredientType.SweetsAndAlcohol);
         var processedData = Const.Get(IngredientType.Processed);
 
-        await foodTypePie.Recalculate(nutritions);
+        await foodTypePie.Recalculate(foodItems);
 
         chartBars = new();
         if (dishData.DailyKalories > 0)
@@ -172,6 +188,12 @@ else
     async Task OpenDishSetUpMenu()
     {
         await InvokeAsync(() => displayDishSetUp = !displayDishSetUp);
+    }
+
+    async Task LogOut()
+    {
+        await storage.RemoveAsync(ConstValues.UserToken);
+        await InvokeAsync(() => authorizationService.RecheckAuthorization());
     }
 }
 

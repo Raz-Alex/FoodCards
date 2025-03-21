@@ -4,7 +4,7 @@
 
 @if(Compact)
 {
-    <PieChart Width="13" Height="13" PiePieces=@nutrients CenterText=@($"{Kalories} kcal")></PieChart>
+    <PieChart Width=@Size Height=@Size PiePieces=@nutrients CenterText=@(HideText ? "" : $"{Kalories} kcal")></PieChart>
 }
 else
 {
@@ -33,12 +33,30 @@ else
     public bool Compact { get; set; }
 
     [Parameter]
+    public bool HideText { get; set; }
+
+    [Parameter]
     public decimal Kalories{ get; set; }
+
+    [Parameter]
+    public FoodItem Ingredient { get; set; }
+
+    [Parameter]
+    public int Size { get; set; } = 13;
 
     List<PiePiece> nutrients = new();
 
-    public async Task Recalculate(List<FoodItem> ingredients)
+    protected override async Task OnInitializedAsync()
     {
+          if (Ingredient != null)
+              await Recalculate(new() { Ingredient });
+    }
+
+    public async Task Recalculate(List<FoodItem> ingredients = null)
+    {
+        if (ingredients == null)
+            ingredients = new() { Ingredient };
+
         await InvokeAsync(() => Kalories = ingredients.Sum(x => x.FullKalories));
 
         if (Kalories == 0)

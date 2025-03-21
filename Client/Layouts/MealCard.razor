@@ -31,12 +31,11 @@
                                     <td>@ingredient.Name</td>
                                     <td>
                                         <input type="number" @bind=@ingredient.Quantity style="height: 1.2rem; width: 4rem;"
-                                               @oninput=@(async() => await Recalculate()) />
+                                        @oninput=Recalculate @onfocusout=Recalculate @onkeyup=Recalculate />
                                     </td>
                                     <td>@ingredient.MesurmentUnit</td>
                                     <td>
-                                        <button type="button" @onclick=@(async() => await RemoveIngredient(ingredient))
-                                        style="padding-inline: 0.5rem; background-color: hsl(0, 60%, 60%); border-radius: 3px;">
+                                        <button class="rem-button" type="button" @onclick=@(async() => await RemoveIngredient(ingredient))>
                                             -
                                         </button>
                                     </td>
@@ -44,30 +43,37 @@
                             }
                         </tbody>
                     </table>
+                    @if (Meal.Ingredients.Count == 0)
+                    {
+                        <q style="display:block;margin:2rem 0rem">Please build your meal by selecting the ingredients from the list below!</q>
+                    }
                     <div style="margin-top:0.5rem">
                         <NutritionTable Kalories=@Meal.Kalories Nutrients=@nutrients
-                            BaseQuantity=@Meal.BaseQuantity MeasurmentUnit=@Meal.MesurmentUnit></NutritionTable>
+                        BaseQuantity=@Meal.BaseQuantity MeasurmentUnit=@Meal.MesurmentUnit></NutritionTable>
                     </div>
                 </div>
                 <FoodTypePie @ref=foodTypePie />
-                <div style="width: max-content;">
-                    <label>
-                        <input type="checkbox" @bind=@Meal.Breakfast/>
-                        @DictionaryHelper.Breakfast
-                    </label>
-                    <label>
-                        <input type="checkbox" @bind=@Meal.Lunch />
-                        @DictionaryHelper.Lunch
-                    </label>
-                    <label>
-                        <input type="checkbox" @bind=@Meal.Dinner />
-                        @DictionaryHelper.Dinner
-                    </label>
-                    <label>
-                        <input type="checkbox" @bind=@Meal.Snack />
-                        @DictionaryHelper.Snack
-                    </label>
-                </div>
+                @if (!HideType)
+                {
+                    <div style="width: max-content;">
+                        <label>
+                            <input type="checkbox" @bind=@Meal.Breakfast />
+                            @DictionaryHelper.Breakfast
+                        </label>
+                        <label>
+                            <input type="checkbox" @bind=@Meal.Lunch />
+                            @DictionaryHelper.Lunch
+                        </label>
+                        <label>
+                            <input type="checkbox" @bind=@Meal.Dinner />
+                            @DictionaryHelper.Dinner
+                        </label>
+                        <label>
+                            <input type="checkbox" @bind=@Meal.Snack />
+                            @DictionaryHelper.Snack
+                        </label>
+                    </div>
+                }
             </div>
             <div style="width: fit-content; height: fit-content;margin: auto; margin-top: 10px;">
                 <button @onclick=@(() => {if(AcceptAction != null)AcceptAction();})>
@@ -113,6 +119,9 @@
     [Parameter]
     public Action Click { get; set; }
 
+    [Parameter]
+    public bool HideType { get; set; }
+
     FoodTypePie foodTypePie;
 
     Dictionary<string, decimal> nutrients;
@@ -125,7 +134,7 @@
 
     public async Task AddIngredient(FoodItem ingredient)
     {
-        if (Meal.Ingredients.Contains(ingredient))
+        if (Meal.Ingredients.Any(x => x.Id == ingredient.Id))
             return;
 
         await InvokeAsync(() => Meal.Ingredients.Add(ingredient.Clone()));
@@ -166,5 +175,14 @@
     .container{
         display: grid;
         grid-template-columns: auto auto auto;
+    }
+
+    .rem-button{
+        background-color: hsl(0, 60%, 60%); 
+        border-radius: 3px;
+        height: 1rem; 
+        vertical-align: middle;
+        min-width: 3rem;
+        padding:0;
     }
 </style>

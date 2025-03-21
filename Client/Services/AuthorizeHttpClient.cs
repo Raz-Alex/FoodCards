@@ -17,6 +17,24 @@ namespace FoodCards.Client.Services
             this.monitor = monitor;
         }
 
+        public async Task<T?> GetAsync<T>(string requestUri)
+        {
+            var httpResponse = await httpClient.GetAsync(requestUri);
+
+            try
+            {
+                var result = await httpResponse.Content.ReadFromJsonAsync<T>();
+                if (result != null)
+                    return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+
+            return default;
+        }
+
         public async Task<T?> PostAsync<T>(string requestUri)
         {
             var token = await storage.GetAsync<Guid>(ConstValues.UserToken);

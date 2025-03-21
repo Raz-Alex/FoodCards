@@ -13,14 +13,10 @@
         </main>
     </Authorized>
     <UnAuthorized>
-        <LogInLayout/>
+        <!--LogInLayout/-->
+        <FreePage/>
     </UnAuthorized>
 </Authorize>
 
 @code {
-    async Task LogOut()
-    {
-        await storage.RemoveAsync(ConstValues.UserToken);
-        await InvokeAsync(() => authorizationService.RecheckAuthorization());
-    }
 }

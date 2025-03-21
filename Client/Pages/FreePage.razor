@@ -1,0 +1,219 @@
+﻿@using FoodCards.Client.Layouts
+@using FoodCards.Client.Script
+@using FoodCards.Shared.Dish
+
+<div style="text-align:center">
+    <div class="card free" style=@($"{(foodItems.Count == 0 || displayCardView || evaluateMeal != null? "display:none" : "")}")>
+        <FoodTypePie @ref=@foodTypePie />
+    </div>
+
+    @if (!displayCardView && evaluateMeal == null)
+    {
+        @if(index == 0)
+        {
+            <div style="text-align:center">
+                <div class="card free" @onclick=ShowCardView>
+                    <button type="button" style="width: max-content;">
+                        Count your calories!
+                    </button>
+                </div>
+            </div>
+        }
+
+        @if (foodItems.Count > 0)
+        {
+            <div style="display:inline-grid">
+                @for(var i = 0; i< foodItems.Count; ++i)
+                {
+                    var item = foodItems[i];
+                    <div class="card free" style="display: flex;width: max-content;"
+                    @onclick=@(async () => await LoadMeal(item))>
+                        @switch(i)
+                        {
+                            case 0:
+                                <FoodTypePie @ref=foodTypePie0 Ingredient=@item Compact Size="3" HideText />
+                                break;
+
+                            case 1:
+                                <FoodTypePie @ref=foodTypePie1 Ingredient=@item Compact Size="3" HideText />
+                                break;
+
+                            case 2:
+                                <FoodTypePie @ref=foodTypePie2 Ingredient =@item Compact Size="3" HideText />
+                                break;
+
+                            case 3:
+                                <FoodTypePie @ref=foodTypePie3 Ingredient=@item Compact Size="3" HideText />
+                                break;
+
+                            case 4:
+                                <FoodTypePie @ref=foodTypePie4 Ingredient=@item Compact Size="3" HideText />
+                                break;
+                        }
+                        <p style="margin-left:1rem">
+                            <h6>@item.Name</h6>
+                            <em>@item.Kalories</em>
+                            <h6>Kcal</h6>
+                        </p>
+                    </div>
+                }
+
+                @if (index > 0 && index < 5)
+                {
+                    <div class="card free" @onclick=ShowCardView>
+                        <button type="button" style="width: max-content;">
+                            Add more meals
+                        </button>
+                    </div>
+                }
+            </div>
+        }
+    }
+
+    @if (displayCardView)
+    {
+        <FreeCardView MealName=@mealNames[index] 
+            GetMeal=@(async (x) => {await GetMeal(x);index++;displayCardView = false;}) 
+            CancelAction=@(async() => await CancelAction())></FreeCardView>
+    }
+    else if (evaluateMeal != null)
+    {
+        <FreeCardView Meal=@(evaluateMeal as Meal) 
+            GetMeal=@(async (x) => await EndEvaluateMeal())
+            CancelAction=@(async() => await CancelReevaluation())></FreeCardView>
+    }
+</div>
+
+@code {
+    FoodTypePie foodTypePie;
+
+    FoodTypePie foodTypePie0;
+    FoodTypePie foodTypePie1;
+    FoodTypePie foodTypePie2;
+    FoodTypePie foodTypePie3;
+    FoodTypePie foodTypePie4;
+
+    List<FoodTypePie> FoodTypePies => new() { foodTypePie0, foodTypePie1, foodTypePie2, foodTypePie3, foodTypePie4 };
+
+    List<FoodItem> foodItems = new();
+
+    FoodItem evaluateMeal;
+
+    bool displayCardView;
+
+    List<string> mealNames = new() { "Breakfast", "Snack1", "Lunch", "Snack2", "Dinner"};
+
+    int index;
+
+    async Task ShowCardView()
+    {
+        await InvokeAsync(() => 
+        {
+            displayCardView = true;
+            StateHasChanged();
+        });
+    }
+
+    async Task GetMeal(FoodItem foodItem)
+    {
+        await InvokeAsync(() =>
+        {
+            if (foodItem != null)
+                foodItems.Add(foodItem);
+
+            displayCardView = false;
+        });
+
+        if (foodItem != null)
+            await Recalculate();
+        else
+            await InvokeAsync(() => StateHasChanged());
+    }
+
+    async Task Recalculate()
+    {
+        var kalories = foodItems.Sum(x => x.FullKalories);
+        var dairy = foodItems.Where(x => x.Type == IngredientType.EggsAndDairy).Sum(x => x.FullKalories);
+        var meats = foodItems.Where(x => x.Type == IngredientType.MeatAndFish).Sum(x => x.FullKalories);
+        var carbs = foodItems.Where(x => x.Type == IngredientType.GrainsAndPotatoes).Sum(x => x.FullKalories);
+        var vegies = foodItems.Where(x => x.Type == IngredientType.Vegetables).Sum(x => x.FullKalories);
+        var fruits = foodItems.Where(x => x.Type == IngredientType.Fruits).Sum(x => x.FullKalories);
+        var fats = foodItems.Where(x => x.Type == IngredientType.Fats).Sum(x => x.FullKalories);
+        var sweets = foodItems.Where(x => x.Type == IngredientType.SweetsAndAlcohol).Sum(x => x.FullKalories);
+        var processed = foodItems.Where(x => x.Type == IngredientType.Processed).Sum(x => x.FullKalories);
+
+        var meals = foodItems.Where(x => x.Type == IngredientType.HomeMadeMeal).Select((x) => x as Meal);
+        if (meals == null)
+            return;
+
+        dairy += meals.Sum(x => x.Ingredients.Where(x => x.Type == IngredientType.EggsAndDairy).Sum(x => x.FullKalories));
+        meats += meals.Sum(x => x.Ingredients.Where(x => x.Type == IngredientType.MeatAndFish).Sum(x => x.FullKalories));
+        carbs += meals.Sum(x => x.Ingredients.Where(x => x.Type == IngredientType.GrainsAndPotatoes).Sum(x => x.FullKalories));
+        vegies += meals.Sum(x => x.Ingredients.Where(x => x.Type == IngredientType.Vegetables).Sum(x => x.FullKalories));
+        fruits += meals.Sum(x => x.Ingredients.Where(x => x.Type == IngredientType.Fruits).Sum(x => x.FullKalories));
+        fats += meals.Sum(x => x.Ingredients.Where(x => x.Type == IngredientType.Fats).Sum(x => x.FullKalories));
+        sweets += meals.Sum(x => x.Ingredients.Where(x => x.Type == IngredientType.SweetsAndAlcohol).Sum(x => x.FullKalories));
+        processed += meals.Sum(x => x.Ingredients.Where(x => x.Type == IngredientType.Processed).Sum(x => x.FullKalories));
+
+        var dairyData = Const.Get(IngredientType.EggsAndDairy);
+        var meatsData = Const.Get(IngredientType.MeatAndFish);
+        var carbsData = Const.Get(IngredientType.GrainsAndPotatoes);
+        var vegiesData = Const.Get(IngredientType.Vegetables);
+        var fruitsData = Const.Get(IngredientType.Fruits);
+        var fatsData = Const.Get(IngredientType.Fats);
+        var sweetsData = Const.Get(IngredientType.SweetsAndAlcohol);
+        var processedData = Const.Get(IngredientType.Processed);
+
+        await foodTypePie.Recalculate(foodItems);
+
+        await InvokeAsync(() => StateHasChanged());
+    }
+
+    async Task LoadMeal(FoodItem foodItem)
+    {
+        await InvokeAsync(() =>
+        {
+            evaluateMeal = foodItem;
+            StateHasChanged();
+        });
+    }
+
+    async Task EndEvaluateMeal()
+    {
+        await Recalculate();
+        foreach (var pie in FoodTypePies)
+            if (pie != null)
+                await pie.Recalculate();
+
+        await InvokeAsync(() =>
+        {
+            evaluateMeal = null;
+            StateHasChanged();
+        });
+    }
+
+    async Task CancelAction()
+    {
+        await InvokeAsync(() =>
+        {
+            displayCardView = false;
+            StateHasChanged();
+        });
+    }
+
+    async Task CancelReevaluation()
+    {
+        await InvokeAsync(() =>
+        {
+            evaluateMeal = null;
+            StateHasChanged();
+        });
+    }
+}
+
+<style>
+    p{
+        line-height: 1;
+        margin-left: 1rem;
+    }
+</style>

@@ -3,9 +3,6 @@ using FoodCards.Shared;
 using FoodCards.Shared.Dish;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Reflection;
-using System.Xml.Linq;
-using System;
 
 namespace FoodCards.Server.Controllers
 {
@@ -50,6 +47,14 @@ namespace FoodCards.Server.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("load-all-fooditems")]
+        public async Task<ActionResult<List<FoodItem>>> GetAllFoodItems()
+        {
+            var data = await dataService.LoadAsync<FoodItem>(ConstValues.FoodData);
+            return Ok(data);
+        }
+
 
         [HttpPost("load")]
         public async Task<ActionResult<UserToken<List<FoodItem>>>> GetFoodItems([FromBody] object post)

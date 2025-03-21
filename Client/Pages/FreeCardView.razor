@@ -1,0 +1,120 @@
+﻿@using FoodCards.Client.Layouts
+@using FoodCards.Client.Script
+@using FoodCards.Client.Services
+@using FoodCards.Shared.Dish
+@inject AuthorizeHttpClient http
+
+@if (GetMeal != null)
+{
+	<MealCard @ref=@mealCard Meal=@buildMeal AcceptAction=@(async() => await Accept())
+		CancelAction=@(async() => await Cancel()) HideType></MealCard>
+}
+
+@if (ingredients != null)
+{
+	<div class="card" style="width: fit-content; height: fit-content;">
+		@if (ingredientTypes != null)
+		{
+			@foreach (var type in ingredientTypes)
+			{
+				@if (type != "None")
+				{
+					_ = Enum.TryParse(type, out IngredientType iType);
+					var iData = Const.Get(iType);
+					<div class="filter-item"
+					style=@($"background-image:{iData.Gradient};border:{iData.Border};{(displayType == iType ? "border:2px double" : "")}")
+					@onclick=@(() => Filter(iType))>
+						@Const.GetShortcut(iType)
+					</div>
+				}
+			}
+		}
+	</div>
+	<div>
+		@foreach (var nutrition in ingredients)
+		{
+			@if (nutrition is FoodItem ingredient)
+			{
+				<FoodCard FoodItem=@ingredient Click=@(async() =>await FoodCardClick(ingredient))
+					Hide=@(displayType != IngredientType.None && displayType != ingredient.Type) />
+			}
+		}
+	</div>
+}
+
+@code {
+	List<FoodItem> ingredients;
+
+	List<string> ingredientTypes = Enum.GetNames(typeof(IngredientType)).ToList();
+
+	IngredientType displayType = IngredientType.None;
+
+	Meal buildMeal;
+
+	MealCard mealCard;
+
+	[Parameter]
+	public Meal Meal { get; set; }
+
+	[Parameter]
+	public string MealName { get; set; }
+
+	[Parameter]
+	public Action<FoodItem> GetMeal { get; set; }
+
+	[Parameter]
+	public Action CancelAction { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		if (Meal != null)
+		{
+			await InvokeAsync(() => buildMeal = Meal);
+		}
+		else if (GetMeal != null)
+			await InvokeAsync(() => buildMeal = new(){Name = MealName});
+
+		var foodItems = await http.GetAsync<List<FoodItem>>("api/food-items/load-all-fooditems");
+		if (foodItems != null)
+			await InvokeAsync(() => ingredients = foodItems);
+	}
+
+	async Task Filter(IngredientType type)
+	{
+		await InvokeAsync(() =>
+		{
+			displayType = displayType == type ? IngredientType.None : type;
+			StateHasChanged();
+		});
+	}
+
+	async Task FoodCardClick(FoodItem ingredient)
+	{
+		if (mealCard == null)
+			return;
+
+		await mealCard.AddIngredient(ingredient);
+		await InvokeAsync(() => StateHasChanged());
+	}
+
+	async Task Accept()
+	{
+		if (buildMeal != null)
+			await InvokeAsync(() => GetMeal(buildMeal));
+	}
+
+	async Task Cancel()
+	{
+		if (CancelAction != null)
+			await InvokeAsync(() => CancelAction());
+	}
+}
+
+<style>
+	.filter-item {
+		padding: 0.5rem;
+		border-radius: 5px;
+		display: inline-flex;
+		margin-left: 0.5rem
+	}
+</style>
