@@ -1,0 +1,15 @@
+﻿@page "/admin"
+
+<Authorize>
+	<Authorized>
+		<TableView/>
+	</Authorized>
+	<UnAuthorized>
+		<LogInLayout />
+	</UnAuthorized>
+</Authorize>
+
+
+@code {
+
+}

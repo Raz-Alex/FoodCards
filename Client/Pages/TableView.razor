@@ -1,0 +1,74 @@
+﻿@*page "/Tables"*@
+@using FoodCards.Client.Script
+@using FoodCards.Client.Services
+@using FoodCards.Shared
+@using FoodCards.Shared.Dish
+@inject AuthorizeHttpClient http
+
+<table>
+	<thead>
+		<tr>
+			<th>
+				Name
+			</th>
+			<th>
+				Kalories
+			</th>
+			<th>
+				Protein
+			</th>
+			<th>
+				Carbohydrate
+			</th>
+			<th>
+				Fat
+			</th>
+			<th>
+				SaturatedFat
+			</th>
+			<th>
+				Fiber
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var ingredient in ingredients)
+		{
+			<tr>
+				<td>
+					@ingredient.Name
+				</td>
+				<td>
+					@ingredient.Kalories
+				</td>
+				<td>
+					@ingredient.Protein
+				</td>
+				<td>
+					@ingredient.Carbohydrate
+				</td>
+				<td>
+					@ingredient.Fat
+				</td>
+				<td>
+					@ingredient.SaturatedFat
+				</td>
+				<td>
+					@ingredient.Fiber
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+
+@code {
+	List<FoodItem> ingredients;
+
+	protected override async Task OnInitializedAsync()
+	{
+		var foodItems = await http.PostAsync<List<FoodItem>>("api/food-items/load");
+		if (foodItems != null)
+			await InvokeAsync(() => ingredients = foodItems);
+	}
+}
