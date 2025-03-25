@@ -1,0 +1,18 @@
+[
+  {
+    "Id": "0ce6797d-1842-4373-a2f7-553312eaf158",
+    "Name": "Fries",
+    "Breakfast": false,
+    "Lunch": false,
+    "Dinner": false,
+    "Snack": false
+  },
+  {
+    "Id": "978e8e82-faf0-4bf7-b647-9f55953a166d",
+    "Name": "Eggs and Fruits",
+    "Breakfast": false,
+    "Lunch": false,
+    "Dinner": false,
+    "Snack": false
+  }
+]
