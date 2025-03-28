@@ -12,7 +12,9 @@
 
 @if (ingredients != null)
 {
-	<div class="card" style="width: fit-content; height: fit-content;">
+	<div class="card" 
+		style="width: fit-content; height: fit-content; padding-top: 0.5rem;position:relative">
+		<p style="position:absolute;top: -0.8rem;">Filter</p>
 		@if (ingredientTypes != null)
 		{
 			@foreach (var type in ingredientTypes)
@@ -115,6 +117,7 @@
 		padding: 0.5rem;
 		border-radius: 5px;
 		display: inline-flex;
-		margin-left: 0.5rem
+		margin-left: 0.5rem;
+		margin-top: 0.5rem;
 	}
 </style>
