@@ -4,18 +4,11 @@ using System.Net.Http.Json;
 
 namespace FoodCards.Client.Services
 {
-    public class AuthorizeHttpClient
+    public class AuthorizeHttpClient(LocalStorage storage, HttpClient httpClient, AuthorizeMonitorService monitor)
     {
-        readonly LocalStorage storage;
-        readonly HttpClient httpClient;
-        readonly AuthorizeMonitorService monitor;
-
-        public AuthorizeHttpClient(LocalStorage storage, HttpClient httpClient, AuthorizeMonitorService monitor)
-        {
-            this.storage = storage;
-            this.httpClient = httpClient;
-            this.monitor = monitor;
-        }
+        readonly LocalStorage storage = storage;
+        readonly HttpClient httpClient = httpClient;
+        readonly AuthorizeMonitorService monitor = monitor;
 
         public async Task<T?> GetAsync<T>(string requestUri)
         {

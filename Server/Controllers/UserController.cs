@@ -7,16 +7,10 @@ namespace FoodCards.Server.Controllers
 {
     [Route("api/users/")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController(DataService dataService, SecurityService securityService) : ControllerBase
     {
-        readonly DataService dataService;
-        readonly SecurityService securityService;
-
-        public UserController(DataService dataService, SecurityService securityService)
-        {
-            this.dataService = dataService;
-            this.securityService = securityService;
-        }
+        readonly DataService dataService = dataService;
+        readonly SecurityService securityService = securityService;
 
         [HttpPost("log-in")]
         public async Task<ActionResult<UserToken<bool>>> GetUser([FromBody] object post)

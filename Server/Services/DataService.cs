@@ -9,17 +9,17 @@ namespace FoodCards.Server.Services
         {
             var path = $"{Path(table)}.json";
             if (!File.Exists(path))
-                return new List<T>();
+                return [];
 
             using var reader = new StreamReader(path);
             var json = await reader.ReadToEndAsync();
             if (string.IsNullOrEmpty(json))
-                return new List<T>();
+                return [];
 
             try
             {
-                var obj = JsonSerializer.Deserialize(json, typeof(List<T>));
-                return obj == null ? new List<T>() : (List<T>)obj;
+                var obj = JsonSerializer.Deserialize<List<T>>(json);
+                return obj ?? [];
             }
             catch(Exception ex)
             {
