@@ -18,6 +18,8 @@ namespace FoodCards.Client.Script
 
         public string Cancel => "Abrechen";
 
+        public string Carbs => "Kohlenhydrate";
+
         public string CreateMeal => "Meal erstellen";
 
         public string DailyKalorieTarget => "Tages Kalorien Ziele";
@@ -25,6 +27,10 @@ namespace FoodCards.Client.Script
         public string Databank => "Database";
 
         public string Dinner => "Abendbrot";
+
+        public string Fat => "Fett";
+
+        public string Fiber => "Ballaststoffe";
 
         public string FoodType => "Lebensmittelart";
 
@@ -42,9 +48,17 @@ namespace FoodCards.Client.Script
 
         public string Name => "Name";
 
-        public string Snack => "Snack";
+        public string Protein => "Eiweiße";
+
+        public string Salt => "Salz";
+
+        public string SatFat => "Gesättigte Fettsäuren";
 
         public string SelectItem => "Stellen Sie Ihre Mahlzeit zusammen, indem Sie die Zutaten aus der folgenden Liste auswählen!";
+
+        public string Snack => "Snack";
+
+        public string Sugar => "Zucker";
 
         public string Unit => "Stück";
 

@@ -50,6 +50,20 @@ namespace FoodCards.Client.Script
 
         public string UploadImage => "UploadImage";
 
+        public string Carbs => "Carbs";
+
+        public string Fat => "Fat";
+
+        public string Fiber => "Fiber";
+
+        public string Protein => "Protein";
+
+        public string Salt => "Salt";
+
+        public string SatFat => "SatFat";
+
+        public string Sugar => "Sugar";
+
         public string FoodTypeName(IngredientType type) => type switch
         {
             IngredientType.EggsAndDairy => "Eggs & Dairy",

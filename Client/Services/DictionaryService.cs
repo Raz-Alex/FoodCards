@@ -67,6 +67,20 @@ namespace FoodCards.Client.Services
 
         public string UploadImage => dictionary.UploadImage;
 
+        public string Carbs => dictionary.Carbs;
+
+        public string Fat => dictionary.Fat;
+
+        public string Fiber => dictionary.Fiber;
+
+        public string Protein => dictionary.Protein;
+
+        public string Salt => dictionary.Salt;
+
+        public string SatFat => dictionary.SatFat;
+
+        public string Sugar => dictionary.Sugar;
+
         public string FoodTypeName(IngredientType type) => dictionary.FoodTypeName(type);
 
         public string FoodTypeShortCut(IngredientType type) => dictionary.FoodTypeShortCut(type);

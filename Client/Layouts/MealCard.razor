@@ -158,13 +158,13 @@
         {   
             nutrients = new()
             {
-                {"Protein", Meal.Protein},
-                {"Fat",Meal.Fat},
-                {"Sat. Fat",Meal.SaturatedFat},
-                {"Carbs",Meal.Carbohydrate},
-                {"Sugar",Meal.Sugar},
-                {"Salt",Meal.Salt},
-                {"Fiber",Meal.Fiber}
+                {d.Protein, Meal.Protein},
+                {d.Fat,Meal.Fat},
+                {d.SatFat,Meal.SaturatedFat},
+                {d.Carbs,Meal.Carbohydrate},
+                {d.Sugar,Meal.Sugar},
+                {d.Salt,Meal.Salt},
+                {d.Fiber,Meal.Fiber}
             };
             StateHasChanged();
         });
