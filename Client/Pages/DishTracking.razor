@@ -1,5 +1,4 @@
-﻿@using FoodCards.Client.Helper
-@using FoodCards.Client.Layouts
+﻿@using FoodCards.Client.Layouts
 @using FoodCards.Client.Script
 @using FoodCards.Client.Services
 @using FoodCards.Shared
@@ -8,6 +7,7 @@
 @inject NavigationManager nav
 @inject LocalStorage storage
 @inject AuthorizeMonitorService authorizationService
+@inject DictionaryService d
 
 @if (foodItems.Count > 0)
 {
@@ -19,21 +19,21 @@
 {
     <div class="card free">
         <button type="button" @onclick=AddBreakfast>
-            @DictionaryHelper.Breakfast
+            @d.Breakfast
         </button>
         <button type="button" @onclick=AddLunch>
-            @DictionaryHelper.Lunch
+            @d.Lunch
         </button>
         <button type="button" @onclick=AddDinner>
-            @DictionaryHelper.Dinner
+            @d.Dinner
         </button>
         <button type="button" @onclick=AddSnacks>
-            @DictionaryHelper.Snack
+            @d.Snack
         </button>
     </div>
     <div class="card free">
         <button type="button" @onclick=OpenDishSetUpMenu>
-            @DictionaryHelper.Goals
+            @d.Goals
         </button>
         @if (chartBars.Count > 0)
         {
@@ -50,12 +50,12 @@
     }
     <div class="card free">
         <div style="width: 10rem;height: 10rem">
-            <img style="width: 100%;height 100%" src=@($"images/glass_water.jpg") />
+            <img style="width: 100%;height: 100%" src=@($"images/glass_water.jpg") />
         </div>
     </div>
     <div class="card free">
         <button type="button" @onclick=GotToDatabank>
-            @DictionaryHelper.Databank
+            @d.Databank
         </button>
     </div>
     <div class="card free">
@@ -158,6 +158,16 @@ else
         var sweetsData = Const.Get(IngredientType.SweetsAndAlcohol);
         var processedData = Const.Get(IngredientType.Processed);
 
+        var dairyDataName = d.FoodTypeName(IngredientType.EggsAndDairy);
+        var meatsDataName = d.FoodTypeName(IngredientType.MeatAndFish);
+        var carbsDataName = d.FoodTypeName(IngredientType.GrainsAndPotatoes);
+        var vegiesDataName = d.FoodTypeName(IngredientType.Vegetables);
+        var fruitsDataName = d.FoodTypeName(IngredientType.Fruits);
+        var fatsDataName = d.FoodTypeName(IngredientType.Fats);
+        var sweetsDataName = d.FoodTypeName(IngredientType.SweetsAndAlcohol);
+        var processedDataName = d.FoodTypeName(IngredientType.Processed);
+
+
         await foodTypePie.Recalculate(foodItems);
 
         chartBars = new();
@@ -166,21 +176,21 @@ else
 
         var kal = kalories * 0.01m;
         if (dishData.EggsAndDairy > 0)
-            chartBars.Add(new(dairyData.Name, dairy / kal / dishData.EggsAndDairy, $"{dairy}kcal"));
+            chartBars.Add(new(dairyDataName, dairy / kal / dishData.EggsAndDairy, $"{dairy}kcal"));
         if (dishData.MeatAndFish > 0)
-            chartBars.Add(new(meatsData.Name, meats / kal / dishData.MeatAndFish, $"{meats}kcal"));
+            chartBars.Add(new(meatsDataName, meats / kal / dishData.MeatAndFish, $"{meats}kcal"));
         if (dishData.GrainsAndPotatoes > 0)
-            chartBars.Add(new(carbsData.Name, carbs / kal / dishData.GrainsAndPotatoes, $"{carbs}kcal"));
+            chartBars.Add(new(carbsDataName, carbs / kal / dishData.GrainsAndPotatoes, $"{carbs}kcal"));
         if (dishData.Vegetables > 0)
-            chartBars.Add(new(vegiesData.Name, vegies / kal / dishData.Vegetables, $"{vegies}kcal"));
+            chartBars.Add(new(vegiesDataName, vegies / kal / dishData.Vegetables, $"{vegies}kcal"));
         if (dishData.Fruits > 0)
-            chartBars.Add(new(fruitsData.Name, fruits / kal / dishData.Fruits, $"{fruits}kcal"));
+            chartBars.Add(new(fruitsDataName, fruits / kal / dishData.Fruits, $"{fruits}kcal"));
         if (dishData.Fats > 0)
-            chartBars.Add(new(fatsData.Name, fats / kal / dishData.Fats, $"{fats}kcal"));
+            chartBars.Add(new(fatsDataName, fats / kal / dishData.Fats, $"{fats}kcal"));
         if (dishData.SweetsAndAlcohol > 0)
-            chartBars.Add(new(sweetsData.Name, sweets / kal / dishData.SweetsAndAlcohol, $"{sweets}kcal"));
+            chartBars.Add(new(sweetsDataName, sweets / kal / dishData.SweetsAndAlcohol, $"{sweets}kcal"));
         if (dishData.Processed > 0)
-            chartBars.Add(new(processedData.Name, processed / kal / dishData.Processed, $"{processed}kcal"));
+            chartBars.Add(new(processedDataName, processed / kal / dishData.Processed, $"{processed}kcal"));
 
         await InvokeAsync(() => StateHasChanged());
     }

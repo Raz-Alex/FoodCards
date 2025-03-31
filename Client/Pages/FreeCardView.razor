@@ -3,6 +3,7 @@
 @using FoodCards.Client.Services
 @using FoodCards.Shared.Dish
 @inject AuthorizeHttpClient http
+@inject DictionaryService d
 
 @if (GetMeal != null)
 {
@@ -26,7 +27,7 @@
 					<div class="filter-item"
 					style=@($"background-image:{iData.Gradient};border:{iData.Border};{(displayType == iType ? "border:2px double" : "")}")
 					@onclick=@(() => Filter(iType))>
-						@Const.GetShortcut(iType)
+						@d.FoodTypeShortCut(iType)
 					</div>
 				}
 			}

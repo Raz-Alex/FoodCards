@@ -1,6 +1,8 @@
 ﻿@using FoodCards.Client.Script
+@using FoodCards.Client.Services
 @using FoodCards.Shared
 @using FoodCards.Shared.Dish
+@inject DictionaryService d
 
 @if(Compact)
 {
@@ -88,27 +90,36 @@ else
         sweets += meals.Sum(x => x.Ingredients.Where(x => x.Type == IngredientType.SweetsAndAlcohol).Sum(x => x.FullKalories));
         processed += meals.Sum(x => x.Ingredients.Where(x => x.Type == IngredientType.Processed).Sum(x => x.FullKalories));
 
-        var dairyData = Const.Get(IngredientType.EggsAndDairy);
-        var meatsData = Const.Get(IngredientType.MeatAndFish);
-        var carbsData = Const.Get(IngredientType.GrainsAndPotatoes);
-        var vegiesData = Const.Get(IngredientType.Vegetables);
-        var fruitsData = Const.Get(IngredientType.Fruits);
-        var fatsData = Const.Get(IngredientType.Fats);
-        var sweetsData = Const.Get(IngredientType.SweetsAndAlcohol);
-        var processedData = Const.Get(IngredientType.Processed);
+        var dairyDataColor = Const.Get(IngredientType.EggsAndDairy).Color;
+        var meatsDataColor = Const.Get(IngredientType.MeatAndFish).Color;
+        var carbsDataColor = Const.Get(IngredientType.GrainsAndPotatoes).Color;
+        var vegiesDataColor = Const.Get(IngredientType.Vegetables).Color;
+        var fruitsDataColor = Const.Get(IngredientType.Fruits).Color;
+        var fatsDataColor = Const.Get(IngredientType.Fats).Color;
+        var sweetsDataColor = Const.Get(IngredientType.SweetsAndAlcohol).Color;
+        var processedDataColor = Const.Get(IngredientType.Processed).Color;
+
+        var dairyDataName = d.FoodTypeName(IngredientType.EggsAndDairy);
+        var meatsDataName = d.FoodTypeName(IngredientType.MeatAndFish);
+        var carbsDataName = d.FoodTypeName(IngredientType.GrainsAndPotatoes);
+        var vegiesDataName = d.FoodTypeName(IngredientType.Vegetables);
+        var fruitsDataName = d.FoodTypeName(IngredientType.Fruits);
+        var fatsDataName = d.FoodTypeName(IngredientType.Fats);
+        var sweetsDataName = d.FoodTypeName(IngredientType.SweetsAndAlcohol);
+        var processedDataName = d.FoodTypeName(IngredientType.Processed);
 
         await InvokeAsync(() =>
         {
             nutrients = new()
                 {
-                new(dairyData, dairy, (decimal)dairy/Kalories),
-                new(meatsData, meats, (decimal)meats/Kalories),
-                new(carbsData, carbs, (decimal)carbs/Kalories),
-                new(vegiesData, vegies, (decimal)vegies / Kalories),
-                new(fruitsData, fruits, (decimal)fruits/Kalories),
-                new(fatsData, fats, (decimal)fats/Kalories),
-                new(sweetsData, sweets, (decimal)sweets/Kalories),
-                new(processedData, processed, (decimal)processed/Kalories),
+                    new(dairyDataName, dairy, (decimal)dairy/Kalories, dairyDataColor),
+                    new(meatsDataName, meats, (decimal)meats/Kalories, meatsDataColor),
+                    new(carbsDataName, carbs, (decimal)carbs/Kalories, carbsDataColor),
+                    new(vegiesDataName, vegies, (decimal)vegies / Kalories, vegiesDataColor),
+                    new(fruitsDataName, fruits, (decimal)fruits/Kalories, fruitsDataColor),
+                    new(fatsDataName, fats, (decimal)fats/Kalories, fatsDataColor),
+                    new(sweetsDataName, sweets, (decimal)sweets/Kalories, sweetsDataColor),
+                    new(processedDataName, processed, (decimal)processed/Kalories, processedDataColor),
                 };
 
             StateHasChanged(); 

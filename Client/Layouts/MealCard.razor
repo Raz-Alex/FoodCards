@@ -1,8 +1,8 @@
-﻿@using FoodCards.Client.Helper
-@using FoodCards.Client.Script
+﻿@using FoodCards.Client.Script
 @using FoodCards.Client.Services
 @using FoodCards.Shared
 @using FoodCards.Shared.Dish
+@inject DictionaryService d
 
 @if (Meal != null && !Hide)
 {
@@ -45,7 +45,7 @@
                     </table>
                     @if (Meal.Ingredients.Count == 0)
                     {
-                        <p style="display:block;margin:2rem">Please build your meal by selecting the ingredients from the list below!</p>
+                        <p style="display:block;margin:2rem">@d.SelectItem</p>
                     }
                     <div style="margin-top:0.5rem">
                         <NutritionTable Kalories=@Meal.Kalories Nutrients=@nutrients
@@ -58,29 +58,29 @@
                     <div style="width: max-content;">
                         <label>
                             <input type="checkbox" @bind=@Meal.Breakfast />
-                            @DictionaryHelper.Breakfast
+                            @d.Breakfast
                         </label>
                         <label>
                             <input type="checkbox" @bind=@Meal.Lunch />
-                            @DictionaryHelper.Lunch
+                            @d.Lunch
                         </label>
                         <label>
                             <input type="checkbox" @bind=@Meal.Dinner />
-                            @DictionaryHelper.Dinner
+                            @d.Dinner
                         </label>
                         <label>
                             <input type="checkbox" @bind=@Meal.Snack />
-                            @DictionaryHelper.Snack
+                            @d.Snack
                         </label>
                     </div>
                 }
             </div>
             <div style="width: fit-content; height: fit-content;margin: auto; margin-top: 10px;">
                 <button @onclick=@(() => {if(AcceptAction != null)AcceptAction();})>
-                    Accept
+                    @d.Accept
                 </button>
                 <button @onclick=@(() => {if(CancelAction != null)CancelAction();})>
-                    Cancel
+                    @d.Cancel
                 </button>
             </div>
         </div>

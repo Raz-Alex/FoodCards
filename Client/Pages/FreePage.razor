@@ -1,6 +1,8 @@
 ﻿@using FoodCards.Client.Layouts
 @using FoodCards.Client.Script
+@using FoodCards.Client.Services
 @using FoodCards.Shared.Dish
+@inject DictionaryService d
 
 <div style="text-align:center">
     <div class="card free" style=@($"{(foodItems.Count == 0 || displayCardView || evaluateMeal != null? "display:none" : "")}")>
@@ -14,7 +16,7 @@
             <div style="text-align:center">
                 <div class="card free" @onclick=ShowCardView>
                     <button type="button" style="width: max-content;">
-                        Count your calories!
+                        @d.CalorieCount
                     </button>
                 </div>
             </div>
@@ -62,7 +64,7 @@
                 {
                     <div class="card free" @onclick=ShowCardView>
                         <button type="button" style="width: max-content;">
-                            Add more meals
+                            @d.AddMoreMeals
                         </button>
                     </div>
                 }
@@ -73,14 +75,14 @@
     @if (displayCardView)
     {
         <FreeCardView MealName=@mealNames[index] 
-            GetMeal=@(async (x) => {await GetMeal(x);index++;displayCardView = false;}) 
-            CancelAction=@(async() => await CancelAction())></FreeCardView>
+        GetMeal=@(async (x) => {await GetMeal(x);index++;displayCardView = false;}) 
+        CancelAction=@(async() => await CancelAction())></FreeCardView>
     }
     else if (evaluateMeal != null)
     {
         <FreeCardView Meal=@(evaluateMeal as Meal) 
-            GetMeal=@(async (x) => await EndEvaluateMeal())
-            CancelAction=@(async() => await CancelReevaluation())></FreeCardView>
+        GetMeal=@(async (x) => await EndEvaluateMeal())
+        CancelAction=@(async() => await CancelReevaluation())></FreeCardView>
     }
 </div>
 
@@ -93,17 +95,22 @@
     FoodTypePie foodTypePie3;
     FoodTypePie foodTypePie4;
 
+    FoodItem evaluateMeal;
+
     List<FoodTypePie> FoodTypePies => new() { foodTypePie0, foodTypePie1, foodTypePie2, foodTypePie3, foodTypePie4 };
 
     List<FoodItem> foodItems = new();
 
-    FoodItem evaluateMeal;
-
     bool displayCardView;
 
-    List<string> mealNames = new() { "Breakfast", "Snack1", "Lunch", "Snack2", "Dinner"};
+    List<string> mealNames;
 
     int index;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await InvokeAsync(() => mealNames = new() { d.Breakfast, $"{d.Snack}1", d.Lunch, $"{d.Snack}2", d.Dinner });
+    }
 
     async Task ShowCardView()
     {

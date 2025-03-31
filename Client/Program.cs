@@ -13,6 +13,7 @@ builder.Services.AddHttpClient("FoodCards.ServerAPI", client => client.BaseAddre
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("FoodCards.ServerAPI"));
 builder.Services.AddScoped<DishSetUpDataService>();
 builder.Services.AddScoped<AuthorizeMonitorService>();
+builder.Services.AddScoped<DictionaryService>();
 builder.Services.AddScoped<LocalStorage>();
 builder.Services.AddScoped<AuthorizeHttpClient>();
 

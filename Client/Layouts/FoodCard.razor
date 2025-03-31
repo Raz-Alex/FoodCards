@@ -1,8 +1,8 @@
-﻿@using FoodCards.Client.Helper
-@using FoodCards.Client.Script
+﻿@using FoodCards.Client.Script
 @using FoodCards.Client.Services
 @using FoodCards.Shared
 @using FoodCards.Shared.Dish
+@inject DictionaryService d
 
 @if(FoodItem != null && !Hide)
 {
@@ -15,7 +15,7 @@
 						<tbody>
 							<tr>
 								<td>
-									@DictionaryHelper.Name
+									@d.Name
 								</td>
 								<td>
 									<input style="width:9rem" @bind=@FoodItem.Name />
@@ -23,7 +23,7 @@
 							</tr>
 							<tr>
 								<td>
-									@DictionaryHelper.UploadImage
+									@d.UploadImage
 								</td>
 								<td>
 									<input style="width:9rem" @bind=@FoodItem.Photo />
@@ -31,7 +31,7 @@
 							</tr>
 							<tr>
 								<td>
-									@DictionaryHelper.FoodType
+									@d.FoodType
 								</td>
 								<td>
 									<select style="width:9rem" name="" size="1" @onchange=@((e) => ChangeType(e))>
@@ -62,7 +62,7 @@
 						<tbody>
 							<tr>
 								<td>
-									@DictionaryHelper.CalculateFor
+									@d.CalculateFor
 								</td>
 								<td>
 									<input @bind=@FoodItem.Quantity type="number"
@@ -70,15 +70,15 @@
 								</td>
 								<td>
 									<select name="" size="1" @onchange=@(async (e) =>await SetValue("MesurmentUnit",(string)e.Value))>
-										<option value="g" selected>@DictionaryHelper.Grams</option>
-										<option value="ml">@DictionaryHelper.Milliliters</option>
-										<option value="unit">@DictionaryHelper.Unit</option>
+										<option value="g" selected>@d.Grams</option>
+										<option value="ml">@d.Milliliters</option>
+										<option value="unit">@d.Unit</option>
 									</select>
 								</td>
 							</tr>
 							<tr>
 								<td>
-									@DictionaryHelper.Kalories
+									@d.Calories
 								</td>
 								<td>
 									<input @bind=@FoodItem.Kalories type="number"
@@ -191,7 +191,7 @@
 		await InvokeAsync(() => FoodItem.Type = iType);
 	}
 
-	async Task SetValue(string key,string value)
+	async Task SetValue(string key, string value)
 	{
 		_ = decimal.TryParse(value, out decimal decimalValue);
 		await InvokeAsync(() =>

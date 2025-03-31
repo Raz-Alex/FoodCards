@@ -1,6 +1,6 @@
-﻿@using FoodCards.Client.Helper
-@using FoodCards.Client.Script
+﻿@using FoodCards.Client.Script
 @using FoodCards.Client.Services
+@inject DictionaryService d
 
 @if (Nutrients != null)
 {
@@ -8,7 +8,7 @@
 		<tbody>
 			<tr>
 				<th>
-					@DictionaryHelper.CalculateFor
+					@d.CalculateFor
 				</th>
 				<td>
 					@($"{BaseQuantity}{MeasurmentUnit}")
@@ -16,7 +16,7 @@
 			</tr>
 			<tr>
 				<th>
-					@DictionaryHelper.Kalories
+					@d.Calories
 				</th>
 				<td>
 					@($"{Kalories}kcal")

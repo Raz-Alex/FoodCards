@@ -16,13 +16,13 @@
             Color = color;
         }
 
-        public PiePiece(IngredientData data, decimal items, decimal percentage)
-        {
-            Text = data.Name;
-            Items = items;
-            Percentage = percentage;
-            Color = data.Color;
-        }
+     //  public PiePiece(IngredientData data, string text, decimal items, decimal percentage)
+     //  {
+     //      Text = text;
+     //      Items = items;
+     //      Percentage = percentage;
+     //      Color = data.Color;
+     //  }
 
         public PiePiece()
         {
