@@ -9,12 +9,10 @@
     @if (!Compact)
     {
         <div class="card free">
-            <div class="container" style=@("column-gap: 2rem;")>
+            <div style=@("column-gap: 2rem;")>
+                <FoodTypePie @ref=foodTypePie />
                 <div class="ing-container">
-                    <label style="display: ruby-text;">
-                        Name:
-                        <input @bind=@Meal.Name />
-                    </label>
+                    @*
                     <table>
                         <tbody>
                             @foreach (var ingredient in Meal.Ingredients)
@@ -46,34 +44,12 @@
                     @if (Meal.Ingredients.Count == 0)
                     {
                         <p style="display:block;margin:2rem">@d.SelectItem</p>
-                    }
+                    }*@
                     <div style="margin-top:0.5rem">
                         <NutritionTable Kalories=@Meal.Kalories Nutrients=@nutrients
                         BaseQuantity=@Meal.BaseQuantity MeasurmentUnit=@Meal.MesurmentUnit></NutritionTable>
                     </div>
                 </div>
-                <FoodTypePie @ref=foodTypePie />
-                @if (!HideType)
-                {
-                    <div style="width: max-content;">
-                        <label>
-                            <input type="checkbox" @bind=@Meal.Breakfast />
-                            @d.Breakfast
-                        </label>
-                        <label>
-                            <input type="checkbox" @bind=@Meal.Lunch />
-                            @d.Lunch
-                        </label>
-                        <label>
-                            <input type="checkbox" @bind=@Meal.Dinner />
-                            @d.Dinner
-                        </label>
-                        <label>
-                            <input type="checkbox" @bind=@Meal.Snack />
-                            @d.Snack
-                        </label>
-                    </div>
-                }
             </div>
             <div style="width: fit-content; height: fit-content;margin: auto; margin-top: 10px;">
                 <button @onclick=@(() => {if(AcceptAction != null)AcceptAction();})>

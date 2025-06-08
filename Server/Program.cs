@@ -6,6 +6,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddSingleton<DataService>();
 builder.Services.AddSingleton<SecurityService>();
+builder.Services.AddSingleton<DataConvertorService>();
+builder.Services.AddSingleton<ErrorService>();
 
 var app = builder.Build();
 

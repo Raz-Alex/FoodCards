@@ -34,7 +34,7 @@
 									@d.FoodType
 								</td>
 								<td>
-									<select style="width:9rem" name="" size="1" @onchange=@((e) => ChangeType(e))>
+									<select style="width:9rem" name="" size="1" @onchange=@(async(e) =>await ChangeType(e))>
 										@foreach (var type in ingredientTypes)
 										{
 											@if (type != "None")

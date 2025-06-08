@@ -73,7 +73,6 @@
 		}
 	</div>	
 	<div>
-		<!--div style="text-align: center;"-->
 		@foreach (var nutrition in ingredients)
 		{
 			@if (nutrition is Meal meal)
@@ -87,7 +86,6 @@
 				Hide=@(displayType != IngredientType.None && displayType != ingredient.Type) />
 			}
 		}
-		<!--/div-->
 	</div>
 }
 
@@ -162,7 +160,6 @@
 		await InvokeAsync(() =>
 		{
 			newIngredient = new();
-			newIngredient.Id = Guid.NewGuid();
 			StateHasChanged();
 		});
 	}
@@ -172,7 +169,6 @@
 		await InvokeAsync(() =>
 		{
 			newMeal = new();
-			newMeal.Id = Guid.NewGuid();
 			StateHasChanged();
 		});
 	}

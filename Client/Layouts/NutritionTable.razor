@@ -19,7 +19,7 @@
 					@d.Calories
 				</th>
 				<td>
-					@($"{Kalories}kcal")
+					@($"{(int)Kalories}kcal")
 				</td>
 			</tr>
 			@foreach (var item in Nutrients)
@@ -31,7 +31,7 @@
 							@item.Key
 						</th>
 						<td>
-							@($"{item.Value}g")
+							@($"{(int)item.Value}g")
 						</td>
 					</tr>
 				}

@@ -5,45 +5,55 @@
 @inject AuthorizeHttpClient http
 @inject DictionaryService d
 
-@if (GetMeal != null)
+@if (error != null)
 {
-	<MealCard @ref=@mealCard Meal=@buildMeal AcceptAction=@(async() => await Accept())
-		CancelAction=@(async() => await Cancel()) HideType></MealCard>
+	<h2>@error</h2>	
 }
 
-@if (ingredients != null)
-{
-	<div class="card" 
-		style="width: fit-content; height: fit-content; padding-top: 0.5rem;position:relative">
-		<p style="position:absolute;top: -0.8rem;">Filter</p>
-		@if (ingredientTypes != null)
-		{
-			@foreach (var type in ingredientTypes)
+<div class="container">
+	@if (GetMeal != null)
+	{
+		<MealCard @ref=@mealCard Meal=@buildMeal AcceptAction=@(async() => await Accept())
+			CancelAction=@(async() => await Cancel()) HideType></MealCard>
+	}
+
+	<input type="search" name="" value="" placeholder="search ingredient">
+
+	@if (ingredients != null)
+	{
+		@*
+		<div class="card" style="width: fit-content; height: fit-content; padding-top: 0.5rem;position:relative">
+			<p style="position:absolute;top: -0.8rem;">Filter</p>
+			@if (ingredientTypes != null)
 			{
-				@if (type != "None")
+				@foreach (var type in ingredientTypes)
 				{
-					_ = Enum.TryParse(type, out IngredientType iType);
-					var iData = Const.Get(iType);
-					<div class="filter-item"
-					style=@($"background-image:{iData.Gradient};border:{iData.Border};{(displayType == iType ? "border:2px double" : "")}")
-					@onclick=@(() => Filter(iType))>
-						@d.FoodTypeShortCut(iType)
-					</div>
+					@if (type != "None")
+					{
+						_ = Enum.TryParse(type, out IngredientType iType);
+						var iData = Const.Get(iType);
+						<div class="filter-item"
+							style=@($"background-image:{iData.Gradient};border:{iData.Border};{(displayType == iType ? "border:2px double" : "")}")
+							@onclick=@(() => Filter(iType))>
+							@d.FoodTypeShortCut(iType)
+						</div>
+					}
 				}
 			}
-		}
-	</div>
-	<div>
-		@foreach (var nutrition in ingredients)
-		{
-			@if (nutrition is FoodItem ingredient)
+		</div>
+		*@
+		<div style="float:left">
+			@foreach (var nutrition in ingredients)
 			{
-				<FoodCard FoodItem=@ingredient Click=@(async() =>await FoodCardClick(ingredient))
+				@if (nutrition is FoodItem ingredient)
+				{
+					<FoodCard FoodItem=@ingredient Click=@(async() =>await FoodCardClick(ingredient))
 					Hide=@(displayType != IngredientType.None && displayType != ingredient.Type) />
+				}
 			}
-		}
-	</div>
-}
+		</div>
+	}
+</div>
 
 @code {
 	List<FoodItem> ingredients;
@@ -68,6 +78,8 @@
 	[Parameter]
 	public Action CancelAction { get; set; }
 
+	string error;
+
 	protected override async Task OnInitializedAsync()
 	{
 		if (Meal != null)
@@ -80,6 +92,15 @@
 		var foodItems = await http.GetAsync<List<FoodItem>>("api/food-items/load-all-fooditems");
 		if (foodItems != null)
 			await InvokeAsync(() => ingredients = foodItems);
+		else
+		{
+			var errorResult = await http.GetAsync<List<string>>("api/food-items/error");
+			await InvokeAsync(() =>
+			{
+				error = errorResult.FirstOrDefault();
+				StateHasChanged();
+			});
+		}
 	}
 
 	async Task Filter(IngredientType type)
@@ -120,5 +141,10 @@
 		display: inline-flex;
 		margin-left: 0.5rem;
 		margin-top: 0.5rem;
+	}
+
+	.container {
+		display:grid;
+		grid-template-columns: 25rem auto;
 	}
 </style>

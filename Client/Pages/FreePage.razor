@@ -4,7 +4,7 @@
 @using FoodCards.Shared.Dish
 @inject DictionaryService d
 
-<div style="text-align:center">
+<div>
     <div class="card free" style=@($"{(foodItems.Count == 0 || displayCardView || evaluateMeal != null? "display:none" : "")}")>
         <FoodTypePie @ref=@foodTypePie />
     </div>
@@ -13,12 +13,10 @@
     {
         @if(index == 0)
         {
-            <div style="text-align:center">
-                <div class="card free" @onclick=ShowCardView>
-                    <button type="button" style="width: max-content;">
-                        @d.CalorieCount
-                    </button>
-                </div>
+            <div class="card free" @onclick=ShowCardView>
+                <button type="button" style="width: max-content;">
+                    @d.CalorieCount
+                </button>
             </div>
         }
 
@@ -84,7 +82,16 @@
         GetMeal=@(async (x) => await EndEvaluateMeal())
         CancelAction=@(async() => await CancelReevaluation())></FreeCardView>
     }
+
+    <div class="card free" style="position:absolute;top:0;right:2rem">
+        <select style="border: none;background: transparent;" name="" size="1" @onchange=@(async(e) =>await ChangeLanguage(e))>
+            <option value="DE" selected>DE</option>
+            <option value="EN">EN</option>
+            <option value="ES">ES</option>
+        </select>
+    </div>
 </div>
+
 
 @code {
     FoodTypePie foodTypePie;
@@ -215,6 +222,11 @@
             evaluateMeal = null;
             StateHasChanged();
         });
+    }
+
+    async Task ChangeLanguage(ChangeEventArgs e)
+    {
+      //  await InvokeAsync(() => d.ChangeLanguage(e.Value));
     }
 }
 

@@ -2,22 +2,21 @@
 using FoodCards.Shared;
 using FoodCards.Shared.Dish;
 using Microsoft.AspNetCore.Mvc;
+using MySqlConnector;
 using Newtonsoft.Json;
 
 namespace FoodCards.Server.Controllers
 {
     [Route("api/food-items/")]
     [ApiController]
-    public class FoodItemController : ControllerBase
+    public class FoodItemController
+        (DataService dataService, SecurityService securityService, 
+        DataConvertorService dataConvertorService, ErrorService errorService) : ControllerBase
     {
-        readonly DataService dataService;
-        readonly SecurityService securityService;
-
-        public FoodItemController(DataService dataService, SecurityService securityService)
-        {
-            this.dataService = dataService;
-            this.securityService = securityService;
-        }
+        readonly DataService dataService = dataService;
+        readonly SecurityService securityService = securityService;
+        readonly DataConvertorService dataConvertorService = dataConvertorService;
+        readonly ErrorService errorService = errorService;
 
         [HttpPost("save-list")]
         public async Task<ActionResult<UserToken<ServerConfirmation>>> SaveFoodItems([FromBody] object post)
@@ -48,11 +47,57 @@ namespace FoodCards.Server.Controllers
             return Ok(result);
         }
 
+        [HttpGet("error")]
+        public async Task<ActionResult<List<string>>> Error()
+        {
+            return Ok(new List<string>() { errorService.Error });
+        }
+
         [HttpGet("load-all-fooditems")]
         public async Task<ActionResult<List<FoodItem>>> GetAllFoodItems()
         {
-            var data = await dataService.LoadAsync<FoodItem>(ConstValues.FoodData);
-            return Ok(data);
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+            .AddJsonFile("appsettings.json")
+            .Build();
+
+#if DEBUG
+            string connectionString = configuration.GetConnectionString("LocalConnection");
+#else
+            string connectionString = configuration.GetConnectionString("DefaultConnection");
+#endif
+            using var connection = new MySqlConnection(connectionString);
+
+            try
+            {
+                connection.Open();
+            }
+            catch (MySqlException ex)
+            {
+                errorService.Error = ex.Message;
+                return Ok(null);
+            }
+            errorService.Error += "connected";
+
+            try
+            {
+                var command = connection.CreateCommand();
+                errorService.Error += "command";
+                command.CommandText = "SELECT * FROM FoodItems";
+                errorService.Error += "CommandText";
+                var reader = await command.ExecuteReaderAsync();
+                errorService.Error += "reader";
+                var data = dataConvertorService.Extract<FoodItem>(reader, errorService);
+                // var data = await dataService.LoadAsync<FoodItem>(ConstValues.FoodData);
+                return Ok(data);
+            }
+            catch (MySqlException ex)
+            {
+                errorService.Error += "cmd " + ex.Message;
+            }
+
+            connection.Close();
+            return null;
         }
 
 
@@ -124,7 +169,7 @@ namespace FoodCards.Server.Controllers
                 Select(x => new Meal()
                 {
                     Id = x.Key,
-                    Ingredients = x.Select(x => new FoodItem() { Id = x.IngredientId, Quantity = x.Quantity }).ToList(),
+                    Ingredients = [.. x.Select(x => new FoodItem() { Id = x.IngredientId, Quantity = x.Quantity })],
                 }).ToList();
 
             foreach(var meal in meals)

@@ -1,8 +1,8 @@
 ﻿namespace FoodCards.Shared.Dish
 {
-    public interface IDish
+    public interface IItemTag
     {
-        Guid Id { get; set; }
+        int Id { get; set; }
         string Name { get; set; }
         string Photo { get; set; }
         IngredientType Type { get; }

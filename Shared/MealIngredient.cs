@@ -2,8 +2,8 @@
 {
     public class MealIngredient
     {
-        public Guid MealId { get; set; }
-        public Guid IngredientId { get; set; }
+        public int MealId { get; set; }
+        public int IngredientId { get; set; }
         public int Quantity { get; set; }
     }
 }

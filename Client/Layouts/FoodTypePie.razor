@@ -21,7 +21,7 @@ else
                             <div style=@($"width:1rem;height: 1rem;margin-right:1rem;background-color:{nut.Color}")></div>
                         </td>
                         <td style="text-align:left">@nut.Text</td>
-                        <td style="text-align:right;padding-inline:0.5rem">@($"{nut.Items}kcal")</td>
+                        <td style="text-align:right;padding-inline:0.5rem">@($"{(int)nut.Items}kcal")</td>
                         <td style="text-align:right">@($"{(int)(nut.Percentage * 100)}%")</td>
                     </tr>
                 }

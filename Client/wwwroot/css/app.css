@@ -45,8 +45,20 @@ tr{
     height: 2rem
 }
 
+div{
+    text-align: left;
+}
+
 fieldset{
     padding: 1rem;
+}
+
+input[type="search"] {
+    width: 12rem;
+    text-align: left;
+    height: fit-content;
+    margin: 2rem 0 0 2rem;
+    padding: 0.5rem;
 }
 
 .card {
